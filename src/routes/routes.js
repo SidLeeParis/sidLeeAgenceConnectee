@@ -62,7 +62,8 @@ var Routes = function(sockets, Event) {
 		else {
 			return !isNaN(date.getTime());
 		}
-	}
+	};
+
 	return {
 		create : _create,
 		find: _find

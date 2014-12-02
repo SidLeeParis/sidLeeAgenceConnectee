@@ -13,7 +13,7 @@ test:
 	$(MOCHA) -R spec $(TESTS)
 
 jshint:
-	$(JSHINT) src test demo
+	$(JSHINT) src test
 
 coverage:
 	@# check if reports folder exists, if not create it
