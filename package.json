@@ -1,0 +1,25 @@
+{
+  "name": "sidLeeAgenceConnectee",
+  "version": "0.0.1",
+  "description": "Server side of Sid Lee x Agence Conectée project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Xavier Seignard <xavier.seignard@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.9.3",
+    "express": "^4.10.4",
+    "mongoose": "^3.8.19",
+    "socket.io": "^1.2.1"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "codeclimate-test-reporter": "0.0.4",
+    "istanbul": "^0.3.2",
+    "jshint": "^2.5.10",
+    "mocha": "^2.0.1",
+    "sinon": "^1.12.1"
+  }
+}
