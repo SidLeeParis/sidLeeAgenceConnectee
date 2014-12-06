@@ -8,7 +8,7 @@ beforeEach(function (done) {
 		for (var i in mongoose.connection.collections) {
 			mongoose.connection.collections[i].remove(function() {});
 		}
-	}
+	};
 
 	if (mongoose.connection.readyState === 0) {
 		mongoose.connect(conf.MONGO_TEST_URL, function (err) {

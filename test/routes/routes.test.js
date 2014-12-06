@@ -9,7 +9,7 @@ var should = require('chai').should(),
 // dummy values for testing
 var dummyName = 'dummyName',
 	dummyValue = 42,
-	dummyType = 'dummyType';
+	dummyUnit = 'dummyUnit';
 
 // mocking Routes args
 var sockets = {
@@ -18,7 +18,7 @@ var sockets = {
 		should.exist(data);
 		data.name.should.equal(dummyName);
 		data.value.should.equal(dummyValue);
-		data.unit.should.equal(dummyType);
+		data.unit.should.equal(dummyUnit);
 	}
 };
 
@@ -37,7 +37,7 @@ describe('Routes', function() {
 			var req = { body: {} };
 			req.body.name = dummyName;
 			req.body.value = dummyValue;
-			req.body.type = dummyType;
+			req.body.unit = dummyUnit;
 
 			routes.create(req, response);
 		});
@@ -51,7 +51,7 @@ describe('Routes', function() {
 			});
 
 			var req = {};
-			req.params = req.query = {}
+			req.params = req.query = {};
 			routes.find(req, response);
 		});
 
