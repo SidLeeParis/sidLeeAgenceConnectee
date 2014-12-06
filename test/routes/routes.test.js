@@ -1,9 +1,9 @@
 'use strict';
 /*jshint expr: true*/
 var should = require('chai').should(),
-	sinon = require('sinon'),
-	io = require('socket.io'),
+	utils = require('../utils'),
 	Response = require('../mocks/response.mock'),
+	Event = require('../../src/models/eventModel'),
 	Routes = require('../../src/routes/routes');
 
 // dummy values for testing
@@ -18,31 +18,43 @@ var sockets = {
 		should.exist(data);
 		data.name.should.equal(dummyName);
 		data.value.should.equal(dummyValue);
-		data.type.should.equal(dummyType);
+		data.unit.should.equal(dummyType);
 	}
 };
 
-var Event = function(data) {
-	this.save = function(callback) {
-		callback();
-	};
-};
 var routes = new Routes(sockets, Event);
 
 describe('Routes', function() {
 
 	describe('#create()', function() {
-		it('should create an event', function() {
-			var response = new Response();
+		it('should create an event', function(done) {
+			var response = new Response(function() {
+				response.getStatus().should.equal(201);
+				should.not.exist(response.getData());
+				done();
+			});
+
 			var req = { body: {} };
 			req.body.name = dummyName;
 			req.body.value = dummyValue;
 			req.body.type = dummyType;
 
 			routes.create(req, response);
-			response.getStatus().should.equal(201);
-			should.not.exist(response.getData());
 		});
+	});
+
+	describe('#find()', function() {
+		it('should retrieve all events', function(done) {
+			var response = new Response(function() {
+				response.getStatus().should.equal(200);
+				done();
+			});
+
+			var req = {};
+			req.params = req.query = {}
+			routes.find(req, response);
+		});
+
 	});
 
 });

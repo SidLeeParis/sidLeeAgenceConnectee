@@ -4,7 +4,7 @@
   "description": "Server side of Sid Lee x Agence Conectée project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "supervisor ./src/app"
   },
   "author": "Xavier Seignard <xavier.seignard@gmail.com>",
   "license": "MIT",
@@ -20,6 +20,7 @@
     "istanbul": "^0.3.2",
     "jshint": "^2.5.10",
     "mocha": "^2.0.1",
-    "sinon": "^1.12.1"
+    "sinon": "^1.12.1",
+    "supervisor": "^0.6.0"
   }
 }

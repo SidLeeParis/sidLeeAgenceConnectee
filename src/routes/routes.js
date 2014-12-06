@@ -16,7 +16,7 @@ var Routes = function(sockets, Event) {
 			name: req.body.name,
 			date: new Date(),
 			value: req.body.value,
-			type: req.body.type
+			unit: req.body.unit
 		};
 		// create event to store in mongo
 		var event = new Event(postData);
@@ -29,7 +29,6 @@ var Routes = function(sockets, Event) {
 	};
 
 	var _find = function(req, res) {
-		console.log(req.params);
 		var filter = {};
 		if (req.params.name) filter.name = req.params.name;
 		var dateFilter = {};
@@ -48,8 +47,9 @@ var Routes = function(sockets, Event) {
 		if (dateFilter.$gte || dateFilter.$lte) {
 			filter.date = dateFilter;
 		}
-		console.log(filter);
-		Event.find(filter).exec(function (err, events) {
+		var query = Event.find(filter);
+		if (req.query.limit) query.limit(req.query.limit);
+		query.exec(function (err, events) {
 			if (err) throw err;
 			res.status(200).send(events);
 		});

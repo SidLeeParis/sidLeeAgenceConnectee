@@ -5,7 +5,7 @@ var express = require('express'),
 	io = require('socket.io')(server),
 	bodyParser = require('body-parser'),
 	mongoose = require('mongoose'),
-	Event = require('../models/eventModel'),
+	Event = require('./models/eventModel'),
 	Routes = require('./routes/routes'),
 	conf = require('./conf/conf');
 

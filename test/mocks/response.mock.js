@@ -1,16 +1,15 @@
 'use strict';
-var Response = function() {
+var Response = function(callback) {
 	var _data, _statusCode;
 
 	var _send = function(responseData) {
 		_data = responseData;
+		callback();
 	};
 
 	var _status = function(statusCode) {
 		_statusCode = statusCode;
-		return {
-			send : _send
-		};
+		return this;
 	};
 
 	var _getData = function() {

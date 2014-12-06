@@ -12,6 +12,12 @@ var Conf = {};
  */
 Conf.MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost/sidlee';
 /**
+ * Connection URL to mongodb test db
+ * @property MONGO_TEST_URL
+ * @type {String}
+ */
+Conf.MONGO_TEST_URL = 'mongodb://localhost/sidleeTest';
+/**
  * API version
  * @property API_VERSION
  * @type {Number}
