@@ -11,12 +11,19 @@ var Conf = {};
  * @type {String}
  */
 Conf.MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost/sidlee';
+
 /**
  * Connection URL to mongodb test db
  * @property MONGO_TEST_URL
  * @type {String}
  */
 Conf.MONGO_TEST_URL = 'mongodb://localhost/sidleeTest';
+/**
+ * Port
+ * @property PORT
+ * @type {Number}
+ */
+Conf.PORT = process.env.PORT || 3000;
 /**
  * API version
  * @property API_VERSION

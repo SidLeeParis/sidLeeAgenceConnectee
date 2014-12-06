@@ -46,7 +46,7 @@ io.on('connection', function (socket) {
 });
 
 // start the server
-server.listen(3000, function () {
+server.listen(conf.PORT, function () {
 	var host = server.address().address;
 	var port = server.address().port;
 	console.log('Sid Lee x Agence Connectée listening at http://%s:%s', host, port);
