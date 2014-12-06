@@ -41,6 +41,9 @@ router.post('/event', routes.create);
 router.get('/event/:name?', routes.find);
 
 // websocket configuration
+io.configure(function() {
+	io.set('match origin protocol', true);
+});
 io.on('connection', function (socket) {
 	console.log('client connected');
 });
