@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/xseignard/sidLeeAgenceConnectee.svg)](https://travis-ci.org/xseignard/sidLeeAgenceConnectee)
 [![Test Coverage](https://codeclimate.com/github/xseignard/sidLeeAgenceConnectee/badges/coverage.svg)](https://codeclimate.com/github/xseignard/sidLeeAgenceConnectee)
 
-Utilisation de l'API cliente
+# Utilisation de l'API cliente
 
-Connecter un client:
+## Connecter un client:
 ```
 var client = new SidLeeClient('https://sidlee.herokuapp.com/', function(data) {
     console.log(data);
@@ -11,7 +11,7 @@ var client = new SidLeeClient('https://sidlee.herokuapp.com/', function(data) {
 ```
 La fonction passée en callback est appelée à chaque fois qu'une nouvelle mesure est reçue.
 
-Requeter les anciennes mesures
+## Requeter les anciennes mesures
 ```
 client.events().exec(function(data) {
   console.log(data);
