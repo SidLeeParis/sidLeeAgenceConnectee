@@ -53,4 +53,4 @@ Comme l'exemple précédent, mais ne retournant que 10 résultats.
 
 Il s'agit d'une api utilisant le pattern de [fluent interface](http://martinfowler.com/bliki/FluentInterface.html), cela veut dire qu'il est possible de chainer les fonctions, mais il ne faut pas oublier d'appeler `exec` pour effectivement éxecuter la requête.
 
-Un exemple sur jsfiddle: [http://jsfiddle.net/07acad0b/](http://jsfiddle.net/07acad0b/)
+Un exemple sur jsfiddle: [http://jsfiddle.net/07acad0b/](http://jsfiddle.net/07acad0b/1/)
