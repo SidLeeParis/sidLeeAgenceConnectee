@@ -4,6 +4,7 @@ var express = require('express'),
 	server = require('http').Server(app),
 	io = require('socket.io')(server),
 	bodyParser = require('body-parser'),
+	cors = require('cors'),
 	mongoose = require('mongoose'),
 	Event = require('./models/eventModel'),
 	Routes = require('./routes/routes'),
@@ -18,6 +19,7 @@ db.once('open', function() {
 });
 
 // app conf
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true

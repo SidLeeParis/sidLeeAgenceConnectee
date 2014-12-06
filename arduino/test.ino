@@ -15,11 +15,11 @@ void setup() {
 }
 
 void loop(){
-	data = "name=random&type=%&value=" + String(random(100), DEC);
+	data = "name=random&unit=%&value=" + String(random(100), DEC);
 	Serial.println(data);
-	if (client.connect("192.168.1.24",3000)) {
+	if (client.connect("sidlee.herokuapp.com",80)) {
 		client.println("POST /api/1/event HTTP/1.1");
-		client.println("Host: 192.168.1.24");
+		client.println("Host: sidlee.herokuapp.com");
 		client.println("Content-Type: application/x-www-form-urlencoded");
 		client.print("Content-Length: ");
 		client.println(data.length());
