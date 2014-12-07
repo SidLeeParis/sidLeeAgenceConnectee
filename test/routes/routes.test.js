@@ -78,7 +78,7 @@ describe('Routes', function() {
 
 				var req = {};
 				req.params = req.query = {};
-				req.params.name = 'dummyName1'
+				req.params.name = 'dummyName1';
 				routes.find(req, response);
 			});
 		});

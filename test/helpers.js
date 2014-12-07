@@ -3,9 +3,10 @@ var async = require('async'),
 	Event = require('../src/models/eventModel');
 
 module.exports.insertEvents = function(countOne, countTwo, callback) {
-	var events = [];
+	var events = [],
+		event;
 	for (var i = 0; i < countOne; i++) {
-		var event = new Event({
+		event = new Event({
 			name: 'dummyName1',
 			date: new Date(),
 			vale: Math.floor(Math.random() * 10),
@@ -14,7 +15,7 @@ module.exports.insertEvents = function(countOne, countTwo, callback) {
 		events.push(event);
 	}
 	for (i = 0; i < countTwo; i++) {
-		var event = new Event({
+		event = new Event({
 			name: 'dummyName2',
 			date: new Date(),
 			vale: Math.floor(Math.random() * 10),
