@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Client tests</title>
+	<link rel="stylesheet" media="all" href="../../node_modules/mocha/mocha.css">
+</head>
+<body>
+	<div id="mocha"><p><a href=".">Index</a></p></div>
+	<div id="messages"></div>
+	<div id="fixtures"></div>
+	<script src="../../node_modules/mocha/mocha.js"></script>
+	<script src="../../node_modules/chai/chai.js"></script>
+	<script src="../../node_modules/sinon/pkg/sinon-1.12.1.js"></script>
+	<script src="../../node_modules/socket.io-client/socket.io.js"></script>
+	<script src="../../public/js/sidlee-client.js"></script>
+	<script>mocha.setup('bdd')</script>
+	<script src="js/sidlee-client.spec.js"></script>
+	<script>
+		if (mochaPhantomJS) {
+			mochaPhantomJS.run();
+		}
+		else {
+			mocha.run();
+		}
+	</script>
+</body>
+</html>

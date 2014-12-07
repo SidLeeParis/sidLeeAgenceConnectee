@@ -1,5 +1,6 @@
 MOCHA="node_modules/.bin/mocha"
 _MOCHA="node_modules/.bin/_mocha"
+MOCHA_PHANTOM="node_modules/.bin/mocha-phantomjs"
 JSHINT="node_modules/.bin/jshint"
 ISTANBUL="node_modules/.bin/istanbul"
 CODECLIMATE="node_modules/.bin/codeclimate"
@@ -9,8 +10,13 @@ TESTS=$(shell find test/ -name "*.test.js")
 clean:
 	rm -rf reports
 
-test:
+back-test:
 	$(MOCHA) -R spec $(TESTS)
+
+front-test:
+	$(MOCHA_PHANTOM) -R spec test/public/test.html
+
+test: back-test front-test
 
 jshint:
 	$(JSHINT) src test
@@ -25,4 +31,4 @@ codeclimate:
 
 ci: clean jshint test coverage codeclimate
 
-.PHONY: clean test jshint coverage codeclimate ci
+.PHONY: clean test back-test front-test jshint coverage codeclimate ci
