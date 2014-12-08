@@ -26,7 +26,7 @@
 	Client.prototype.limit = function(limit) {
 		if (limit) this.queryParams.push('limit=' + limit);
 		return this;
-	}
+	};
 
 	Client.prototype.exec = function(callback) {
 		var request = new XMLHttpRequest();
@@ -40,7 +40,7 @@
 			currentUrl += '?';
 			for (var i = 0; i < this.queryParams.length; i++) {
 				currentUrl += this.queryParams[i] + '&';
-			};
+			}
 		}
 		request.open('GET', currentUrl, true);
 		request.send(null);
