@@ -4,7 +4,7 @@
 # Utilisation de l'API cliente
 
 ## Connecter un client:
-```
+```javascript
 var client = new SidLeeClient('https://sidlee.herokuapp.com/', function(data) {
     console.log(data);
 });
@@ -12,21 +12,21 @@ var client = new SidLeeClient('https://sidlee.herokuapp.com/', function(data) {
 La fonction passée en callback est appelée à chaque fois qu'une nouvelle mesure est reçue.
 
 ## Requeter les anciennes mesures
-```
+```javascript
 client.events().exec(function(data) {
   console.log(data);
 });
 ```
 `events` accepte un argument optionnel permettant de filtrer par nom d'évènement. Chaque capteur aura son nom d'évènement, ainsi on peut filter par nom:
 
-```
+```javascript
 client.events('test').exec(function(data) {
   console.log(data);
 });
 ```
 
 On peut aussi filtrer par date avec `from` et `to`:
-```
+```javascript
 client.events('random')
 		.from('2014-12-01')
 		.to('2014-12-02')
@@ -39,7 +39,7 @@ Cela retournera les mesures du capteur 'random' entre les dates du 1er décembre
 
 Enfin, il est possible de limiter le nombre de résultats avec `limit`:
 
-```
+```javascript
 client.events('random')
 		.from('2014-12-01')
 		.to('2014-12-02')
