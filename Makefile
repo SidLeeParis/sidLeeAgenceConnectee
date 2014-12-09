@@ -4,6 +4,7 @@ MOCHA_PHANTOM="node_modules/.bin/mocha-phantomjs"
 JSHINT="node_modules/.bin/jshint"
 ISTANBUL="node_modules/.bin/istanbul"
 CODECLIMATE="node_modules/.bin/codeclimate"
+KARMA="node_modules/karma/bin/karma"
 
 TESTS=$(shell find test/ -name "*.test.js")
 
@@ -14,7 +15,9 @@ back-test:
 	$(MOCHA) -R spec $(TESTS)
 
 front-test:
-	$(MOCHA_PHANTOM) -R spec test/public/test.html
+	@#$(MOCHA_PHANTOM) -R spec test/public/test.html
+	$(KARMA) start
+
 
 test: back-test front-test
 
@@ -27,8 +30,8 @@ coverage:
 	$(ISTANBUL) cover --dir ./reports $(_MOCHA) -- -R spec $(TESTS)
 
 codeclimate:
-	CODECLIMATE_REPO_TOKEN=dec3f4db135a9088676a04f44bdc4c4857b9012c46b1e2f35801e8ffc5f68678 $(CODECLIMATE) < reports/lcov.info
+	CODECLIMATE_REPO_TOKEN=dec3f4db135a9088676a04f44bdc4c4857b9012c46b1e2f35801e8ffc5f68678 $(CODECLIMATE) < "reports/**/lcov.info"
 
-ci: clean jshint test coverage codeclimate
+ci: clean jshint test coverage
 
 .PHONY: clean test back-test front-test jshint coverage codeclimate ci
