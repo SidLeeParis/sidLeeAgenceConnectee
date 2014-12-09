@@ -16,7 +16,7 @@ back-test:
 
 front-test:
 	@#$(MOCHA_PHANTOM) -R spec test/public/test.html
-	$(KARMA) start
+	-$(KARMA) start
 
 
 test: back-test front-test
