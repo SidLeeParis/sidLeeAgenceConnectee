@@ -28,10 +28,12 @@ coverage:
 	@# check if reports folder exists, if not create it
 	@test -d reports || mkdir reports
 	$(ISTANBUL) cover --dir ./reports $(_MOCHA) -- -R spec $(TESTS)
+	@# merge client side coeverage in server side lcov
+	@cat ./reports/phantomjs/lcov.info >> ./reports/lcov.info
 
 codeclimate:
-	CODECLIMATE_REPO_TOKEN=dec3f4db135a9088676a04f44bdc4c4857b9012c46b1e2f35801e8ffc5f68678 $(CODECLIMATE) < "reports/**/lcov.info"
+	CODECLIMATE_REPO_TOKEN=dec3f4db135a9088676a04f44bdc4c4857b9012c46b1e2f35801e8ffc5f68678 $(CODECLIMATE) < reports/lcov.info
 
-ci: clean jshint test coverage
+ci: clean jshint test coverage codeclimate
 
 .PHONY: clean test back-test front-test jshint coverage codeclimate ci

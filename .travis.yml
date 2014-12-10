@@ -2,13 +2,4 @@ language: node_js
 services: mongodb
 node_js:
   - "0.10"
-before_script:
-  - npm install -g codeclimate-test-reporter
-
-after_script:
-  - codeclimate < reports/**/lcov.info
-
 script: make ci
-
-env:
-  - CODECLIMATE_REPO_TOKEN=dec3f4db135a9088676a04f44bdc4c4857b9012c46b1e2f35801e8ffc5f68678

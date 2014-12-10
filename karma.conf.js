@@ -8,7 +8,7 @@ module.exports = function(config) {
 			'public/js/sidlee-client.js',
 			'test/public/js/sidlee-client.spec.js'
 		],
-		browsers: ['PhantomJS', 'Chrome', 'Firefox'],
+		browsers: ['PhantomJS'],
 
 		reporters: ['progress', 'coverage'],
 
@@ -18,7 +18,10 @@ module.exports = function(config) {
 
 		coverageReporter: {
 			type : 'lcovonly',
-			dir : 'reports/'
+			dir : 'reports/',
+			subdir: function(browser) {
+				return browser.toLowerCase().split(/[ /-]/)[0];
+			}
 		},
 
 		singleRun: true
