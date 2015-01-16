@@ -65,7 +65,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 			case 'today' : functionToUse = aggregateForToday; break;
 			case 'last24' : functionToUse = aggregateForLast24h; break;
 			case 'last31' : functionToUse = aggregateForLast31d; break;
-		};
+		}
 
 		var name = '';
 		if (req.params.name) name = req.params.name;
@@ -124,21 +124,21 @@ var Routes = function(sockets, Event, SensorsConf) {
 
 		var aggregate = Event.aggregate();
 		// match events from date and with the given name
-		aggregate.match({ date: { $gte : yesterday }, name: sensorConf.name })
+		aggregate.match({ date: { $gte : yesterday }, name: sensorConf.name });
 		// only keep the hour part of the date, since we now all matched events happened during the last 24h
-		aggregate.project({ name: 1, value: 1, hour : {'$hour' : '$date'} })
+		aggregate.project({ name: 1, value: 1, hour : {'$hour' : '$date'} });
 		// group these events in order to sum/average the sensed values
 		// according to the sensor strategy
 		if (sensorConf.sum) {
-			aggregate.group({ _id: { name: '$name', hour: '$hour' }, value: { $sum: '$value' } })
+			aggregate.group({ _id: { name: '$name', hour: '$hour' }, value: { $sum: '$value' } });
 		}
 		else {
-			aggregate.group({ _id: { name: '$name', hour: '$hour' }, value: { $avg: '$value' } })
+			aggregate.group({ _id: { name: '$name', hour: '$hour' }, value: { $avg: '$value' } });
 		}
 		// re-arrange data
-		aggregate.project({ _id: '$_id.name', values: { hour: '$_id.hour', value : '$value' } })
+		aggregate.project({ _id: '$_id.name', values: { hour: '$_id.hour', value : '$value' } });
 		// then push each values in an array
-		aggregate.group({ _id: '$_id', values: { $push:  { hour: '$values.hour', value: '$values.value' } } })
+		aggregate.group({ _id: '$_id', values: { $push:  { hour: '$values.hour', value: '$values.value' } } });
 		aggregate.exec(callback);
 	};
 
@@ -156,21 +156,21 @@ var Routes = function(sockets, Event, SensorsConf) {
 
 		var aggregate = Event.aggregate();
 		// match events from date and with the given name
-		aggregate.match({ date: { $gte : oneMonthAgo }, name: sensorConf.name })
+		aggregate.match({ date: { $gte : oneMonthAgo }, name: sensorConf.name });
 		// only keep the hour part of the date, since we now all matched events happened during the last 24h
-		aggregate.project({ name: 1, value: 1, day : {'$dayOfMonth' : '$date'} })
+		aggregate.project({ name: 1, value: 1, day : {'$dayOfMonth' : '$date'} });
 		// group these events in order to sum/average the sensed values
 		// according to the sensor strategy
 		if (sensorConf.sum) {
-			aggregate.group({ _id: { name: '$name', day: '$day' }, value: { $sum: '$value' } })
+			aggregate.group({ _id: { name: '$name', day: '$day' }, value: { $sum: '$value' } });
 		}
 		else {
-			aggregate.group({ _id: { name: '$name', day: '$day' }, value: { $avg: '$value' } })
+			aggregate.group({ _id: { name: '$name', day: '$day' }, value: { $avg: '$value' } });
 		}
 		// re-arrange data
-		aggregate.project({ _id: '$_id.name', values: { day: '$_id.day', value : '$value' } })
+		aggregate.project({ _id: '$_id.name', values: { day: '$_id.day', value : '$value' } });
 		// then push each values in an array
-		aggregate.group({ _id: '$_id', values: { $push:  { day: '$values.day', value: '$values.value' } } })
+		aggregate.group({ _id: '$_id', values: { $push:  { day: '$values.day', value: '$values.value' } } });
 		aggregate.exec(callback);
 	};
 
