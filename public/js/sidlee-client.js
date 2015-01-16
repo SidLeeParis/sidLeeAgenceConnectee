@@ -28,6 +28,14 @@
 		return this;
 	};
 
+	Client.prototype.today = function() {
+		var today = new Date();
+		var queryDate = today.getFullYear() + '-' + today.getMonth() +1 + '-' + today.getDate();
+		this.queryParams.push('fromDate=' + queryDate);
+		this.queryParams.push('toDate=' + queryDate);
+		return this;
+	}
+
 	Client.prototype.exec = function(callback) {
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function() {

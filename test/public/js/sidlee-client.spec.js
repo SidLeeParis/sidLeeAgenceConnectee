@@ -84,6 +84,19 @@ describe('SidLeeClient', function() {
 		});
 	});
 
+	describe('#today()', function(){
+
+		it('should happen 2 query params: fromDate and toDate', function() {
+			var today = new Date();
+			var queryDate = today.getFullYear() + '-' + today.getMonth() +1 + '-' + today.getDate();
+			var client = new SidLeeClient(server, function(data) {});
+			client.today();
+			client.queryParams.length.should.equal(2);
+			client.queryParams[0].should.equal('fromDate=' + queryDate);
+			client.queryParams[1].should.equal('toDate=' + queryDate);
+		});
+	});
+
 	describe('#exec()', function(){
 		this.timeout(3000);
 
