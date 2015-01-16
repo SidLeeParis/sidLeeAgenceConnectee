@@ -9,7 +9,7 @@ module.exports.insertEvents = function(countOne, countTwo, callback) {
 		event = new Event({
 			name: 'dummyName1',
 			date: new Date(),
-			vale: Math.floor(Math.random() * 10),
+			value: Math.floor(Math.random() * 10),
 			unit: 'dummyUnit'
 		});
 		events.push(event);
@@ -18,7 +18,7 @@ module.exports.insertEvents = function(countOne, countTwo, callback) {
 		event = new Event({
 			name: 'dummyName2',
 			date: new Date(),
-			vale: Math.floor(Math.random() * 10),
+			value: 1,
 			unit: 'dummyUnit'
 		});
 		events.push(event);

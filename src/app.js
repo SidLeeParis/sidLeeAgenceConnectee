@@ -8,7 +8,8 @@ var express = require('express'),
 	mongoose = require('mongoose'),
 	Event = require('./models/eventModel'),
 	Routes = require('./routes/routes'),
-	conf = require('./conf/conf');
+	conf = require('./conf/conf'),
+	SensorsConf = require('./conf/sensorsConf');
 
 // connect to mongo
 mongoose.connect(conf.MONGO_URL);
@@ -36,11 +37,15 @@ if (env === 'development') {
 }
 
 // routes configuration
-var routes = new Routes(io.sockets, Event),
+var routes = new Routes(io.sockets, Event, SensorsConf),
 	router = express.Router();
 app.use(conf.API_PREFIX, router);
 router.post('/event', routes.create);
 router.get('/event/:name?', routes.find);
+// the bind function permits to specify what will be the 'this' in the context of the function
+router.get('/today/:name?', routes.aggregate.bind('today'));
+router.get('/last24/:name?', routes.aggregate.bind('last24'));
+router.get('/last31/:name?', routes.aggregate.bind('last31'));
 
 // websocket configuration
 io.on('connection', function (socket) {
