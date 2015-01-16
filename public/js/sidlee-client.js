@@ -34,7 +34,12 @@
 		this.queryParams.push('fromDate=' + queryDate);
 		this.queryParams.push('toDate=' + queryDate);
 		return this;
-	}
+	};
+
+	Client.prototype.oldestFirst = function() {
+		this.queryParams.push('oldestFirst=true');
+		return this;
+	};
 
 	Client.prototype.exec = function(callback) {
 		var request = new XMLHttpRequest();

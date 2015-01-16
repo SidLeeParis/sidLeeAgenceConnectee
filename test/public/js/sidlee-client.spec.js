@@ -62,7 +62,7 @@ describe('SidLeeClient', function() {
 			client.queryParams.length.should.equal(0);
 		});
 
-		it('should add a fromDate filter to the query params', function() {
+		it('should add a toDate filter to the query params', function() {
 			var client = new SidLeeClient(server, function(data) {});
 			client.to('2014-12-01');
 			client.queryParams[0].should.equal('toDate=2014-12-01');
@@ -77,7 +77,7 @@ describe('SidLeeClient', function() {
 			client.queryParams.length.should.equal(0);
 		});
 
-		it('should add a fromDate filter to the query params', function() {
+		it('should add a limit filter to the query params', function() {
 			var client = new SidLeeClient(server, function(data) {});
 			client.limit('10');
 			client.queryParams[0].should.equal('limit=10');
@@ -94,6 +94,15 @@ describe('SidLeeClient', function() {
 			client.queryParams.length.should.equal(2);
 			client.queryParams[0].should.equal('fromDate=' + queryDate);
 			client.queryParams[1].should.equal('toDate=' + queryDate);
+		});
+	});
+
+	describe('#oldestFirst()', function(){
+
+		it('should add a oldestFirst filter to the query params', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.oldestFirst();
+			client.queryParams[0].should.equal('oldestFirst=true');
 		});
 	});
 

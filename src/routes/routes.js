@@ -49,6 +49,7 @@ var Routes = function(sockets, Event) {
 		}
 		var query = Event.find(filter);
 		if (req.query.limit) query.limit(req.query.limit);
+		if (!req.query.oldestFirst) query.sort('-date');
 		query.exec(function (err, events) {
 			if (err) throw err;
 			res.status(200).send(events);
