@@ -41,11 +41,12 @@ var routes = new Routes(io.sockets, Event, SensorsConf),
 	router = express.Router();
 app.use(conf.API_PREFIX, router);
 router.post('/event', routes.create);
-router.get('/event/:name?', routes.find);
 // the bind function permits to specify what will be the 'this' in the context of the function
-router.get('/today/:name?', routes.aggregate.bind('today'));
-router.get('/last24/:name?', routes.aggregate.bind('last24'));
-router.get('/last31/:name?', routes.aggregate.bind('last31'));
+router.get('/event/today/:name?', routes.aggregate.bind('today'));
+router.get('/event/last24/:name?', routes.aggregate.bind('last24'));
+router.get('/event/last31/:name?', routes.aggregate.bind('last31'));
+router.get('/event/:name?', routes.find);
+
 
 // websocket configuration
 io.on('connection', function (socket) {

@@ -86,14 +86,46 @@ describe('SidLeeClient', function() {
 
 	describe('#today()', function(){
 
-		it('should happen 2 query params: fromDate and toDate', function() {
-			var today = new Date();
-			var queryDate = today.getFullYear() + '-' + today.getMonth() +1 + '-' + today.getDate();
+		it('should create the right url without name filter', function() {
 			var client = new SidLeeClient(server, function(data) {});
 			client.today();
-			client.queryParams.length.should.equal(2);
-			client.queryParams[0].should.equal('fromDate=' + queryDate);
-			client.queryParams[1].should.equal('toDate=' + queryDate);
+			client.getUrl.should.equal(server + 'api/1/event/' + 'today');
+		});
+
+		it('should create the right url with name filter', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.today('test');
+			client.getUrl.should.equal(server + 'api/1/event/' + 'today/test');
+		});
+	});
+
+	describe('#last24()', function(){
+
+		it('should create the right url without name filter', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.last24();
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last24');
+		});
+
+		it('should create the right url with name filter', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.last24('test');
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last24/test');
+		});
+	});
+
+	describe('#last31()', function(){
+
+		it('should create the right url without name filter', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.last31();
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last31');
+		});
+
+		it('should create the right url with name filter', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.last31('test');
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last31/test');
 		});
 	});
 

@@ -28,11 +28,21 @@
 		return this;
 	};
 
-	Client.prototype.today = function() {
-		var today = new Date();
-		var queryDate = today.getFullYear() + '-' + today.getMonth() +1 + '-' + today.getDate();
-		this.queryParams.push('fromDate=' + queryDate);
-		this.queryParams.push('toDate=' + queryDate);
+	Client.prototype.today = function(nameFilter) {
+		this.getUrl = this.getUrl + 'today';
+		if (nameFilter) this.getUrl = this.getUrl + '/' +nameFilter;
+		return this;
+	};
+
+	Client.prototype.last24 = function(nameFilter) {
+		this.getUrl = this.getUrl + 'last24';
+		if (nameFilter) this.getUrl = this.getUrl + '/' + nameFilter;
+		return this;
+	};
+
+	Client.prototype.last31 = function(nameFilter) {
+		this.getUrl = this.getUrl + 'last31';
+		if (nameFilter) this.getUrl = this.getUrl + '/' + nameFilter;
 		return this;
 	};
 
