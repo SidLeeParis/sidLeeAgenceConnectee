@@ -13,7 +13,10 @@ var eventSchema = mongoose.Schema({
 	name: { type: String, required: true },
 	date: { type: Date, required: true },
 	value: Number,
-	unit: String
+	unit: String,
+	app: String,
+	user: String,
+	trackerVersion: String
 });
 
 /**

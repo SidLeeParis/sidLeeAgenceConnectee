@@ -156,13 +156,15 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'dummyName2\' when called for today', function(done) {
+			it('should count the right amount for event called \'ctrlz\' when called for today', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'dummyName2') {
+							if (currentSensor._id === 'ctrlz') {
 								currentSensor.value.should.equal(5);
+								should.exist(currentSensor.last);
+								should.exist(currentSensor.user);
 								done();
 							}
 						});
@@ -205,12 +207,12 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'dummyName2\' when called for last24', function(done) {
+			it('should count the right amount for event called \'ctrlz\' when called for last24', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'dummyName2') {
+							if (currentSensor._id === 'ctrlz') {
 								currentSensor.values[0].hour.should.equal(new Date().getUTCHours());
 								currentSensor.values[0].value.should.equal(5);
 								done();
@@ -221,6 +223,44 @@ describe('Routes', function() {
 					var req = {};
 					req.params = req.query = {};
 					routes.aggregate.call('last24', req, response);
+				});
+			});
+
+			it('should count the right amount for event called \'ctrlz\' when called for last24 with user filter', function(done) {
+				helpers.insertEvents(5, 5, function() {
+					var response = new Response(function() {
+						response.getStatus().should.equal(200);
+						response.getData().forEach(function(currentSensor) {
+							if (currentSensor._id === 'ctrlz') {
+								should.exist(currentSensor.values[0].user);
+								should.exist(currentSensor.values[0].value);
+								done();
+							}
+						});
+					});
+
+					var req = {};
+					req.params = req.query = {};
+					routes.aggregate.call('last24/user', req, response);
+				});
+			});
+
+			it('should count the right amount for event called \'ctrlz\' when called for last24 with app filter', function(done) {
+				helpers.insertEvents(5, 5, function() {
+					var response = new Response(function() {
+						response.getStatus().should.equal(200);
+						response.getData().forEach(function(currentSensor) {
+							if (currentSensor._id === 'ctrlz') {
+								should.exist(currentSensor.values[0].app);
+								should.exist(currentSensor.values[0].value);
+								done();
+							}
+						});
+					});
+
+					var req = {};
+					req.params = req.query = {};
+					routes.aggregate.call('last24/app', req, response);
 				});
 			});
 		});
@@ -255,12 +295,12 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'dummyName2\' when called for last24', function(done) {
+			it('should count the right amount for event called \'ctrlz\' when called for last31', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'dummyName2') {
+							if (currentSensor._id === 'ctrlz') {
 								currentSensor.values[0].day.should.equal(new Date().getUTCDate());
 								currentSensor.values[0].value.should.equal(5);
 								done();
@@ -271,6 +311,44 @@ describe('Routes', function() {
 					var req = {};
 					req.params = req.query = {};
 					routes.aggregate.call('last31', req, response);
+				});
+			});
+
+			it('should count the right amount for event called \'ctrlz\' when called for last31 with user filter', function(done) {
+				helpers.insertEvents(5, 5, function() {
+					var response = new Response(function() {
+						response.getStatus().should.equal(200);
+						response.getData().forEach(function(currentSensor) {
+							if (currentSensor._id === 'ctrlz') {
+								should.exist(currentSensor.values[0].user);
+								should.exist(currentSensor.values[0].value);
+								done();
+							}
+						});
+					});
+
+					var req = {};
+					req.params = req.query = {};
+					routes.aggregate.call('last31/user', req, response);
+				});
+			});
+
+			it('should count the right amount for event called \'ctrlz\' when called for last31 with app filter', function(done) {
+				helpers.insertEvents(5, 5, function() {
+					var response = new Response(function() {
+						response.getStatus().should.equal(200);
+						response.getData().forEach(function(currentSensor) {
+							if (currentSensor._id === 'ctrlz') {
+								should.exist(currentSensor.values[0].app);
+								should.exist(currentSensor.values[0].value);
+								done();
+							}
+						});
+					});
+
+					var req = {};
+					req.params = req.query = {};
+					routes.aggregate.call('last31/app', req, response);
 				});
 			});
 		});

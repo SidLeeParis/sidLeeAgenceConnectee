@@ -5,6 +5,7 @@ JSHINT="node_modules/.bin/jshint"
 ISTANBUL="node_modules/.bin/istanbul"
 CODECLIMATE="node_modules/.bin/codeclimate"
 KARMA="node_modules/karma/bin/karma"
+SUPERVISOR="node_modules/.bin/supervisor"
 
 TESTS=$(shell find test/ -name "*.test.js")
 
@@ -36,4 +37,7 @@ codeclimate:
 
 ci: clean jshint test coverage codeclimate
 
-.PHONY: clean test back-test front-test jshint coverage codeclimate ci
+dev-server:
+	$(SUPERVISOR) ./src/app
+
+.PHONY: clean back-test front-test test jshint coverage codeclimate ci dev-server

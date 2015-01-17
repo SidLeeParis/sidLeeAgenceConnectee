@@ -11,7 +11,8 @@ var SensorsConf = {
 	roomTemp: { name: 'roomTemp', sum: false },
 	sound: { name: 'sound', sum: false },
 	flush: { name: 'flush', sum: true },
-	water: { name: 'water', sum: true }
+	water: { name: 'water', sum: true },
+	ctrlz: { name: 'ctrlz', sum: true }
 };
 
 

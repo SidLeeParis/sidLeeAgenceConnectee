@@ -35,15 +35,17 @@
 		return this;
 	};
 
-	Client.prototype.last24 = function(nameFilter) {
+	Client.prototype.last24 = function(nameFilter, appOrUserFilter) {
 		this.getUrl = this.getUrl + 'last24';
 		if (nameFilter) this.getUrl = this.getUrl + '/' + nameFilter;
+		if (appOrUserFilter && nameFilter === 'ctrlz') this.getUrl = this.getUrl + '/' + appOrUserFilter;
 		return this;
 	};
 
-	Client.prototype.last31 = function(nameFilter) {
+	Client.prototype.last31 = function(nameFilter, appOrUserFilter) {
 		this.getUrl = this.getUrl + 'last31';
 		if (nameFilter) this.getUrl = this.getUrl + '/' + nameFilter;
+		if (appOrUserFilter && nameFilter === 'ctrlz') this.getUrl = this.getUrl + '/' + appOrUserFilter;
 		return this;
 	};
 

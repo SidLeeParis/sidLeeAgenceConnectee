@@ -44,7 +44,11 @@ router.post('/event', routes.create);
 // the bind function permits to specify what will be the 'this' in the context of the function
 router.get('/event/today/:name?', routes.aggregate.bind('today'));
 router.get('/event/last24/:name?', routes.aggregate.bind('last24'));
+router.get('/event/last24/:name?/user', routes.aggregate.bind('last24/user'));
+router.get('/event/last24/:name?/app', routes.aggregate.bind('last24/app'));
 router.get('/event/last31/:name?', routes.aggregate.bind('last31'));
+router.get('/event/last31/:name?/user', routes.aggregate.bind('last31/user'));
+router.get('/event/last31/:name?/app', routes.aggregate.bind('last31/app'));
 router.get('/event/:name?', routes.find);
 
 

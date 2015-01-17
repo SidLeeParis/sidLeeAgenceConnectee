@@ -112,6 +112,18 @@ describe('SidLeeClient', function() {
 			client.last24('test');
 			client.getUrl.should.equal(server + 'api/1/event/' + 'last24/test');
 		});
+
+		it('should create the right url with name filter and appOrUser filter', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.last24('ctrlz', 'app');
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last24/ctrlz/app');
+		});
+
+		it('should create the right url with name filter and reject appOrUser filter', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.last24('test', 'app');
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last24/test');
+		});
 	});
 
 	describe('#last31()', function(){
@@ -125,6 +137,18 @@ describe('SidLeeClient', function() {
 		it('should create the right url with name filter', function() {
 			var client = new SidLeeClient(server, function(data) {});
 			client.last31('test');
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last31/test');
+		});
+
+		it('should create the right url with name filter and appOrUser filter', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.last31('ctrlz', 'app');
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last31/ctrlz/app');
+		});
+
+		it('should create the right url with name filter and reject appOrUser filter', function() {
+			var client = new SidLeeClient(server, function(data) {});
+			client.last31('test', 'app');
 			client.getUrl.should.equal(server + 'api/1/event/' + 'last31/test');
 		});
 	});
