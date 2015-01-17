@@ -1,4 +1,5 @@
 (function(io){
+	'use strict';
 
 	var Client = function(url, eventHandler) {
 		this.socket = io.connect(url, {secure: true});
