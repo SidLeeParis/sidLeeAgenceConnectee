@@ -213,7 +213,7 @@ describe('Routes', function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
 							if (currentSensor._id === 'ctrlz') {
-								currentSensor.values[0].hour.should.equal(new Date().getUTCHours());
+								currentSensor.values[0].hourAgo.should.equal(0);
 								currentSensor.values[0].value.should.equal(5);
 								done();
 							}
@@ -265,7 +265,7 @@ describe('Routes', function() {
 			});
 		});
 
-		describe('- last31 routes', function() {
+		describe('- last30 routes', function() {
 
 			it('should group events in two categories when called for last24', function(done) {
 				helpers.insertEvents(5, 5, function() {
@@ -277,11 +277,11 @@ describe('Routes', function() {
 
 					var req = {};
 					req.params = req.query = {};
-					routes.aggregate.call('last31', req, response);
+					routes.aggregate.call('last30', req, response);
 				});
 			});
 
-			it('should only return events for \'dummyName1\' when called for last31', function(done) {
+			it('should only return events for \'dummyName1\' when called for last30', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
@@ -291,17 +291,17 @@ describe('Routes', function() {
 
 					var req = {};
 					req.params= { name: 'dummyName1' };
-					routes.aggregate.call('last31', req, response);
+					routes.aggregate.call('last30', req, response);
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for last31', function(done) {
+			it('should count the right amount for event called \'ctrlz\' when called for last30', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
 							if (currentSensor._id === 'ctrlz') {
-								currentSensor.values[0].day.should.equal(new Date().getUTCDate());
+								currentSensor.values[0].dayAgo.should.equal(0);
 								currentSensor.values[0].value.should.equal(5);
 								done();
 							}
@@ -310,11 +310,11 @@ describe('Routes', function() {
 
 					var req = {};
 					req.params = req.query = {};
-					routes.aggregate.call('last31', req, response);
+					routes.aggregate.call('last30', req, response);
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for last31 with user filter', function(done) {
+			it('should count the right amount for event called \'ctrlz\' when called for last30 with user filter', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
@@ -329,11 +329,11 @@ describe('Routes', function() {
 
 					var req = {};
 					req.params = req.query = {};
-					routes.aggregate.call('last31/user', req, response);
+					routes.aggregate.call('last30/user', req, response);
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for last31 with app filter', function(done) {
+			it('should count the right amount for event called \'ctrlz\' when called for last30 with app filter', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
@@ -348,7 +348,7 @@ describe('Routes', function() {
 
 					var req = {};
 					req.params = req.query = {};
-					routes.aggregate.call('last31/app', req, response);
+					routes.aggregate.call('last30/app', req, response);
 				});
 			});
 		});

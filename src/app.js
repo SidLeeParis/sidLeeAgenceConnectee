@@ -6,6 +6,8 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
 	cors = require('cors'),
 	mongoose = require('mongoose'),
+	CronJob = require('cron').CronJob,
+	moment = require('moment'),
 	Event = require('./models/eventModel'),
 	Routes = require('./routes/routes'),
 	conf = require('./conf/conf'),
@@ -46,11 +48,21 @@ router.get('/event/today/:name?', routes.aggregate.bind('today'));
 router.get('/event/last24/:name?', routes.aggregate.bind('last24'));
 router.get('/event/last24/:name?/user', routes.aggregate.bind('last24/user'));
 router.get('/event/last24/:name?/app', routes.aggregate.bind('last24/app'));
-router.get('/event/last31/:name?', routes.aggregate.bind('last31'));
-router.get('/event/last31/:name?/user', routes.aggregate.bind('last31/user'));
-router.get('/event/last31/:name?/app', routes.aggregate.bind('last31/app'));
+router.get('/event/last30/:name?', routes.aggregate.bind('last30'));
+router.get('/event/last30/:name?/user', routes.aggregate.bind('last30/user'));
+router.get('/event/last30/:name?/app', routes.aggregate.bind('last30/app'));
 router.get('/event/:name?', routes.find);
 
+// cron configuration
+// remove events that are one month old every day at 0h05
+// except for the scroll paper printer
+new CronJob('5 0 * * *', function(){
+	console.log('Removing events older than a month');
+	var oneMonthAgo = moment().startOf('day').subtract(1, 'M').toDate();
+	Event.remove({ name: { $ne: 'scroll' }, date : { $lt : oneMonthAgo } }).exec(function(err) {
+		console.log('Done removing old events');
+	});
+}, null, true, 'Europe/Paris');
 
 // websocket configuration
 io.on('connection', function (socket) {

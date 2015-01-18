@@ -1,11 +1,11 @@
 'use strict';
-var Event = require('../models/eventModel');
+var moment = require('moment'),
+	Event = require('../models/eventModel');
 
 // function to aggregate today values of a given sensor, according to its strategy
 var today = function(sensorConf, callback) {
 	// get the current date (beginning of the day: 0h00m00s000ms)
-	var today = new Date();
-	today.setHours(0,0,0,0);
+	var today = moment().startOf('day').toDate();
 
 	var aggregate = Event.aggregate();
 	// match events from date and with the given name
@@ -31,9 +31,11 @@ var today = function(sensorConf, callback) {
 
 // function to aggregate values of the last 24h of a given sensor, according to its strategy
 var last24 = function(sensorConf, callback) {
-	// get yesterday date (now minus 24h)
-	var yesterday = new Date();
-	yesterday.setHours(yesterday.getHours() - 24);
+	// get current hour in order to make some relative calculations
+	var current = moment();
+	var currentHour = current.utc().hour();
+	// get yesterday date (from h-23 to h+1 to get the running hour, e.g. from 2h yesterday to 2h today when it's 1h)
+	var yesterday = current.startOf('hour').add(1, 'h').subtract(24, 'h').toDate();
 
 	var aggregate = Event.aggregate();
 	// match events from date and with the given name
@@ -49,23 +51,26 @@ var last24 = function(sensorConf, callback) {
 		aggregate.group({ _id: { name: '$name', hour: '$hour' }, value: { $avg: '$value' } });
 	}
 	// re-arrange data
-	aggregate.project({ _id: '$_id.name', values: { hour: '$_id.hour', value : '$value' } });
+	// calculate hour ago, instead of the plain hour
+	// first subtract the hour returned by the query to the current hour
+	aggregate.project({ _id: '$_id.name', values: { hour: { $subtract: [ currentHour, '$_id.hour' ] }, value : '$value' } });
+	// then if the result of the subtraction is negative, it means it's an hour of the day ago
+	// if so remove 24h, else leave the hour as is
+	aggregate.project({ _id: '$_id', values: { hourAgo: { $cond: [ { $lt: [ '$values.hour', 0 ] }, { $add: ['$values.hour', 24] }, '$values.hour' ] }, value : '$values.value' } });
+	// sort the result by ascending values.hourAgo
+	aggregate.sort('values.hourAgo');
 	// then push each values in an array
-	aggregate.group({ _id: '$_id', values: { $push:  { hour: '$values.hour', value: '$values.value' } } });
+	aggregate.group({ _id: '$_id', values: { $push:  { hourAgo: '$values.hourAgo', value: '$values.value' } } });
 	aggregate.exec(callback);
 };
 
 // function to aggregate values of the last month of a given sensor, according to its strategy
-var last31 = function(sensorConf, callback) {
-	// get a month ago date (same day, same time, but the month ago)
-	// get the date one month ago
-	var oneMonthAgo = new Date();
-	var previousMonth = oneMonthAgo.getMonth() - 1;
-	if (previousMonth < 0) {
-		previousMonth += 12;
-		oneMonthAgo.setFullYear(oneMonthAgo.getFullYear() - 1);
-	}
-	oneMonthAgo.setMonth(previousMonth);
+var last30 = function(sensorConf, callback) {
+	// get current day in order to make some relatie calculations
+	var current = moment();
+	var currentDay = current.utc().date();
+	// get a month ago date (from d+1/M-1 to d/M, e.g. from 19/12 to 18/01)
+	var oneMonthAgo = current.startOf('day').add(1, 'd').subtract(1, 'M').toDate();
 
 	var aggregate = Event.aggregate();
 	// match events from date and with the given name
@@ -81,27 +86,29 @@ var last31 = function(sensorConf, callback) {
 		aggregate.group({ _id: { name: '$name', day: '$day' }, value: { $avg: '$value' } });
 	}
 	// re-arrange data
-	aggregate.project({ _id: '$_id.name', values: { day: '$_id.day', value : '$value' } });
+	// calculate day ago instead of plain day
+	// first subtract the day returned by the query to the current day
+	aggregate.project({ _id: '$_id.name', values: { day: { $subtract: [ currentDay, '$_id.day' ] }, value : '$value' } });
+	// then if the result of the subtraction is less than 1, it means it's a day before the beginning of the current month
+	// if so subtract it to the currentDay, else leave the day as is
+	aggregate.project({ _id: '$_id', values: { dayAgo: { $cond: [ { $lt: [ '$values.day', 0 ] }, { $subtract: [currentDay - 1, '$values.day'] }, '$values.day' ] }, value : '$values.value' } });
+	// sort the result by ascending values.dayAgo
+	aggregate.sort('values.dayAgo');
 	// then push each values in an array
-	aggregate.group({ _id: '$_id', values: { $push:  { day: '$values.day', value: '$values.value' } } });
+	aggregate.group({ _id: '$_id', values: { $push:  { dayAgo: '$values.dayAgo', value: '$values.value' } } });
 	aggregate.exec(callback);
 };
 
 // function to aggregate today values of a given sensor, according to its strategy
 var ctrlz = function(sensorConf, callback) {
-	var date = new Date();
+	var date;
 	if (this.dateRange === 'last24') {
-		// get yesterday date (now minus 24h)
-		date.setHours(date.getHours() - 24);
+		// get yesterday date (from h-23 to h+1 to get the running hour, e.g. from 2h yesterday to 2h today when it's 1h)
+		date = moment().startOf('hour').add(1, 'h').subtract(24, 'h').toDate();
 	}
 	else {
-		// get a month ago date (same day, same time, but the month ago)
-		var previousMonth = date.getMonth() - 1;
-		if (previousMonth < 0) {
-			previousMonth += 12;
-			date.setFullYear(date.getFullYear() - 1);
-		}
-		date.setMonth(previousMonth);
+		// get a month ago date (from d+1/M-1 to d/M, e.g. from 19/12 to 18/01)
+		date = moment().startOf('day').add(1, 'd').subtract(1, 'M').toDate();
 	}
 
 	var aggregate = Event.aggregate();
@@ -122,6 +129,6 @@ var ctrlz = function(sensorConf, callback) {
 module.exports = {
 	today: today,
 	last24: last24,
-	last31 : last31,
+	last30 : last30,
 	ctrlz: ctrlz
 };

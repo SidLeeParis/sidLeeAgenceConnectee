@@ -35,18 +35,19 @@
 		return this;
 	};
 
-	Client.prototype.last24 = function(nameFilter, appOrUserFilter) {
-		this.getUrl = this.getUrl + 'last24';
+	Client.prototype.lastXX = function(nameFilter, appOrUserFilter, lastXX) {
+		this.getUrl = this.getUrl + lastXX;
 		if (nameFilter) this.getUrl = this.getUrl + '/' + nameFilter;
 		if (appOrUserFilter && nameFilter === 'ctrlz') this.getUrl = this.getUrl + '/' + appOrUserFilter;
 		return this;
 	};
 
-	Client.prototype.last31 = function(nameFilter, appOrUserFilter) {
-		this.getUrl = this.getUrl + 'last31';
-		if (nameFilter) this.getUrl = this.getUrl + '/' + nameFilter;
-		if (appOrUserFilter && nameFilter === 'ctrlz') this.getUrl = this.getUrl + '/' + appOrUserFilter;
-		return this;
+	Client.prototype.last24 = function(nameFilter, appOrUserFilter) {
+		this.lastXX(nameFilter, appOrUserFilter, 'last24');
+	};
+
+	Client.prototype.last30 = function(nameFilter, appOrUserFilter) {
+		this.lastXX(nameFilter, appOrUserFilter, 'last30');
 	};
 
 	Client.prototype.oldestFirst = function() {
