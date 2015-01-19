@@ -11,6 +11,7 @@ var express = require('express'),
 	Event = require('./models/eventModel'),
 	Routes = require('./routes/routes'),
 	conf = require('./conf/conf'),
+	getLikes = require('./misc/facebookLikes'),
 	SensorsConf = require('./conf/sensorsConf');
 
 // connect to mongo
@@ -61,6 +62,26 @@ new CronJob('5 0 * * *', function(){
 	var oneMonthAgo = moment().startOf('day').subtract(1, 'M').toDate();
 	Event.remove({ name: { $ne: 'scroll' }, date : { $lt : oneMonthAgo } }).exec(function(err) {
 		console.log('Done removing old events');
+	});
+}, null, true, 'Europe/Paris');
+
+// query facebook graph to get likes, every minutes
+var previousLikes = 0;
+new CronJob('* * * * *', function(){
+	getLikes(function(likes) {
+		// only send data if changed
+		if (likes.value !== previousLikes) {
+			// update previous likes
+			previousLikes = likes.value;
+			// construct data
+			var data = {
+				name: likes._id,
+				date: new Date(),
+				value: likes.value,
+				unit: 'likes'
+			};
+			io.sockets.emit('event', data);
+		}
 	});
 }, null, true, 'Europe/Paris');
 
