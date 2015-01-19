@@ -1,6 +1,7 @@
 'use strict';
 var async = require('async'),
 	getLikes = require('../misc/facebookLikes'),
+	getVisits = require('../misc/googleAnalyticsVisits'),
 	helper = require('./aggregateHelper');
 
 /**
@@ -83,8 +84,13 @@ var Routes = function(sockets, Event, SensorsConf) {
 		// a sensor name is provided, only query this one
 		if (sensorConf) {
 			if (sensorConf.name === 'likes') {
-				getLikes(function(likes) {
+				getLikes(function(err, likes) {
 					res.status(200).send(likes);
+				});
+			}
+			else if (sensorConf.name === 'visits') {
+				getVisits(function(err, visits) {
+					res.status(200).send(visits);
 				});
 			}
 			else {
@@ -101,8 +107,14 @@ var Routes = function(sockets, Event, SensorsConf) {
 				allSensors,
 				function(sensor, callback) {
 					if (SensorsConf[sensor].name === 'likes') {
-						getLikes(function(likes) {
+						getLikes(function(err, likes) {
 							aggregationResult.push(likes);
+							callback();
+						});
+					}
+					else if (SensorsConf[sensor].name === 'visits') {
+						getVisits(function(err, visits) {
+							aggregationResult.push(visits);
 							callback();
 						});
 					}

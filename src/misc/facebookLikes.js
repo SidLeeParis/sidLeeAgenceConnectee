@@ -23,8 +23,12 @@ var getLikes = function(callback) {
 				_id: 'likes',
 				value: likes
 			};
-			callback(data);
+			callback(null, data);
 		});
+	});
+	// an error occured
+	req.on('error', function(err) {
+		callback(err, null);
 	});
 	// actually send the request
 	req.end();

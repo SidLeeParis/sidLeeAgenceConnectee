@@ -12,6 +12,7 @@ var express = require('express'),
 	Routes = require('./routes/routes'),
 	conf = require('./conf/conf'),
 	getLikes = require('./misc/facebookLikes'),
+	getVisits = require('./misc/googleAnalyticsVisits'),
 	SensorsConf = require('./conf/sensorsConf');
 
 // connect to mongo
@@ -68,7 +69,7 @@ new CronJob('5 0 * * *', function(){
 // query facebook graph to get likes, every minutes
 var previousLikes = 0;
 new CronJob('* * * * *', function(){
-	getLikes(function(likes) {
+	getLikes(function(err, likes) {
 		// only send data if changed
 		if (likes.value !== previousLikes) {
 			// update previous likes
@@ -80,6 +81,27 @@ new CronJob('* * * * *', function(){
 				value: likes.value,
 				unit: 'likes'
 			};
+			io.sockets.emit('event', data);
+		}
+	});
+}, null, true, 'Europe/Paris');
+
+// query google analytics to get visits, every minutes
+var previousVisits = -1;
+new CronJob('* * * * *', function(){
+	getVisits(function(err, visits) {
+		// only send data if changed
+		if (visits.value !== previousVisits) {
+			// update previous visits
+			previousVisits = visits.value;
+			// construct data
+			var data = {
+				name: visits._id,
+				date: new Date(),
+				value: visits.value,
+				unit: 'visits'
+			};
+			console.log(data);
 			io.sockets.emit('event', data);
 		}
 	});

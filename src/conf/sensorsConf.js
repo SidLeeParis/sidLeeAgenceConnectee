@@ -13,7 +13,8 @@ var SensorsConf = {
 	flush: { name: 'flush', sum: true },
 	water: { name: 'water', sum: true },
 	ctrlz: { name: 'ctrlz', sum: true },
-	likes: { name: 'likes'}
+	likes: { name: 'likes'},
+	visits: { name: 'visits'}
 };
 
 

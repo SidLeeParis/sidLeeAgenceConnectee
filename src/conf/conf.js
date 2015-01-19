@@ -36,6 +36,18 @@ Conf.API_VERSION = 1;
  * @type {String}
  */
 Conf.API_PREFIX = '/api/' + Conf.API_VERSION;
+/**
+ * Google service email
+ * @property GOOGLE_SERVICE_ACCOUNT_EMAIL
+ * @type {String}
+ */
+Conf.GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '197794117251-hc2jcb1n8puengrubd9nkcpbvj4b9gk6@developer.gserviceaccount.com';
+/**
+ * Google service pem key
+ * @property GOOGLE_SERVICE_ACCOUNT_KEY_FILE
+ * @type {String}
+ */
+Conf.GOOGLE_SERVICE_ACCOUNT_KEY_FILE = __dirname + '/../conf/dashlee.pem';
 
 
 module.exports = Conf;
