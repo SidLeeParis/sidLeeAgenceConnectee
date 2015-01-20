@@ -23,7 +23,7 @@ var postFridgeDegrees = function() {
 
 	// object to post
 	var data = {
-		name: SensorsConf['fridgeDegrees'].name,
+		name: SensorsConf.fridgeDegrees.name,
 		value: value,
 		unit: 'C',
 		token: Conf.SENSOR_TOKEN
