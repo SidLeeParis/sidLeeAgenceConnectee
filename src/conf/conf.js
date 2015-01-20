@@ -48,6 +48,12 @@ Conf.GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || 
  * @type {String}
  */
 Conf.GOOGLE_SERVICE_ACCOUNT_KEY_FILE = __dirname + '/../conf/dashlee.pem';
+/**
+ * Token used by sensors to post data
+ * @property SENSOR_TOKEN
+ * @type {String}
+ */
+Conf.SENSOR_TOKEN = 'a7485fc8-ed22-495c-51fb-2859397537ea';
 
 
 module.exports = Conf;

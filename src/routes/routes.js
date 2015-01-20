@@ -1,5 +1,6 @@
 'use strict';
 var async = require('async'),
+	Conf = require('../conf/conf'),
 	getLikes = require('../misc/facebookLikes'),
 	getVisits = require('../misc/googleAnalyticsVisits'),
 	helper = require('./aggregateHelper');
@@ -15,24 +16,30 @@ var async = require('async'),
 var Routes = function(sockets, Event, SensorsConf) {
 
 	var _create = function(req, res) {
-		// get posted data
-		var postData = {
-			name: req.body.name,
-			date: new Date(),
-			value: parseInt(req.body.value),
-			unit: req.body.unit,
-			app: req.body.app,
-			user: req.body.user,
-			trackerVersion: req.body.trackerVersion
-		};
-		// create event to store in mongo
-		var event = new Event(postData);
-		// save it and when saved, broadcast its creation to all connected websockets
-		event.save(function (err) {
-			if (err) throw err;
-			sockets.emit('event', postData);
-			res.status(201).send();
-		});
+		if (req.body.token === Conf.SENSOR_TOKEN) {
+			// get posted data
+			var postData = {
+				name: req.body.name,
+				date: new Date(),
+				value: req.body.value,
+				unit: req.body.unit,
+				app: req.body.app,
+				user: req.body.user,
+				trackerVersion: req.body.trackerVersion
+			};
+			// create event to store in mongo
+			var event = new Event(postData);
+			// save it and when saved, broadcast its creation to all connected websockets
+			event.save(function (err) {
+				if (err) throw err;
+				postData.value = postData.value + 0;
+				sockets.emit('event', postData);
+				res.status(201).send();
+			});
+		}
+		else {
+			res.status(403).send({ error: 'Wrong token' });
+		}
 	};
 
 	var _find = function(req, res) {

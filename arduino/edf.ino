@@ -43,7 +43,7 @@ void loop() {
 				buffer[3] = '\0';
 				int  watts;
 				watts = atoi(buffer) * 230;
-				sendEvent("edf", String(watts, DEC), "watts");
+				sendEvent("watt", String(watts, DEC), "watts");
 			}
 		}
 	}
@@ -51,6 +51,7 @@ void loop() {
 
 void sendEvent(String name, String value, String unit) {
 	String data = "name=" + name + "&value=" + value + "&unit=" + unit;
+	data += "&token=a7485fc8-ed22-495c-51fb-2859397537ea";
 	Serial.println(data);
 	if (client.connect("sidlee.herokuapp.com",80)) {
 		client.println("POST /api/1/event HTTP/1.1");

@@ -13,7 +13,6 @@ IRsend irsend;
 
 byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x01 };
 EthernetClient client;
-String data;
 
 void setup() {
 	Serial.begin(9600);
@@ -26,7 +25,6 @@ void setup() {
 	irsend.enableIROut(38);
 	irsend.mark(0);
 	delay(1000);
-	data = "";
 }
 
 void loop(){
@@ -47,6 +45,7 @@ void loop(){
 
 void sendEvent(String name, String value, String unit) {
 	String data = "name=" + name + "&value=" + value + "&unit=" + unit;
+	data += "&token=a7485fc8-ed22-495c-51fb-2859397537ea";
 	Serial.println(data);
 	if (client.connect("sidlee.herokuapp.com",80)) {
 		client.println("POST /api/1/event HTTP/1.1");
