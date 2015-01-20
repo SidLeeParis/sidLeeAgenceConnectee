@@ -6,6 +6,7 @@
 		this.socket.on('event', eventHandler);
 		this.url = url;
 		this.getUrl = this.url + 'api/1/event/';
+		this.postUrl = this.url + 'api/1/event';
 		this.queryParams = [];
 	};
 
@@ -73,6 +74,23 @@
 		request.send(null);
 		this.getUrl = this.url + 'api/1/event/';
 		this.queryParams = [];
+	};
+
+	Client.prototype.postEvent = function(event, callback) {
+		if (event && event.name && event.value && event.unit && event.token) {
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function() {
+				if (request.readyState == 4 && request.status == 201) {
+					callback();
+				}
+			};
+			request.open('POST', this.postUrl);
+			request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+			request.send(JSON.stringify(event));
+		}
+		else {
+			callback(new Error('You must define a name, a value, a unit and a token'));
+		}
 	};
 
 	window.SidLeeClient = Client;
