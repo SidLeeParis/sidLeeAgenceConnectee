@@ -19,7 +19,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 		var postData = {
 			name: req.body.name,
 			date: new Date(),
-			value: req.body.value,
+			value: parseInt(req.body.value),
 			unit: req.body.unit,
 			app: req.body.app,
 			user: req.body.user,
