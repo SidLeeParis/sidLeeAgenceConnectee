@@ -175,12 +175,12 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for today', function(done) {
+			it('should count the right amount for event called \'undo\' when called for today', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'ctrlz') {
+							if (currentSensor._id === 'undo') {
 								currentSensor.value.should.equal(5);
 								should.exist(currentSensor.last);
 								should.exist(currentSensor.user);
@@ -226,12 +226,12 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for last24', function(done) {
+			it('should count the right amount for event called \'undo\' when called for last24', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'ctrlz') {
+							if (currentSensor._id === 'undo') {
 								currentSensor.values[0].hourAgo.should.equal(0);
 								currentSensor.values[0].value.should.equal(5);
 								done();
@@ -245,12 +245,12 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for last24 with user filter', function(done) {
+			it('should count the right amount for event called \'undo\' when called for last24 with user filter', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'ctrlz') {
+							if (currentSensor._id === 'undo') {
 								should.exist(currentSensor.values[0].user);
 								should.exist(currentSensor.values[0].value);
 								done();
@@ -264,12 +264,12 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for last24 with app filter', function(done) {
+			it('should count the right amount for event called \'undo\' when called for last24 with app filter', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'ctrlz') {
+							if (currentSensor._id === 'undo') {
 								should.exist(currentSensor.values[0].app);
 								should.exist(currentSensor.values[0].value);
 								done();
@@ -314,12 +314,12 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for last30', function(done) {
+			it('should count the right amount for event called \'undo\' when called for last30', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'ctrlz') {
+							if (currentSensor._id === 'undo') {
 								currentSensor.values[0].dayAgo.should.equal(0);
 								currentSensor.values[0].value.should.equal(5);
 								done();
@@ -333,12 +333,12 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for last30 with user filter', function(done) {
+			it('should count the right amount for event called \'undo\' when called for last30 with user filter', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'ctrlz') {
+							if (currentSensor._id === 'undo') {
 								should.exist(currentSensor.values[0].user);
 								should.exist(currentSensor.values[0].value);
 								done();
@@ -352,12 +352,12 @@ describe('Routes', function() {
 				});
 			});
 
-			it('should count the right amount for event called \'ctrlz\' when called for last30 with app filter', function(done) {
+			it('should count the right amount for event called \'undo\' when called for last30 with app filter', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'ctrlz') {
+							if (currentSensor._id === 'undo') {
 								should.exist(currentSensor.values[0].app);
 								should.exist(currentSensor.values[0].value);
 								done();
