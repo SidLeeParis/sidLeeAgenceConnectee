@@ -28,10 +28,10 @@ var googleAnalyticsVisits = function(callback) {
 			'ids': 'ga:96546222',
 			'start-date': start,
 			'end-date': end,
-			'metrics': 'ga:visits'
+			'metrics': 'ga:pageviews'
 		}, function(err, result) {
 			if (err) callback(err, null);
-			var visits = parseInt(result.totalsForAllResults['ga:visits']);
+			var visits = parseInt(result.totalsForAllResults['ga:pageviews']);
 			var data = {
 				_id: 'visits',
 				value: visits
