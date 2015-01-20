@@ -87,6 +87,7 @@
 					else {
 						callback(new Error('An error occured, recieved a ' + request.status + ' status code instead of 201'));
 					}
+				}
 			};
 			request.open('POST', this.postUrl);
 			request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
