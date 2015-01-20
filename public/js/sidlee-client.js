@@ -80,9 +80,13 @@
 		if (event && event.name && event.value && event.unit && event.token) {
 			var request = new XMLHttpRequest();
 			request.onreadystatechange = function() {
-				if (request.readyState == 4 && request.status == 201) {
-					callback();
-				}
+				if (request.readyState == 4) {
+					if (request.status == 201) {
+						callback();
+					}
+					else {
+						callback(new Error('An error occured, recieved a ' + request.status + ' status code instead of 201'));
+					}
 			};
 			request.open('POST', this.postUrl);
 			request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
