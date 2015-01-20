@@ -32,6 +32,8 @@ var Routes = function(sockets, Event, SensorsConf) {
 			// save it and when saved, broadcast its creation to all connected websockets
 			event.save(function (err) {
 				if (err) throw err;
+				postData._id = postData.name;
+				delete postData.name;
 				postData.value = postData.value + 0;
 				sockets.emit('event', postData);
 				res.status(201).send();
