@@ -77,7 +77,7 @@ new CronJob('* * * * *', function(){
 			previousLikes = likes.value;
 			// construct data
 			var data = {
-				name: likes._id,
+				_id: likes._id,
 				date: new Date(),
 				value: likes.value,
 				unit: 'likes'
@@ -97,7 +97,7 @@ new CronJob('* * * * *', function(){
 			previousVisits = visits.value;
 			// construct data
 			var data = {
-				name: visits._id,
+				_id: visits._id,
 				date: new Date(),
 				value: visits.value,
 				unit: 'visits'

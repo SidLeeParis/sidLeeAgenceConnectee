@@ -19,7 +19,7 @@ var sockets = {
 	emit: function(msg, data) {
 		msg.should.equal('event');
 		should.exist(data);
-		data.name.should.equal(dummyName);
+		data._id.should.equal(dummyName);
 		data.value.should.equal(dummyValue);
 		data.unit.should.equal(dummyUnit);
 	}
