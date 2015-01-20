@@ -16,10 +16,10 @@ module.exports.insertEvents = function(countOne, countTwo, callback) {
 	}
 	for (i = 0; i < countTwo; i++) {
 		event = new Event({
-			name: 'ctrlz',
+			name: 'undo',
 			date: new Date(),
 			value: 1,
-			unit: 'ctrlz',
+			unit: 'undo',
 			user: 'user' + Math.floor(Math.random() * 10),
 			app: 'app' + Math.floor(Math.random() * 10),
 			trackerVersion: 'v' + Math.floor(Math.random() * 10)

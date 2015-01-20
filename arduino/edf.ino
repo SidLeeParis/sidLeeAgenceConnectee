@@ -1,6 +1,8 @@
 #include <Ethernet.h>
 #include <SPI.h>
 #include <SoftwareSerial.h>
+#include <Button.h>
+#include <elapsedMillis.h>
 
 #define DEBUT_TRAME 0x02
 #define DEBUT_LIGNE 0x0A
@@ -10,7 +12,12 @@ byte inByte = 0;
 char teleInfoData[21] = "";
 byte index = 0;
 
+elapsedMillis timeElapsed;
+unsigned int interval = 30000;
+
 SoftwareSerial teleInfo(2, 3);
+
+Button door = Button(A0, INPUT_PULLUP);
 
 byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x04 };
 EthernetClient client;
@@ -28,7 +35,7 @@ void setup() {
 
 void loop() {
 
-	if (teleInfo.available()) {
+	if (teleInfo.available() && timeElapsed > interval) {
 		inByte = teleInfo.read() & 0x7F;;
 		if (inByte == DEBUT_TRAME || inByte == DEBUT_LIGNE) index = 0;
 		teleInfoData[index] = inByte;
@@ -46,6 +53,10 @@ void loop() {
 				sendEvent("watt", String(watts, DEC), "watts");
 			}
 		}
+	}
+
+	if (door.uniquePress()) {
+		sendEvent("door", "1", "door");
 	}
 }
 

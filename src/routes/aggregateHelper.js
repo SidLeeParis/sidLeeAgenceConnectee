@@ -12,12 +12,12 @@ var today = function(sensorConf, callback) {
 	aggregate.match({ date: { $gte : today }, name: sensorConf.name });
 	// group these events in order to sum/average the sensed values
 	// according to the sensor strategy
-	// ctrlz is a special case where most recent event is needed (date + user + app)
-	if (sensorConf.name === 'ctrlz') {
-		// sort by desc date (the first will be the most recent ctrlz)
+	// undo is a special case where most recent event is needed (date + user + app)
+	if (sensorConf.name === 'undo') {
+		// sort by desc date (the first will be the most recent undo)
 		aggregate.sort('-date');
 		// group by name, sum the values, and keep first date and first user
-		// since ctrlz are sorted, it means the most recent ctrlz is the first one
+		// since undo are sorted, it means the most recent undo is the first one
 		aggregate.group({ _id: '$name', value: { $sum: '$value' }, last: { $first: '$date' }, user: { $first: '$user' }, app: { $first: '$app' } });
 	}
 	else if (sensorConf.sum) {
@@ -100,7 +100,7 @@ var last30 = function(sensorConf, callback) {
 };
 
 // function to aggregate today values of a given sensor, according to its strategy
-var ctrlz = function(sensorConf, callback) {
+var undo = function(sensorConf, callback) {
 	var date;
 	if (this.dateRange === 'last24') {
 		// get yesterday date (from h-23 to h+1 to get the running hour, e.g. from 2h yesterday to 2h today when it's 1h)
@@ -130,5 +130,5 @@ module.exports = {
 	today: today,
 	last24: last24,
 	last30 : last30,
-	ctrlz: ctrlz
+	undo: undo
 };
