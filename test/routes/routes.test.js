@@ -6,6 +6,7 @@ var should = require('chai').should(),
 	Response = require('../mocks/response.mock'),
 	Event = require('../../src/models/eventModel'),
 	Routes = require('../../src/routes/routes'),
+	Conf = require('../../src/conf/conf'),
 	SensorsConf = require('../mocks/sensorsConf.mock');
 
 // dummy values for testing
@@ -35,6 +36,24 @@ describe('Routes', function() {
 				should.not.exist(response.getData());
 				Event.count(function(err, count) {
 					count.should.equal(1);
+					done();
+				});
+			});
+
+			var req = { body: {} };
+			req.body.name = dummyName;
+			req.body.value = dummyValue;
+			req.body.unit = dummyUnit;
+			req.body.token = Conf.SENSOR_TOKEN;
+
+			routes.create(req, response);
+		});
+
+		it('should return a 403 (forbidden) if no token provided', function(done) {
+			var response = new Response(function() {
+				response.getStatus().should.equal(403);
+				Event.count(function(err, count) {
+					count.should.equal(0);
 					done();
 				});
 			});
