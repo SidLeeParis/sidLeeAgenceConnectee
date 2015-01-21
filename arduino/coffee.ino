@@ -35,7 +35,7 @@ void loop() {
 
 	if (coffeeIsServing) {
 		sendEvent("coffee", "1", "coffee");
-		delay(10000);
+		delay(30000);
 	}
 
 	delay(500);

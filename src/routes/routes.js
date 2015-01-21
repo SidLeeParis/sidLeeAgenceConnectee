@@ -34,7 +34,13 @@ var Routes = function(sockets, Event, SensorsConf) {
 				if (err) throw err;
 				postData._id = postData.name;
 				delete postData.name;
-				postData.value = postData.value + 0;
+				if (postData.value.indexOf('.') > -1) {
+					postData.value = parseFloat(postData.value);
+				}
+				else {
+					postData.value = parseInt(postData.value);
+				}
+
 				sockets.emit('event', postData);
 				res.status(201).send();
 			});
