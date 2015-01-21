@@ -11,7 +11,6 @@ var options = {
 var getLikes = function(callback) {
 	// request to get the # of likes
 	var req = http.get('http://graph.facebook.com/203384865593', function(response) {
-		console.log(response);
 		var str = '';
 		// while data is incoming, concatenate it
 		response.on('data', function (chunk) {
