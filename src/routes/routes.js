@@ -34,13 +34,14 @@ var Routes = function(sockets, Event, SensorsConf) {
 				if (err) throw err;
 				postData._id = postData.name;
 				delete postData.name;
-				if (postData.value.indexOf('.') > -1) {
-					postData.value = parseFloat(postData.value);
+				if (typeof postData.value === 'string') {
+					if (postData.value.indexOf('.') > -1) {
+						postData.value = parseFloat(postData.value);
+					}
+					else {
+						postData.value = parseInt(postData.value);
+					}
 				}
-				else {
-					postData.value = parseInt(postData.value);
-				}
-
 				sockets.emit('event', postData);
 				res.status(201).send();
 			});
