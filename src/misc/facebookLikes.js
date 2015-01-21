@@ -10,7 +10,8 @@ var options = {
 
 var getLikes = function(callback) {
 	// request to get the # of likes
-	var req = http.request(options, function(response) {
+	var req = http.get('http://graph.facebook.com/203384865593', function(response) {
+		console.log(response);
 		var str = '';
 		// while data is incoming, concatenate it
 		response.on('data', function (chunk) {
@@ -25,13 +26,9 @@ var getLikes = function(callback) {
 			};
 			callback(null, data);
 		});
-	});
-	// an error occured
-	req.on('error', function(err) {
+	}).on('error', function(err) {
 		callback(err, null);
 	});
-	// actually send the request
-	req.end();
 };
 
 module.exports = getLikes;

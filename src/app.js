@@ -121,6 +121,6 @@ io.on('connection', function (socket) {
 server.listen(conf.PORT, function () {
 	var host = server.address().address;
 	var port = server.address().port;
-	console.log('Sid Lee x Agence Connectée listening at http://%s:%s', host, port);
+	console.log('Sid Lee x Agence Connectée listening at http://'+ host + ':' + port);
 });
 
