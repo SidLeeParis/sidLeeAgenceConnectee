@@ -17,8 +17,8 @@ var async = require('async'),
 var Routes = function(sockets, Event, SensorsConf) {
 
 	var _create = function(req, res) {
-		if (req.body.token === Conf.SENSOR_TOKEN
-			|| (req.body.token === Conf.FRONTEND_TOKEN && req.body.name === SensorsConf.lightswitch.name)) {
+		if (req.body.token === Conf.SENSOR_TOKEN ||
+			(req.body.token === Conf.FRONTEND_TOKEN && req.body.name === SensorsConf.lightswitch.name)) {
 			// get posted data
 			var postData = {
 				name: req.body.name,
