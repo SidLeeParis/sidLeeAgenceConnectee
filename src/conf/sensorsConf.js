@@ -3,22 +3,47 @@
  * Configuration of sensors
  * @module SensorsConf
  */
-var SensorsConf = {
-	red: { name: 'red', sum: true },
-	blue: { name: 'blue', sum: true },
-	watt: { name: 'watt', sum: false },
-	stairs: { name: 'stairs', sum: true },
-	roomTemp: { name: 'roomTemp', sum: false },
-	sound: { name: 'sound', sum: false },
-	flush: { name: 'flush', sum: true },
-	water: { name: 'water', sum: true },
-	undo: { name: 'undo', sum: true },
-	coffee: { name: 'coffee', sum: true },
-	lightswitch: { name: 'lightswitch', sum: true },
-	fridgeDegrees : { name: 'fridgeDegrees', sum: false },
-	likes: { name: 'likes' },
-	visits: { name: 'visits' }
-};
+var SensorsConf = {};
+
+// Sensors
+
+// baby foot : arduino ethernet
+SensorsConf.red = { name: 'red', sum: true };
+SensorsConf.blue = { name: 'blue', sum: true };
+// edf + door : arduino ethernet
+SensorsConf.watt = { name: 'watt', sum: false };
+SensorsConf.door = { name: 'door', sum: true };
+// stairs : arduino ethernet
+SensorsConf.stairs = { name: 'stairs', sum: true };
+// temp + sound + light : arduino ethernet
+SensorsConf.sound = { name: 'sound', sum: false };
+SensorsConf.degrees = { name: 'degrees', sum: false };
+SensorsConf.light  = { name: 'light', sum: false };
+// flush : spark core
+SensorsConf.flush = { name: 'flush', sum: true };
+// water : arduino ethernet
+SensorsConf.water = { name: 'water', sum: true };
+// coffe : arduino ethernet
+SensorsConf.coffee = { name: 'coffee', sum: true };
+// fridge door : spark core
+SensorsConf.fridge = { name: 'fridge', sum: true };
+// tracer : arduino ethernet
+SensorsConf.tracer = { name: 'tracer', sum: true };
+
+// Not sensors
+
+// printer
+SensorsConf.printer = { name: 'printer', sum: true };
+// fridge degrees
+SensorsConf.fridgeDegrees = { name: 'fridgeDegrees', sum: false };
+// switch button on the web page
+SensorsConf.lightswitch = { name: 'lightswitch', sum: true };
+// undo
+SensorsConf.undo = { name: 'undo', sum: true };
+// facebook likes
+SensorsConf.likes = { name: 'likes' };
+// page visits
+SensorsConf.visits = { name: 'visits' };
 
 
 module.exports = SensorsConf;
