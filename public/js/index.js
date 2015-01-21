@@ -5,12 +5,4 @@
 		console.log(data);
 	});
 
-	// query events
-	client.events('random')
-		.from('2014-12-01')
-		.to('2014-12-02')
-		.limit(10)
-		.exec(function(data) {
-			console.log(data);
-		});
 })(SidLeeClient);
