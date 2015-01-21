@@ -54,6 +54,11 @@ Conf.GOOGLE_SERVICE_ACCOUNT_KEY_FILE = __dirname + '/../conf/dashlee.pem';
  * @type {String}
  */
 Conf.SENSOR_TOKEN = '***REMOVED***';
-
+/**
+ * Token used by front end to post data
+ * @property FRONTEND_TOKEN
+ * @type {String}
+ */
+Conf.FRONTEND_TOKEN = 'b3f2ad85-a221-6fbf-19e2-9bcca6994c44';
 
 module.exports = Conf;
