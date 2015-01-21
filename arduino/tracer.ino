@@ -1,31 +1,28 @@
 #include <Ethernet.h>
 #include <SPI.h>
+#include <Button.h>
 
-// ir beam between GND and D2
-#define PIN_SENSOR 2
+// sensor between GND and D2
+#define PIN_SENSOR A0
 
-byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x06 };
+byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x07 };
+
 EthernetClient client;
 String data;
-
-int previousState = HIGH;
+Button door = Button(PIN_SENSOR, INPUT_PULLUP);
 
 void setup() {
 	Serial.begin(9600);
 	if (Ethernet.begin(mac) == 0) {
 		Serial.println("Failed to configure Ethernet using DHCP");
 	}
-	pinMode(PIN_SENSOR, INPUT_PULLUP);
 	delay(1000);
 }
 
 void loop() {
-	int irBeamState = digitalRead(PIN_SENSOR);
-	if (irBeamState == LOW && previousState == HIGH) {
-		sendEvent("stairs", "12", "stairs");
-		delay(1000);
+	if (door.uniquePress()) {
+		sendEvent("tracer", "1", "cm");
 	}
-	previousState = irBeamState;
 	delay(50);
 }
 
