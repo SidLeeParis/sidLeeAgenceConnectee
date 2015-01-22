@@ -1,5 +1,6 @@
 'use strict';
 var moment = require('moment'),
+	SensorsConf = require('../conf/sensorsConf'),
 	Event = require('../models/eventModel');
 
 // function to aggregate today values of a given sensor, according to its strategy
@@ -13,7 +14,7 @@ var today = function(sensorConf, callback) {
 	// group these events in order to sum/average the sensed values
 	// according to the sensor strategy
 	// undo is a special case where most recent event is needed (date + user + app)
-	if (sensorConf.name === 'undo') {
+	if (sensorConf.name === SensorsConf.undo.name) {
 		// sort by desc date (the first will be the most recent undo)
 		aggregate.sort('-date');
 		// group by name, sum the values, and keep first date and first user
@@ -25,6 +26,10 @@ var today = function(sensorConf, callback) {
 	}
 	else {
 		aggregate.group({ _id: '$name', value: { $avg: '$value' } });
+	}
+	// for devices, we need to return an integer, so we round the value
+	if (sensorConf.name === SensorsConf.devices.name) {
+		aggregate.project({ _id: 1, value: { $subtract:[ '$value' , { $mod: [ '$value', 1 ] } ] } });
 	}
 	aggregate.exec(callback);
 };
@@ -49,6 +54,10 @@ var last24 = function(sensorConf, callback) {
 	}
 	else {
 		aggregate.group({ _id: { name: '$name', hour: '$hour' }, value: { $avg: '$value' } });
+	}
+	// if it's devices, we need to return an integer average value
+	if (sensorConf.name === SensorsConf.devices.name) {
+		aggregate.project({ _id: 1, value: { $subtract:[ '$value' , { $mod: [ '$value', 1 ] } ] } });
 	}
 	// re-arrange data
 	// calculate hour ago, instead of the plain hour
@@ -84,6 +93,10 @@ var last30 = function(sensorConf, callback) {
 	}
 	else {
 		aggregate.group({ _id: { name: '$name', day: '$day' }, value: { $avg: '$value' } });
+	}
+	// if it's devices, we need to return an integer average value
+	if (sensorConf.name === SensorsConf.devices.name) {
+		aggregate.project({ _id: 1, value: { $subtract:[ '$value' , { $mod: [ '$value', 1 ] } ] } });
 	}
 	// re-arrange data
 	// calculate day ago instead of plain day

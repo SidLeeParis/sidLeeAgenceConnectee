@@ -5,11 +5,15 @@
 // sensor between GND and D2
 #define PIN_SENSOR A0
 
-byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x07 };
+// diamètre mini : 3.5 cm
+// diamètre maxi: 15 cm
+// longueur de papier moyenne par tour: (3.5*3.14 + 15*3.14) / 2 = 29 cm
+#define AVG 29
 
+byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x07 };
 EthernetClient client;
-String data;
-Button door = Button(PIN_SENSOR, INPUT_PULLUP);
+
+Button tracer = Button(PIN_SENSOR, INPUT_PULLUP);
 
 void setup() {
 	Serial.begin(9600);
@@ -20,8 +24,8 @@ void setup() {
 }
 
 void loop() {
-	if (door.uniquePress()) {
-		sendEvent("tracer", "1", "cm");
+	if (tracer.uniquePress()) {
+		sendEvent("tracer", String(AVG, DEC), "cm");
 	}
 	delay(50);
 }
