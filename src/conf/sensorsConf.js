@@ -40,6 +40,8 @@ SensorsConf.fridgeDegrees = { name: 'fridgeDegrees', sum: false };
 SensorsConf.lightswitch = { name: 'lightswitch', sum: true };
 // undo
 SensorsConf.undo = { name: 'undo', sum: true };
+// connected devices in the agency
+SensorsConf.devices = { name: 'devices', sum: false };
 // facebook likes
 SensorsConf.likes = { name: 'likes' };
 // page visits
