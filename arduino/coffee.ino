@@ -31,18 +31,20 @@ void loop() {
 	float medianGdCafe = gdCafe.getMedian();
 	float medianPtCafe = ptCafe.getMedian();
 
-	boolean coffeeIsServing = (medianPtCafe > 400 && medianGdCafe < 300) || (medianGdCafe > 400 && medianPtCafe < 300);
-
-	if (coffeeIsServing) {
-		sendEvent("coffee", "1", "coffee");
+	if (medianPtCafe > 400 && medianGdCafe < 300) {
+		sendEvent("coffee", "1", "coffee", false);
+		delay(30000);
+	}
+	else if (medianGdCafe > 400 && medianPtCafe < 300) {
+		sendEvent("coffee", "1", "coffee", true);
 		delay(30000);
 	}
 
 	delay(500);
 }
 
-void sendEvent(String name, String value, String unit) {
-	String data = "name=" + name + "&value=" + value + "&unit=" + unit;
+void sendEvent(String name, String value, String unit, boolean bigOrNot) {
+	String data = "name=" + name + "&value=" + value + "&unit=" + unit + "&big=" + bigOrNot;
 	data += "&token=***REMOVED***";
 	Serial.println(data);
 	if (client.connect("sidlee.herokuapp.com",80)) {
