@@ -3,9 +3,23 @@
 #include <Adafruit_TSL2561_U.h>
 #include <Ethernet.h>
 #include <SPI.h>
+#include <elapsedMillis.h>
 
 #define PIN_TEMP 0
 #define PIN_DB 2
+
+elapsedMillis timeElapsedDegrees;
+elapsedMillis timeElapsedSound;
+elapsedMillis timeElapsedLux;
+
+unsigned int interval = 20000;
+
+boolean canSend = true;
+elapsedMillis canSendDelay;
+unsigned int canSendInterval = 2000;
+
+int threshold = 25;
+int previousdB = 0;
 
 Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 12345);
 
@@ -29,12 +43,28 @@ void setup() {
 }
 
 void loop() {
-	sendEvent("degrees", String(getTemp(PIN_TEMP), DEC), "C");
-	delay(5000);
-	sendEvent("sound", String(getDb(PIN_DB), DEC), "dB");
-	delay(5000);
-	sendEvent("light", String(getLux(), DEC), "lux");
-	delay(5000);
+	int currentdB = getDb(PIN_DB);
+	if (abs(currentdB - previousdB) > threshold && canSend) {
+		sendEvent("sound", String(currentdB, DEC), "dB");
+		canSend = false;
+		canSendDelay = 0;
+	}
+	previousdB = currentdB;
+	if (canSendDelay > canSendInterval) {
+		canSend = true;
+	}
+	if (timeElapsedDegrees > interval) {
+		sendEvent("degrees", getTemp(PIN_TEMP), "C");
+		timeElapsedDegrees = 0;
+	}
+	if (timeElapsedSound > interval) {
+		sendEvent("sound", String(currentdB, DEC), "dB");
+		timeElapsedSound = 0;
+	}
+	if (timeElapsedLux > interval) {
+		sendEvent("light", getLux(), "lux");
+		timeElapsedLux = 0;
+	}
 }
 
 int getDb(int dBPin) {
@@ -66,15 +96,19 @@ int getDb(int dBPin) {
 	}
 }
 
-int getTemp(int tempPin) {
-	return (500 * analogRead(tempPin)) /1024;
+String getTemp(int tempPin) {
+	float temp = ((500.0 * analogRead(tempPin)) /1024.0);
+	// keep only 2 decimals
+	String t = String(temp, DEC);
+	t = t.substring(0, t.indexOf('.') + 2);
+	return t;
 }
 
-int getLux() {
+String getLux() {
 	sensors_event_t event;
 	tsl.getEvent(&event);
 	if(event.light) {
-		return (int) event.light;
+		return String((int) event.light, DEC);
 	}
 }
 
