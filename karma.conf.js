@@ -6,7 +6,7 @@ module.exports = function(config) {
 			'node_modules/chai/chai.js',
 			'node_modules/socket.io-client/socket.io.js',
 			'public/js/sidlee-client.js',
-			'test/public/js/sidlee-client.spec.js'
+			'test/app/js/sidlee-client.spec.js'
 		],
 		browsers: ['PhantomJS'],
 
@@ -14,7 +14,7 @@ module.exports = function(config) {
 
 		transports: ['websocket', 'flashsocket', 'htmlfile', 'xhr-polling', 'jsonp-polling'],
 
-		preprocessors: { 'public/js/sidlee-client.js': 'coverage' },
+		preprocessors: { 'app/scripts/api/sidlee-client.js': 'coverage' },
 
 		coverageReporter: {
 			type : 'lcovonly',
