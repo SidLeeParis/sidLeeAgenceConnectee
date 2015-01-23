@@ -8,12 +8,12 @@
       }
       #canvas {
         position: absolute;
-        bottom: 30px;
+        bottom: 10px;
         left: 0;
       }
       .bottom {
         background-color: white;
-        height: 30px;
+        height: 10px;
         width: 100%;
         position: absolute;
         left: 0;
@@ -21,23 +21,23 @@
       }
     </style>
     <div class="date">Now</div>
-    <div class="number">45</div>
+    <div id="number" class="number odometer">[[count]]</div>
     <div class="subtitle">decibels of noise<br>at the central table</div>
-    <canvas id="canvas" height="70" width="360"></canvas>
+    <canvas id="canvas" height="90" width="360"></canvas>
     <div class="bottom"></div>
 
   </template>
   <script>
     (function () {
       /*jslint nomen: true */
-      /*global SmoothieChart, TimeSeries */
-      var line1_;
+      /*global SmoothieChart, TimeSeries, Odometer */
+      var line1_, od_, self_;
       var timer_ = null;
 
       function gotoZero(value) {
           timer_ = setTimeout(function() {
-            var v = value;
-            v = Math.max(Math.random() / 10, v + 0.3 - Math.random() * 2);
+            var v = Math.min(3, value);
+            v = Math.max((self_.count - 30) / 50 + Math.random() / 10, v + 0.3 - Math.random() * 2);
             line1_.append(new Date().getTime(), v);
             gotoZero(v);
           }, 100);
@@ -45,6 +45,17 @@
       }
 
       Polymer({
+        count: 0,
+        ready: function() {
+          self_ = this;
+        },
+        attached: function() {
+          od_ = new Odometer({
+            el: self_.$.number,
+            value: self_.count,
+            format: '(dd)',
+          });
+        },
         domReady: function() {
           this.fitCanvas();
 
@@ -67,21 +78,26 @@
 
           line1_.append(new Date().getTime(), 0);
           setInterval(function() {
-            var newVal = 1 + Math.random() * 2;
+            var newVal = Math.min(3, 0.3 + (1 + Math.random() * 2 * (self_.count - 20) / 50) * (self_.count - 20) / 50);
             line1_.append(new Date().getTime(), newVal);
             clearTimeout(timer_);
             gotoZero(newVal);
-            // setTimeout(function() {
-            //     gotoZero(newVal);
-            //   }, 100);
-
           }, 500);
         },
+        tick: function(sensor) {
+          self_.setCountTo(sensor.value);
+        },
+        initSensor: function(sensor) {
+          self_.setCountTo(sensor.value);
+        },
+        setCountTo: function(value) {
+          self_.count = value;
+          od_.update(self_.count);
+          //line1_.append(new Date().getTime(), self_.count);
+        },
         fitCanvas: function() {
-          this.async(function() {
-            this.$.canvas.width  = this.clientWidth;
-          }, null, 400);
-        }
+          self_.$.canvas.width  = self_.clientWidth;
+        },
       });
     })();
   </script>

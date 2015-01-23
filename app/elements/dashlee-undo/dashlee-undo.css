@@ -10,6 +10,16 @@
   animation: show 0.5s infinite alternate;
 }
 
+i.apple {
+  display: inline-block;
+  background: url('../../images/apple.svg') no-repeat;
+  width: 19px;
+  height: 23px;
+  position: relative;
+  top: 1px;
+  margin-right: 2px;
+}
+
 @keyframes show {
   0% {
     opacity: 0;
