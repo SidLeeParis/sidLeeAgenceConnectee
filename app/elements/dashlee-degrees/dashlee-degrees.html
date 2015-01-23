@@ -51,15 +51,15 @@
           var smoothie = new SmoothieChart({
             interpolation: 'linear',
             labels: {disabled: true},
-            minValue: 2,
-            maxValue: 8,
+            minValue: -5,
+            maxValue: 35,
             millisPerPixel:50,
             grid: {
               fillStyle: 'transparent',
               strokeStyle: 'transparent'
             }
           });
-          smoothie.streamTo(self_.$.canvas, 1000);
+          smoothie.streamTo(self_.$.canvas, 2000);
           // Data
           line1_ = new TimeSeries();
           // Add to SmoothieChart
@@ -68,11 +68,11 @@
             strokeStyle: 'transparent'
           });
 
-          line1_.append(new Date().getTime(), 2);
+          line1_.append(new Date().getTime(), -5);
           setInterval(function() {
             var newVal = (1 + (Math.random() - 0.5) / 3) * self_.count;
             line1_.append(new Date().getTime(), newVal);
-          }, 1000);
+          }, 2000);
         },
         fitCanvas: function() {
           self_.$.canvas.width  = self_.clientWidth;
