@@ -31,9 +31,12 @@
       var innerText = counterEl_.innerText;
       if (nb > 0) {
         counterEl_.innerText = innerText.substr(0, innerText.length - 1);
-        var duration = 200 + Math.floor(Math.random() * 300);
+        var duration =  200 + Math.floor(Math.random() * 100);
+        var simulateError = (Math.random() > 0.6);
+        if (simulateError) {
+          duration = duration / 2;
+        }
         backTimeout_ = setTimeout(function() {
-          var simulateError = (Math.random() > 0.6);
           if (simulateError) {
             writeText(errorSet_.charAt(Math.floor(Math.random() * errorSet_.length)), 0, function() {
               backspace(nb, callback);
@@ -44,10 +47,9 @@
           }
         }, duration);
       }
-      else {
-        if (callback) {
-          callback();
-        }      }
+      else if (callback) {
+        callback();
+      }
     }
 
     function writeText(text, nb, callback) {
@@ -55,15 +57,13 @@
       if (nb <= text.length) {
         var innerText = counterEl_.innerText;
         counterEl_.innerText = innerText + text.substr(nb, 1);
-        var duration = 200 + Math.floor(Math.random() * 300);
+        var duration = 100 + Math.floor(Math.random() * 100);
         writeTimeout_ = setTimeout(function() {
           writeText(text, ++nb, callback);
         }, duration);
       }
-      else {
-        if (callback) {
-          callback();
-        }
+      else if (callback) {
+        callback();
       }
     }
 
