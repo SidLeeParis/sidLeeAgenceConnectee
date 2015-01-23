@@ -1,0 +1,118 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-undo">
+  <template>
+    <link rel="stylesheet" href="dashlee-undo.css">
+    <div class="date">Today</div>
+    <div><span id="number" class="number">[[count]]</span><span class="cursor"></span></div>
+    <div class="subtitle"><a href="https://undo.meteor.com" target="_blank">+z</a>
+    </div>
+    <div id="stats">
+      <div class="date" style="margin-top: 30px;width: 60%;display: inline-block;">Last:
+        <br><span id="time">{{time}}</span>
+        <br><span id="username">{{username}}</span>
+        <br>on
+        <br><span id="appname">{{appname}}</span>
+      </div>
+    </div>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global moment */
+
+    var self_, counterEl_,
+        backTimeout_ = null,
+        writeTimeout_ = null,
+        errorSet_ = '*@XZ#&?:/%$€!}(§£';
+
+    function backspace(nb, callback) {
+      clearTimeout(backTimeout_);
+      var innerText = counterEl_.innerText;
+      if (nb > 0) {
+        counterEl_.innerText = innerText.substr(0, innerText.length - 1);
+        var duration = 200 + Math.floor(Math.random() * 300);
+        backTimeout_ = setTimeout(function() {
+          var simulateError = (Math.random() > 0.6);
+          if (simulateError) {
+            writeText(errorSet_.charAt(Math.floor(Math.random() * errorSet_.length)), 0, function() {
+              backspace(nb, callback);
+            });
+          }
+          else {
+            backspace(--nb, callback);
+          }
+        }, duration);
+      }
+      else {
+        if (callback) {
+          callback();
+        }      }
+    }
+
+    function writeText(text, nb, callback) {
+      clearTimeout(writeTimeout_);
+      if (nb <= text.length) {
+        var innerText = counterEl_.innerText;
+        counterEl_.innerText = innerText + text.substr(nb, 1);
+        var duration = 200 + Math.floor(Math.random() * 300);
+        writeTimeout_ = setTimeout(function() {
+          writeText(text, ++nb, callback);
+        }, duration);
+      }
+      else {
+        if (callback) {
+          callback();
+        }
+      }
+    }
+
+    Polymer({
+      count: 0,
+      ready: function() {
+        self_ = this;
+        counterEl_ = this.$.number;
+      },
+      initSensor: function(sensor) {
+        self_.setCountTo(sensor.value);
+        this.setDetails(sensor);
+      },
+      tick: function(sensor) {
+        self_.setCountTo(self_.count + 1);
+        this.setDetails(sensor);
+      },
+      setCountTo: function(count) {
+        if (self_.count === count) {
+          return;
+        }
+        clearTimeout(writeTimeout_);
+        clearTimeout(backTimeout_);
+        var countText = counterEl_.innerText;
+        var newCountText = count.toString();
+        self_.count = count;
+
+        var i = 0;
+        while(countText[i] === newCountText[i] && i < countText.length) {
+          i++;
+        }
+
+        var nb = countText.length - i;
+        if (i > 0) {
+          nb += (Math.random() > 0.7) ? 1 : 0;
+        }
+
+        backspace(nb, function() {
+          writeText(newCountText, countText.length - nb);
+        });
+
+        self_.$.stats.style.visibility = self_.count > 0 ? 'visible' : 'hidden';
+      },
+      setDetails: function(sensor) {
+        this.time = moment(sensor.last).tz('Europe/Paris').format('HH:mm:ss');
+        this.username = sensor.user;
+        this.appname = sensor.app;
+      }
+    });
+  })();
+  </script>
+</polymer-element>

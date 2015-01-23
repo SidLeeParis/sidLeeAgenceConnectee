@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.cursor {
+  display: inline-block;
+  margin-left: 5px;
+  width: 22px;
+  border-bottom: 4px solid white;
+  animation: show 0.5s infinite alternate;
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+}

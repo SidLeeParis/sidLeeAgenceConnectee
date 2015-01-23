@@ -1,0 +1,30 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-printer-sheet" attributes="counter" noscript>
+  <template>
+    <style>
+      :host {
+        display: block;
+        width: 210px;
+        height: 140px;
+        border: 2px solid white;
+        background-color: black;
+        font-size: 30px;
+        position: relative;
+      }
+      .stats {
+        position: absolute;
+        -webkit-transform: translateY(-50%);
+                transform: translateY(-50%);
+        left: 0;
+        right: 0;
+        top: 50%;
+      }
+    </style>
+    <div class="stats">
+      <div class="date">Today</div>
+      <div class="number">{{counter}}</div>
+      <div class="subtitle">Printouts</div>
+    </div>
+  </template>
+</polymer-element>

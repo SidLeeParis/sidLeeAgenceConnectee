@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-door" attributes="">
+  <template>
+    <link rel="stylesheet" href="dashlee-door.css">
+    <div class="date">Today</div>
+    <div id="number" class="number odometer">[[count]]</div>
+    <div class="subtitle">main door openings</div>
+    <svg id="svg" on-click="{{tick}}"></svg>
+  </template>
+  <script>
+  (function () {
+    /*jslint nomen: true */
+    /*global Odometer */
+
+    var self_, od_;
+
+    Polymer({
+      count: 0,
+      ready: function() {
+        self_ = this;
+      },
+      attached: function() {
+        od_ = new Odometer({
+          el: self_.$.number,
+          value: self_.count,
+          format: '',
+        });
+      },
+      initSensor: function(sensor) {
+        self_.setCountTo(sensor.value);
+      },
+      tick: function() {
+        self_.setCountTo(self_.count + 1);
+      },
+      setCountTo: function(count) {
+        self_.count = count;
+        od_.update(self_.count);
+      }
+    });
+  })();
+  </script>
+</polymer-element>

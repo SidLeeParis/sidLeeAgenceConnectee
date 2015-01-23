@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="EN_en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>SID LEE • DASH LEE</title>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <!-- build:css styles/fonts.css -->
+    <link rel="stylesheet" href="styles/fonts.css" type="text/css">
+    <!-- endbuild-->
+
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css" type="text/css" shim-shadowdom>
+    <link rel="stylesheet" href="styles/odometer.css" type="text/css" shim-shadowdom>
+    <!-- endbuild-->
+
+    <script>
+      window.odometerOptions = {
+        auto: false,
+        duration: 2000
+      };
+    </script>
+
+    <!-- build:js scripts/vendors.min.js -->
+    <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/Snap.svg/dist/snap.svg.js"></script>
+    <script src="bower_components/gsap/src/uncompressed/TweenMax.js"></script>
+    <script src="bower_components/GSAPSnapPlugin/SnapPlugin.js"></script>
+    <script src="bower_components/smoothie/smoothie.js"></script>
+    <script src="bower_components/socket.io-client/socket.io.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/moment-timezone/builds/moment-timezone-with-data.js"></script>
+    <script src="scripts/api/sidlee-client.js"></script>
+    <script src="bower_components/odometer/odometer.js"></script>
+    <!-- endbuild-->
+
+    <!-- build:vulcanized elements/elements.vulcanized.html -->
+    <link rel="import" href="elements/elements.html">
+    <!-- endbuild-->
+  </head>
+  <body fullbleed unresolved>
+
+
+  <template id="dashboard" is="auto-binding">
+
+    <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
+    <dashlee-loader id="loader" class="loading"></dashlee-loader>
+    <div class="wrapper {{{invert: switchStatus} | tokenList }} {{{compact: phoneScreen} | tokenList }}">
+     <dashlee-header></dashlee-header>
+     <div class="dashboard" layout vertical?="{{phoneScreen}}" horizontal?="{{!phoneScreen}}" wrap>
+        <dashlee-degrees id="fridgeDegrees" class="item large" auto-vertical></dashlee-degrees>
+        <dashlee-coffee id="coffee" class="item large" auto-vertical></dashlee-coffee>
+        <dashlee-sound id="sound" class="item large invert" auto-vertical></dashlee-sound>
+        <dashlee-flush id="flush" class="item" auto-vertical></dashlee-flush>
+        <dashlee-stairs id="stairs" class="item large" auto-vertical count="2000"></dashlee-stairs>
+        <dashlee-water id="water" class="item large" auto-vertical></dashlee-water>
+        <dashlee-devices id="devices" class="item" auto-vertical></dashlee-devices>
+        <dashlee-door id="door" class="item large invert" auto-vertical></dashlee-door>
+        <dashlee-undo id="undo" class="item" auto-vertical></dashlee-undo>
+        <dashlee-fax id="fax" class="item invert" auto-vertical></dashlee-fax>
+        <dashlee-baby id="baby" class="item" auto-vertical></dashlee-baby>
+        <dashlee-fridge id="fridge" class="item large" auto-vertical></dashlee-fridge>
+        <dashlee-likes id="likes" class="item" auto-vertical></dashlee-likes>
+        <dashlee-printer id="printer" class="item large invert" auto-vertical></dashlee-printer>
+        <dashlee-visits id="visits" class="item" auto-vertical></dashlee-visits>
+        <dashlee-lightswitch id="lightswitch" class="item large invert" auto-vertical switch="{{switchStatus}}"></dashlee-lightswitch>
+        <dashlee-tracer id="tracer" class="item large" auto-vertical count="23"></dashlee-tracer>
+        <dashlee-jobs id="jobs" class="item" auto-vertical count="2"></dashlee-jobs>
+     </div>
+
+     <dashlee-footer></dashlee-footer>
+  </template>
+
+
+    <!-- build:js scripts/app.js -->
+    <script src="scripts/app.js"></script>
+    <!-- endbuild-->
+  </body>
+</html>
