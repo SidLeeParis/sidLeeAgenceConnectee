@@ -2,7 +2,7 @@
   "name": "dashlee",
   "version": "0.0.0",
   "dependencies": {
-    "polymer": "Polymer/polymer#^0.5.1",
+    "polymer": "Polymer/polymer#0.5.2",
     "underscore": "~1.7.0",
     "core-media-query": "Polymer/core-media-query#~0.5.2",
     "Snap.svg": "~0.3.0",
