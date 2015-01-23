@@ -44,6 +44,9 @@ var Routes = function(sockets, Event, SensorsConf) {
 						postData.value = parseInt(postData.value);
 					}
 				}
+				if (req.body.big && req.body.big === 1) {
+					postData.big = true;
+				}
 				sockets.emit('event', postData);
 				res.status(201).send();
 			});

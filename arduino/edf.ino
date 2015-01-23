@@ -13,15 +13,15 @@ char teleInfoData[21] = "";
 byte index = 0;
 
 elapsedMillis timeElapsed;
-unsigned int interval = 30000;
+unsigned int interval = 5000;
 
 SoftwareSerial teleInfo(2, 3);
+int  watts;
 
 Button door = Button(A0, INPUT_PULLUP);
 
 byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x04 };
 EthernetClient client;
-String data;
 
 void setup() {
 	Serial.begin(9600);
@@ -29,13 +29,12 @@ void setup() {
 	if (Ethernet.begin(mac) == 0) {
 		Serial.println("Failed to configure Ethernet using DHCP");
 	}
-	data = "";
 	delay(1000);
 }
 
 void loop() {
 
-	if (teleInfo.available() && timeElapsed > interval) {
+	if (teleInfo.available()) {
 		inByte = teleInfo.read() & 0x7F;;
 		if (inByte == DEBUT_TRAME || inByte == DEBUT_LIGNE) index = 0;
 		teleInfoData[index] = inByte;
@@ -48,15 +47,19 @@ void loop() {
 				buffer[1] = teleInfoData[8];
 				buffer[2] = teleInfoData[9];
 				buffer[3] = '\0';
-				int  watts;
 				watts = atoi(buffer) * 230;
-				sendEvent("watt", String(watts, DEC), "watts");
+
 			}
 		}
+	}
+	if (timeElapsed > interval) {
+		sendEvent("watt", String(watts, DEC), "watts");
+		timeElapsed = 0;
 	}
 
 	if (door.uniquePress()) {
 		sendEvent("door", "1", "door");
+		delay(50);
 	}
 }
 
