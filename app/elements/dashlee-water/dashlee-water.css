@@ -1,0 +1,149 @@
+:host {
+  display: block;
+}
+.bottle {
+  display: inline-block;
+  width: 138px;
+  height: 208px;
+  text-align: center;
+  background: url('../../images/bottle.svg') no-repeat;
+}
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 118px;
+  height: 178px;
+  animation: wave-animation 3s infinite linear;
+  background-color: transparent;
+  background-image: url('../../images/wave.png');
+  background-repeat: repeat-x;
+  background-size: 118px 178px;
+}
+.bubbles {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  width: 118px;
+  height: 178px;
+  transition: height .6s cubic-bezier(.175, .885, .32, 1.275);
+}
+.bubble {
+  position: absolute;
+  bottom: -20px;
+  width: 4px;
+  height: 4px;
+  margin-left: 50%;
+  border-radius: 2px;
+  background-color: black;
+  animation-fill-mode: forwards;
+}
+.bubble.short {
+  animation: short-bubble 1800ms linear;
+}
+.bubble.medium {
+  width: 4px;
+  height: 4px;
+  animation: short-bubble 2000ms linear;
+  border-radius: 2px;
+}
+.bubble.large {
+  width: 4px;
+  height: 4px;
+  animation: medium-bubble 1800ms linear;
+  border-radius: 2px;
+}
+.level {
+  position: relative;
+  top: 11px;
+  left: 1px;
+  display: inline-block;
+  width: 118px;
+  height: 178px;
+  mask: url('../../images/wave_mask.svg');
+}
+.level[data-level='0'] .wave, .level[data-level='0'] .bubbles {
+  transition: height 1.4s linear;
+  height: 178px;
+}
+.level[data-level='1'] .wave, .level[data-level='1'] .bubbles {
+  transition: height .6s cubic-bezier(.175, .885, .32, 1.275);
+  height: 148px;
+}
+.level[data-level='2'] .wave, .level[data-level='2'] .bubbles {
+  transition: height .6s cubic-bezier(.175, .885, .32, 1.275);
+  height: 108px;
+}
+.level[data-level='3'] .wave, .level[data-level='3'] .bubbles {
+  transition: height .6s cubic-bezier(.175, .885, .32, 1.275);
+  height: 48px;
+}
+.level[data-level='4'] .wave, .level[data-level='4'] .bubbles {
+  transition: height .6s cubic-bezier(.175, .885, .32, 1.275);
+  height: 8px;
+}
+
+@keyframes wave-animation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 118px 0;
+  }
+}
+@keyframes short-bubble {
+  0% {
+    transform: translate3d(5px, 0, 0);
+  }
+  13% {
+    transform: translate3d(2px, -20px, 0);
+  }
+  20% {
+    transform: translate3d(5px, -40px, 0) scale(1.2);
+  }
+  30% {
+    transform: translate3d(0px, -60px, 0);
+  }
+  40% {
+    transform: translate3d(8px, -80px, 0);
+  }
+  50% {
+    transform: translate3d(3px, -100px, 0);
+  }
+  60% {
+    transform: translate3d(8px, -120px, 0);
+  }
+  70% {} 80%, 100% {
+    transform: translate3d(0, -200px, 0);
+  }
+}
+@keyframes medium-bubble {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  5% {
+    transform: translate3d(4px, -20px, 0);
+  }
+  10% {
+    transform: translate3d(2px, -40px, 0);
+  }
+  20% {
+    transform: translate3d(7px, -80px, 0) scale(.7);
+  }
+  30% {
+    transform: translate3d(5px, -120px, 0);
+  }
+  40% {
+    transform: translate3d(1px, -160px, 0);
+  }
+  50% {
+    transform: translate3d(2px, -200px, 0) scale(1.1);
+  }
+  60% {
+    transform: translate3d(-3px, -240px, 0);
+  }
+  100% {
+    transform: translate3d(0, -400px, 0);
+  }
+}

@@ -1,0 +1,38 @@
+@font-face {
+  font-family: 'font-idlewild';
+  src: url('fonts/idlewild-bold.eot?#iefix') format('embedded-opentype'), url('fonts/idlewild-bold.woff') format('woff'), url('fonts/idlewild-bold.ttf') format('truetype'), url('fonts/idlewild-bold.svg#fonts/idlewild-bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'font-sidlee';
+  src: url('fonts/sidlee-extrabold.eot?#iefix') format('embedded-opentype'),
+       url('fonts/sidlee-extrabold.woff') format('woff'), url('fonts/sidlee-extrabold.ttf')  format('truetype'), url('fonts/sidlee-extrabold.svg#fonts/sidlee-extrabold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'font-tsar';
+  src: url('fonts/tstarpro-headline.eot?#iefix') format('embedded-opentype'),
+       url('fonts/tstarpro-headline.woff') format('woff'), url('fonts/tstarpro-headline.ttf')  format('truetype'), url('fonts/tstarpro-headline.svg#fonts/tstarpro-headline') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'font-gotham';
+  src: url('fonts/gothamhtf-lightcondensed.eot?#iefix') format('embedded-opentype'),
+       url('fonts/gothamhtf-lightcondensed.woff') format('woff'), url('fonts/gothamhtf-lightcondensed.ttf')  format('truetype'), url('fonts/gothamhtf-lightcondensed.svg#fonts/gothamhtf-lightcondensed') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'font-knockout';
+  src: url('fonts/knockout.eot?#iefix') format('embedded-opentype'),
+       url('fonts/knockout.woff') format('woff'), url('fonts/knockout.ttf')  format('truetype'), url('fonts/knockout.svg#fonts/knockout') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

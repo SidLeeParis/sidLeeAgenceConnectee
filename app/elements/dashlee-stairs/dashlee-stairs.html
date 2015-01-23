@@ -1,0 +1,91 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-stairs" attributes="count">
+  <template>
+    <link rel="stylesheet" href="dashlee-stairs.css">
+    <div id="stairsWrapper" class="stairs-wrapper" on-click="{{tick}}">
+      <div class="stairs">
+        <div class="cube">
+          <div class="face top"></div>
+          <div class="face front"><div class="number">[[count | plus(2)]]</div></div>
+        </div>
+      </div>
+      <div class="stairs">
+        <div class="cube">
+          <div class="face top"></div>
+          <div class="face front"><div class="number">[[count | plus(1)]]</div></div>
+        </div>
+      </div>
+      <div class="stairs">
+        <div class="cube">
+          <div class="face top"></div>
+          <div class="face front"><div class="number">[[count]]</div></div>
+        </div>
+      </div>
+      <div class="stairs">
+        <div class="cube">
+          <div class="face top"></div>
+          <div class="face front"><div class="number">[[count | plus(-1)]]</div></div>
+        </div>
+      </div>
+      <div class="stairs">
+        <div class="cube">
+          <div class="face top"></div>
+          <div class="face front"><div class="number">[[count | plus(-2)]]</div></div>
+        </div>
+      </div>
+    </div>
+    <div id="stats" class="stats">
+      <div class="date">Today</div>
+      <div class="subtitle">steps walked on the stairs</div>
+    </div>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global _ */
+
+    var catchup_ = 0;
+    var self_, stairsWrapper_, stats_, timer_;
+    Polymer({
+      count: 0,
+      ready: function() {
+        self_ = this;
+        stairsWrapper_ = this.$.stairsWrapper;
+        stats_ = this.$.stats;
+      },
+      initSensor: function(sensor) {
+        self_.count = sensor.value;
+      },
+      tick: function() {
+        catchup_++;
+        stats_.classList.add('hidden');
+        setTimeout(this.animateStairs, 100);
+      },
+      setCountTo: function(count) {
+        catchup_ = count - this.count;
+        stats_.classList.add('hidden');
+        this.animateStairs();
+      },
+      animateStairs: _.throttle(function() {
+        clearTimeout(timer_);
+        if (catchup_ > 0) {
+          self_.count++;
+          catchup_--;
+          var stair = stairsWrapper_.lastElementChild;
+          stair.querySelector('.number').innerText = self_.count + 2;
+          stairsWrapper_.insertBefore(stair, stairsWrapper_.firstElementChild);
+          timer_ = setTimeout(function () {
+              self_.animateStairs();
+          }, 500);
+        }
+        else {
+          setTimeout(function() {
+            stats_.classList.remove('hidden');
+          }, 100);
+        }
+      }, 500, {trailing: true})
+    });
+  })();
+  </script>
+</polymer-element>

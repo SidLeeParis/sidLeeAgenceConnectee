@@ -1,0 +1,80 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-fridge" attributes="">
+  <template>
+    <link rel="stylesheet" href="dashlee-fridge.css">
+    <div class="column">
+      <div class="date">Today</div>
+      <div id="number" class="number">[[count]]</div>
+      <div class="subtitle">fridge
+        <br>door
+        <br>openings</div>
+    </div>
+    <div class="column">
+      <div id="door" class="door open">
+        <div class="back">
+          <div class="floor">
+            <img class="object bottle" src="../../images/fridge_bottle2.svg" height="41">
+            <div class="object glass empty"></div>
+            <div class="object glass"></div>
+          </div>
+          <div class="floor">
+            <img class="object bottle" src="../../images/fridge_bottle.svg" height="32" style="right:9px">
+            <div class="handle"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="front-panel">
+            <div class="handle"></div>
+          </div>
+          <div class="left-panel"></div>
+          <div class="top-panel"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global Odometer */
+
+    var self_, od_, timeout_;
+
+    Polymer({
+      count: 0,
+      ready: function() {
+        self_ = this;
+      },
+      attached: function() {
+        od_ = new Odometer({
+          el: self_.$.number,
+          value: self_.count,
+          format: ''
+        });
+      },
+      tick: function(sensor) {
+        clearTimeout(timeout_);
+
+        self_.setCountTo(self_.count + sensor.value);
+
+        self_.$.door.classList.remove('open');
+        timeout_ = setTimeout(function() {
+          self_.$.door.classList.add('open');
+        }, 3000);
+      },
+      initSensor: function(sensor) {
+        self_.setCountTo(sensor.value);
+
+        self_.$.door.classList.remove('open');
+        timeout_ = setTimeout(function() {
+          self_.$.door.classList.add('open');
+        }, 3000);
+      },
+      setCountTo: function(count) {
+        self_.count = count;
+        od_.update(self_.count);
+      }
+    });
+  })();
+  </script>
+</polymer-element>

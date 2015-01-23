@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../dashlee-printer-sheet/dashlee-printer-sheet.html">
+
+<polymer-element name="dashlee-printer">
+  <template>
+    <link rel="stylesheet" href="dashlee-printer.css">
+    <div id="pile" class="pile" on-click="{{tick}}">
+      <dashlee-printer-sheet class="noanim" data-index="0" counter="0"></dashlee-printer-sheet>
+      <dashlee-printer-sheet class="noanim" data-index="1" counter="0"></dashlee-printer-sheet>
+      <dashlee-printer-sheet class="noanim" data-index="2" counter="0"></dashlee-printer-sheet>
+      <dashlee-printer-sheet class="noanim" data-index="3" counter="0"></dashlee-printer-sheet>
+      <dashlee-printer-sheet id="firstSheet" class="noanim" data-index="4" counter="[[count]]"></dashlee-printer-sheet>
+
+
+    </div>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global _ */
+
+    var catchup_ = 0;
+    var self_, pile_, timer_;
+    Polymer({
+      count: 0,
+      ready: function() {
+        self_ = this;
+        pile_ = this.$.pile;
+      },
+      initSensor: function(sensor) {
+        self_.count = sensor.value;
+        this.$.firstSheet.setAttribute('counter', self_.count);
+      },
+      tick: function(sensor) {
+        this.setCountTo(this.count + sensor.value);
+      },
+      setCountTo: function(count) {
+        catchup_ = count - this.count;
+        this.printStuff();
+      },
+      printStuff: _.throttle(function() {
+        clearTimeout(timer_);
+        if (catchup_ > 0) {
+          self_.count++;
+          catchup_--;
+
+          var sheet = document.createElement('dashlee-printer-sheet');
+          sheet.setAttribute('data-index', self_.count % 5);
+          sheet.setAttribute('counter', self_.count);
+
+          pile_.appendChild(sheet);
+
+          setTimeout(function() {
+            pile_.removeChild(pile_.children[0]);
+          }, 200);
+
+          timer_ = setTimeout(self_.printStuff, 1000);
+        }
+      }, 1000, {trailing: true})
+    });
+  })();
+  </script>
+</polymer-element>

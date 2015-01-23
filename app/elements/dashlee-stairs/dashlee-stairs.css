@@ -1,0 +1,79 @@
+:host {
+  display: block;
+  padding: 0 !important;
+  background: white url(../../images/dot-black.png) repeat 20px 20px !important;
+}
+
+.stats {
+  width: 100%;
+  height: 50%;
+  margin: auto;
+  position: absolute;
+  top: -16px; left: 0; bottom: 0; right: 0;
+  transition: opacity .1s linear;
+}
+
+.stats > .date {
+  margin-bottom: 56px;
+}
+
+.stairs-wrapper {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.stairs {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  perspective: 750px;
+  perspective-origin: 50% -10%;
+}
+.stairs .cube {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .5s linear;
+}
+.stairs .face {
+  display: block;
+  width: 300px;
+  height: 106px;
+  top: 40px;
+  position: absolute;
+  border: 2px solid black;
+  backface-visibility: hidden;
+  line-height: 94px;
+  left: 50%;
+}
+.stairs .top {
+  transform: rotateX(90deg) translate3d(-50%, 0, 53px);
+  overflow: hidden;
+}
+.stairs .front {
+  transform: translate3d(-50%, 0, 53px);
+  background: black url(../../images/dot.png) repeat 20px 20px;
+}
+
+.stairs .front > .number {
+  height: 100%;
+  line-height: inherit;
+}
+
+.stairs:nth-child(1) .cube {
+  transform: translate3d(0, -210px, -210px);
+}
+.stairs:nth-child(2) .cube {
+  transform: translate3d(0, -105px, -105px);
+}
+.stairs:nth-child(3) .cube {
+  transform: translate3d(0, 0, 0);
+}
+.stairs:nth-child(4) .cube {
+  transform: translate3d(0, 105px, 105px);
+}
+.stairs:nth-child(5) .cube {
+  transform: translate3d(0, 210px, 210px);
+}

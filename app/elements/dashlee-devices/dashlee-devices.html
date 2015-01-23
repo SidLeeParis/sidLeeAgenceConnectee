@@ -1,0 +1,47 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-devices" attributes="">
+  <template>
+    <link rel="stylesheet" href="dashlee-devices.css">
+    <div class="date">Now</div>
+    <div id="number" class="number">[[count]]</div>
+    <div class="subtitle">connected<br>devices</div>
+    <div id="finder" class="finder" on-click="{{tick}}"></div>
+  </template>
+  <script>
+  (function () {
+    /*jslint nomen: true */
+    /*global Odometer */
+
+    var self_, od_;
+
+    Polymer({
+      count: 0,
+      ready: function() {
+        self_ = this;
+      },
+      attached: function() {
+        od_ = new Odometer({
+          el: self_.$.number,
+          value: self_.count,
+          format: ''
+        });
+      },
+      tick: function(sensor) {
+        self_.setCountTo(sensor.value);
+        // self_.$.hand.classList.add('shake');
+        // setTimeout(function() {
+        //   self_.$.hand.classList.remove('shake');
+        // }, 3000);
+      },
+      initSensor: function(sensor) {
+        self_.setCountTo(sensor.value);
+      },
+      setCountTo: function(count) {
+        self_.count = count;
+        od_.update(self_.count);
+      }
+    });
+  })();
+  </script>
+</polymer-element>
