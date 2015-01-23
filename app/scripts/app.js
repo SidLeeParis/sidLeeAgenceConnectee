@@ -15,6 +15,10 @@ if (!DEBUG_MODE_ON) {
   var dashboard_;
   var client_;
 
+  var adjustCanvases = _.debounce(function(){
+    dashboard_.$.degrees.fitCanvas();
+    dashboard_.$.sound.fitCanvas();
+  }, 300);
 
   function computeData(sensor) {
     if (! initialized_) {
@@ -52,8 +56,7 @@ if (!DEBUG_MODE_ON) {
   function removeLoader() {
     setTimeout(function() {
       dashboard_.$.loader.classList.remove('loading');
-      dashboard_.$.fridgeDegrees.fitCanvas();
-      dashboard_.$.sound.fitCanvas();
+      adjustCanvases();
     }, 300);
     setTimeout(function() {
       dashboard_.$.loader.remove();
@@ -69,10 +72,7 @@ if (!DEBUG_MODE_ON) {
       return value + i;
     };
 
-    window.onresize = _.debounce(function() {
-      dashboard_.$.fridgeDegrees.fitCanvas();
-      dashboard_.$.sound.fitCanvas();
-    }, 300);
+    window.onresize = adjustCanvases;
 
     document.addEventListener('switch-event', function(event) {
       client_.postEvent({
