@@ -57,7 +57,7 @@
     "mocha": "^2.0.1",
     "mocha-phantomjs": "^3.5.2",
     "socket.io-client": "^1.2.1",
-    "supervisor": "^0.6.0",
+    "supervisor": "^0.6.0"
   },
   "engines": {
     "node": ">=0.10.0"
