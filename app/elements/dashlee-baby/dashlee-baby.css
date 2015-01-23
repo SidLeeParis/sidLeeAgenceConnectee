@@ -22,6 +22,17 @@
   top: 113px;
 }
 
+.number-wrapper {
+  position: relative;
+  height: 51px;
+  top: 6px;
+  overflow: hidden;
+}
+
+.number-wrapper > .number {
+  margin-top: -6px;
+}
+
 .side-title {
   text-transform: uppercase;
   font-family: 'font-knockout';
