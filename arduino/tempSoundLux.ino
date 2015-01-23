@@ -1,26 +1,40 @@
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_TSL2561_U.h>
 #include <Ethernet.h>
 #include <SPI.h>
 
 #define PIN_TEMP 0
 #define PIN_DB 2
 
+Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 12345);
+
 byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x05 };
 EthernetClient client;
-String data;
 
 void setup() {
 	Serial.begin(9600);
 	if (Ethernet.begin(mac) == 0) {
 		Serial.println("Failed to configure Ethernet using DHCP");
 	}
-	data = "";
+	// start and configure lux sensor
+	if(!tsl.begin()) {
+		Serial.print("Failed to configure lux sensor");
+	}
+	tsl.enableAutoRange(true);
+	//tsl.setGain(TSL2561_GAIN_16X);
+	tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_402MS);
+
 	delay(1000);
 }
 
 void loop() {
-	sendEvent("roomTemp", String(getTemp(PIN_TEMP), DEC), "C");
+	sendEvent("degrees", String(getTemp(PIN_TEMP), DEC), "C");
+	delay(5000);
 	sendEvent("sound", String(getDb(PIN_DB), DEC), "dB");
-	delay(10000);
+	delay(5000);
+	sendEvent("light", String(getLux(), DEC), "lux");
+	delay(5000);
 }
 
 int getDb(int dBPin) {
@@ -54,6 +68,14 @@ int getDb(int dBPin) {
 
 int getTemp(int tempPin) {
 	return (500 * analogRead(tempPin)) /1024;
+}
+
+int getLux() {
+	sensors_event_t event;
+	tsl.getEvent(&event);
+	if(event.light) {
+		return (int) event.light;
+	}
 }
 
 
