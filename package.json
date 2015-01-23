@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Server side of Sid Lee x Agence Conectée project",
   "author": "Xavier Seignard <xavier.seignard@gmail.com>",
+  "scripts": {
+    "postinstall": "bower install && grunt build"
+  },
   "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
