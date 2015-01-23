@@ -17,7 +17,6 @@ var async = require('async'),
 var Routes = function(sockets, Event, SensorsConf) {
 
 	var _create = function(req, res) {
-		console.log(req.body);
 		if (req.body.token === Conf.SENSOR_TOKEN ||
 			(req.body.token === Conf.FRONTEND_TOKEN && req.body.name === SensorsConf.lightswitch.name)) {
 			// get posted data
@@ -45,8 +44,8 @@ var Routes = function(sockets, Event, SensorsConf) {
 						postData.value = parseInt(postData.value);
 					}
 				}
-				if (req.body.big && req.body.big === 1) {
-					postData.big = true;
+				if (req.body.big) {
+					postData.big = parseInt(req.body.big) === 1 ? true : false;
 				}
 				sockets.emit('event', postData);
 				res.status(201).send();
