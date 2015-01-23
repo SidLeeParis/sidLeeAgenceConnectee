@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-baby" attributes="">
+  <template>
+    <link rel="stylesheet" href="dashlee-baby.css">
+    <div class="date">Today</div>
+    <div class="baby"></div>
+    <div class="numbers">
+      <div class="side">
+        <div class="side-title">Red</div>
+        <div id="red" class="number">[[count.red]]</div>
+      </div>
+      <div class="side">
+      <div class="side-title">Blue</div>
+        <div id="blue" class="number">[[count.blue]]</div>
+      </div>
+    </div>
+    <div class="subtitle">goals scored on<br>the table-football</div>
+  </template>
+  <script>
+  (function () {
+    /*jslint nomen: true */
+    /*global Odometer */
+
+    var self_, od_ = {red: null, blue: null};
+
+    Polymer({
+      count: {red: 0, blue: 0},
+      ready: function() {
+        self_ = this;
+      },
+      attached: function() {
+        od_.red = new Odometer({
+          el: self_.$.red,
+          value: self_.redCount,
+          format: '',
+        });
+        od_.blue = new Odometer({
+          el: self_.$.blue,
+          value: self_.blueCount,
+          format: '',
+        });
+      },
+      initSensor: function(sensor) {
+        self_.setCountTo(sensor.value, sensor._id);
+      },
+      tick: function(sensor) {
+        self_.setCountTo(self_.count[sensor._id] + 1, sensor._id);
+      },
+      setCountTo: function(count, side) {
+        self_.count[side] = count;
+        od_[side].update(self_.count[side]);
+      }
+    });
+  })();
+  </script>
+</polymer-element>

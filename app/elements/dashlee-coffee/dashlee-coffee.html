@@ -1,0 +1,152 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-coffee">
+  <template>
+    <link rel="stylesheet" href="dashlee-coffee.css">
+    <div class="date">Today</div>
+    <div id="number" class="number odometer">[[count]]</div>
+    <div class="subtitle">coffees poured</div>
+    <svg id="svg" on-click="{{tick}}"></svg>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global _, Snap, mina, TimelineLite, Odometer */
+    var self_,
+      filledIndex_ = 3,
+      cups_,
+      s_,
+      timer_,
+      od_,
+      catchup_ = 0;
+
+    function fillHalfCup(c) {
+      c.coffee.animate({
+        'path': 'M11,82 h43,0 l1,-13 c-18,3 -31,-17 -45.5,-4Z'
+      }, 500, mina.backin);
+    }
+
+    function fillFullCup(c) {
+      c.coffee.animate({
+        'path': 'M11,82 h43,0 l2,-44 c-48,7.5 -48,7.5 -48,7.5Z'
+      }, 500, mina.backout);
+    }
+
+    function moveCups() {
+      for (var i = 0; i < cups_.length; i++) {
+        var c = cups_[i];
+        var prevX = c.node.x.baseVal.value;
+        if (prevX + 80 <= 0) {
+          c.attr({
+            x: (cups_.length - 2) * 80 - 40
+          });
+          if (c.coffee) {
+            c.coffee.remove();
+          }
+        } else {
+          c.animate({
+            x: prevX - 80
+          }, 600, mina.backout);
+        }
+      }
+    }
+
+    Polymer({
+      count: 0,
+      ready: function(){
+        self_ = this;
+      },
+      attached: function() {
+        od_ = new Odometer({
+          el: self_.$.number,
+          value: self_.count,
+          format: '',
+        });
+      },
+      initSensor: function(sensor) {
+        catchup_ = 0;
+        self_.count = sensor.value;
+        od_.update(self_.count);
+      },
+      tick: function() {
+        catchup_++;
+        self_.animateCount();
+      },
+      setCountTo: function(count) {
+        catchup_ = count - self_.count;
+        self_.animateCount();
+      },
+      animateCount: _.throttle(function() {
+        clearTimeout(timer_);
+        if (catchup_ > 0) {
+          od_.update(++self_.count);
+          catchup_--;
+          self_.fillFirstCup();
+          timer_ = setTimeout(self_.animateCount, 1800);
+        }
+      }, 1700, {trailing: true}),
+      domReady: function() {
+        s_ = Snap(this.$.svg);
+        var cup = Snap();
+        var glass = cup.polygon('57,85 8,85 2,2 60,2');
+        var handle = cup.path('M58,52 c8,0 15,-7 15,-15 c0,-8 -6,-15 -13,-15');
+
+        glass.addClass('glass');
+        handle.addClass('handle');
+
+        s_.add(cup);
+        cups_ = [cup];
+
+        cup.attr({
+          x: -40,
+          y: 145
+        });
+
+        for (var i=1;i<10;i++) {
+          var c = cup.clone().appendTo(s_).attr({
+            x: i*80 -40,
+            y: 145
+          });
+          cups_.push(c);
+        }
+
+        this.fillCup(cups_[0], false);
+        this.fillCup(cups_[1], false);
+        this.fillCup(cups_[2], false);
+      },
+      fillFirstCup : function() {
+        this.fillCup(cups_[filledIndex_], true);
+        filledIndex_ = ++filledIndex_ % cups_.length;
+      },
+      fillCup : function(c, animFlag) {
+        if(c.coffee) {
+          c.coffee.remove();
+        }
+        var coffee = animFlag ? c.path('M11,82 h43,0 l0,-3 c3,-1 -18,3 -43.5,0Z') : c.path('M11,82 h43,0 l2,-44 c-48,7.5 -48,7.5 -48,7.5Z');
+        coffee.addClass('coffee');
+        c.coffee = coffee;
+
+        if (animFlag) {
+          var box = c.getBBox();
+          var center = c.node.x.baseVal.value + box.w / 2 - 6;
+          var fluid = s_.rect(center,0, 2,4);
+          fluid.addClass('fluid');
+
+          var tl = new TimelineLite();
+          tl.to(fluid, 0.3, {snap: {height: 227, width: 2.5}})
+            //.fromTo(c.coffee.node, 0.3, {scaleX:0}, {scaleX:1}, 0.2)
+            .call(function() {c.coffee.addClass('prefilled');}, null, 0.2)
+            .call(fillHalfCup, [c], null, 0.4)
+            .call(fillFullCup, [c], null, 0.8)
+            .to(fluid, 0.3, {snap: {y:187, height: 1, width: 1}})
+            .call(function(){fluid.remove();})
+            .call(moveCups);
+        }
+        else {
+          coffee.addClass('prefilled');
+        }
+      }
+    });
+  })();
+  </script>
+</polymer-element>

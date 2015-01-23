@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-tracer" attributes="count">
+  <template>
+    <link rel="stylesheet" href="dashlee-tracer.css">
+
+    <div class="printer" on-click="{{tick}}">
+      <div id="paper" class="paper">
+        <div id="numbers" class="numbers">
+          <div class="number">[[count | plus(2)]]</div>
+          <div class="number">[[count | plus(1)]]</div>
+          <div class="number">[[count]]</div>
+          <div class="number">[[count | plus(-1)]]</div>
+          <div class="number">[[count | plus(-2)]]</div>
+        </div>
+      </div>
+    </div>
+    <div class="date">This year</div>
+    <div class="subtitle">meters of scroll paper printed</div>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global _ */
+
+    var catchup_ = 0;
+    var index_ = 0;
+
+    var self_, paper_, numbers_, timer_;
+
+    Polymer({
+      count: 0,
+      ready: function() {
+        self_ = this;
+        paper_ = this.$.paper;
+        numbers_ = this.$.numbers;
+      },
+      initSensor: function(sensor) {
+        self_.count = sensor.value;
+      },
+      tick: function() {
+        catchup_++;
+        this.printStuff();
+      },
+      setCountTo: function(count) {
+        catchup_ = count - this.count;
+        this.printStuff();
+      },
+      printStuff: _.throttle(function() {
+        clearTimeout(timer_);
+        if (catchup_ > 0) {
+          catchup_--;
+          self_.count++;
+          index_++;
+
+          var number = numbers_.lastElementChild;
+          number.innerHTML = self_.count + 2;
+          numbers_.insertBefore(number, numbers_.firstElementChild);
+          paper_.style.backgroundPositionY = (60 * index_ + 4) + 'px';
+          timer_ = setTimeout(self_.printStuff, 600);
+        }
+      }, 600, {trailing: true})
+    });
+  })();
+  </script>
+</polymer-element>

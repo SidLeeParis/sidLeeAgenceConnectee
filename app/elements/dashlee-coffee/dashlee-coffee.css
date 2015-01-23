@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+#svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.coffee {
+  fill: white;
+  transform: scaleX(0);
+  transform-origin: 50% 0;
+  transition: transform .3s ease;
+}
+.coffee.prefilled {
+  transform: scaleX(1);
+}
+.glass, .handle {
+  fill: none;
+  stroke: white;
+  stroke-width: 1.5;
+}
+.fluid {
+  fill: white;
+}

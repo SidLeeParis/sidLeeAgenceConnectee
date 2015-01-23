@@ -1,0 +1,30 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-header">
+  <template>
+    <style>
+      :host {
+        padding: 5px 0;
+        display: block;
+      }
+    </style>
+    <a href="http://sidlee.com/fr" target="_blank"><span class="sidlee">SID LEE</span>&nbsp;&nbsp;<span class="subtitle">Paris, {{time}}</span></a>
+  </template>
+  <script>
+    (function () {
+      /*jslint nomen: true */
+      /*global moment */
+      var self_;
+
+      Polymer({
+        ready: function() {
+          self_ = this;
+          self_.time = moment().tz('Europe/Paris').format('HH:mm:ss');
+          setInterval(function() {
+            self_.time = moment().tz('Europe/Paris').format('HH:mm:ss');
+          }, 1000);
+        }
+      });
+    })();
+  </script>
+</polymer-element>

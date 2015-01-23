@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+
+.baby {
+  position: absolute;
+  width: 100%;
+  top: 38px;
+  height: 152px;
+  background: url('../../images/baby.svg') center no-repeat;
+}
+
+.subtitle {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+}
+
+.numbers {
+  position: absolute;
+  width: 100%;
+  top: 113px;
+}
+
+.side-title {
+  text-transform: uppercase;
+  font-family: 'font-knockout';
+  font-size: 22px;
+  margin-bottom: -8px;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+}
+
+.numbers > .side {
+  display: inline-block;
+  width: 62px;
+}
+
+.numbers > .side:first-child {
+  margin-right: 22px;
+}

@@ -1,0 +1,68 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-flush">
+  <template>
+    <link rel="stylesheet" href="dashlee-flush.css">
+    <div class="date">Today</div>
+    <div id="number" class="number">[[count]]</div>
+    <div class="subtitle">toilets flushed</div>
+
+    <div id="flush" class="flush" on-click="{{tick}}">
+      <div class="finger"></div>
+      <div class="button"></div>
+    </div>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global _, Odometer */
+
+    var self_, flush_, od_, timer_, catchup_ = 0;
+
+    Polymer({
+      count: 0,
+      ready: function() {
+        self_ = this;
+      },
+      domReady: function() {
+        flush_ = this.$.flush;
+      },
+      attached: function() {
+        od_ = new Odometer({
+          el: self_.$.number,
+          value: self_.count,
+          format: '',
+        });
+      },
+      initSensor: function(sensor) {
+        catchup_ = 0;
+        self_.count = sensor.value;
+        od_.update(self_.count);
+      },
+      tick: function() {
+        catchup_++;
+        self_.animateCount();
+      },
+      setCountTo: function(count) {
+        catchup_ = count - self_.count;
+        self_.animateCount();
+      },
+      animateCount: _.throttle(function() {
+        clearTimeout(timer_);
+        if (catchup_ > 0) {
+          od_.update(++self_.count);
+          catchup_--;
+          flush_.classList.add('flushed');
+          setTimeout(function() {
+            flush_.classList.remove('flushed');
+          }, 100);
+          // self_.async(function() {
+          //   flush_.classList.remove('flushed');
+          // });
+          timer_ = setTimeout(self_.animateCount, 1400);
+        }
+      }, 1400, {trailing: true})
+    });
+  })();
+  </script>
+</polymer-element>

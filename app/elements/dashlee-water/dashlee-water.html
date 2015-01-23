@@ -1,0 +1,70 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-water">
+  <template>
+    <link rel="stylesheet" href="dashlee-water.css">
+<div class="column">
+  <div class="date">Today</div>
+  <div class="number">2</div>
+  <div class="subtitle">liters
+    <br>of
+    <br>fountain
+    <br>water
+    <br>drunk</div>
+</div>
+<div class="column">
+  <div class="bottle" on-click="{{giveMeADrink}}">
+    <div id="level" class="level" data-level="0">
+      <div class="wave"></div>
+      <div id="bubbles" class="bubbles"></div>
+    </div>
+  </div>
+</div>
+
+  </template>
+  <script>
+    (function () {
+      /*jslint nomen: true */
+      /*global _ */
+
+      var counter_ = 0;
+
+
+      Polymer({
+        giveMeADrink: function() {
+          counter_++;
+          this.$.level.setAttribute('data-level', counter_ % 5);
+          var numBubbles = 3 + Math.floor(Math.random() * 3);
+
+          for (var i = 0; i < numBubbles; i++) {
+            var bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+
+            var classIndex = Math.floor(Math.random() * 3);
+            switch (classIndex) {
+              case 0:
+                bubble.classList.add('short');
+                break;
+              case 1:
+                bubble.classList.add('medium');
+                break;
+              default:
+                bubble.classList.add('large');
+                break;
+            }
+            var leftOffset = Math.floor(Math.random() * 20);
+            bubble.style.webkitAnimationDuration = 1000 + leftOffset * 100 + 'ms';
+            bubble.style.animationDuration = 1000 + leftOffset * 100 + 'ms';
+            bubble.style.left = leftOffset - 15 + 'px';
+            bubble.style.bottom = -30 + leftOffset + 'px';
+            this.$.bubbles.appendChild(bubble);
+          }
+          this.emptyBubbles_();
+        },
+        emptyBubbles_ : _.debounce(function() {
+          this.$.bubbles.innerHTML = '';
+        }, 3000)
+      });
+    })();
+  </script>
+</polymer-element>

@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+.finder {
+
+  margin-top: 17px;
+  background: url(../../images/finder.svg) center 0 no-repeat;
+  height: 65px;
+  width: 100%;
+}
