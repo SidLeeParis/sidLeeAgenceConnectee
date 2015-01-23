@@ -12,27 +12,28 @@
 }
 
 .finger {
+  position: relative;
   background: url(../../images/flush_finger.svg) 50% 0 no-repeat;
   height: 71px;
   margin-left: -20px;
-  transform: translateY(-2px);
+  top: -2px;
   transition: transform .1s ease-out .5s;
 }
 
 .button {
-  margin-top: 2px;
+  position: relative;
   background: url(../../images/flush_button.svg) 50% 0 no-repeat;
   height: 32px;
   transition: transform .8s ease-out .5s;
 }
 
 .flush.flushed .finger {
-  transform: translateY(28px);
+  transform: translateY(26px);
   transition-delay: 0s;
 }
 
 .flush.flushed .button {
-  transform: translateY(23px);
+  transform: translateY(21px);
   transition-duration: .1s;
   transition-delay: 0s;
 }
