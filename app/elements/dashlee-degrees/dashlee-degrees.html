@@ -1,0 +1,98 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-degrees" attributes="">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      #canvas {
+        position: absolute;
+        bottom: 60px;
+        left: 0;
+      }
+      .bottom {
+        background-color: white;
+        height: 60px;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
+    </style>
+    <div class="date">Now</div>
+    <div id="number" class="number odometer">[[count]]</div>
+    <div class="subtitle">degrees indoor</div>
+    <canvas id="canvas" height="70" width="360"></canvas>
+    <div class="bottom"></div>
+
+  </template>
+  <script>
+    (function () {
+      /*jslint nomen: true */
+      /*global SmoothieChart, TimeSeries, Odometer */
+      var line1_, od_, self_;
+
+      Polymer({
+        count: 0.0,
+        ready: function() {
+          self_ = this;
+        },
+        attached: function() {
+          od_ = new Odometer({
+            el: self_.$.number,
+            value: self_.count,
+            format: '(dd).d',
+          });
+        },
+        domReady: function() {
+          self_.fitCanvas();
+
+          var smoothie = new SmoothieChart({
+            interpolation: 'linear',
+            labels: {disabled: true},
+            minValue: 2,
+            maxValue: 8,
+            millisPerPixel:50,
+            grid: {
+              fillStyle: 'transparent',
+              strokeStyle: 'transparent'
+            }
+          });
+          smoothie.streamTo(self_.$.canvas, 1000);
+          // Data
+          line1_ = new TimeSeries();
+          // Add to SmoothieChart
+          smoothie.addTimeSeries(line1_, {
+            fillStyle:'#fff',
+            strokeStyle: 'transparent'
+          });
+
+          line1_.append(new Date().getTime(), 2);
+          setInterval(function() {
+            var newVal = (1 + (Math.random() - 0.5) / 3) * self_.count;
+            line1_.append(new Date().getTime(), newVal);
+          }, 1000);
+        },
+        fitCanvas: function() {
+          self_.$.canvas.width  = self_.clientWidth;
+        },
+        tick: function(sensor) {
+          self_.setCountTo(sensor.value);
+        },
+        initSensor: function(sensor) {
+          self_.setCountTo(sensor.value);
+        },
+        setCountTo: function(value) {
+          if (Math.round((value % 1) * 10) % 10 === 0) {
+            value += 0.1;
+          }
+
+          self_.count = value.toFixed(1);
+          od_.update(self_.count);
+          line1_.append(new Date().getTime(), self_.count);
+        }
+      });
+    })();
+  </script>
+</polymer-element>

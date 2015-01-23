@@ -1,0 +1,129 @@
+* /deep/ * {
+  box-sizing: border-box;
+  user-select: none;
+  cursor: default;
+}
+
+* /deep/ a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #000;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+* /deep/ .invert {
+  filter: invert(1);
+}
+
+* /deep/ .number {
+  font-family: 'font-tsar';
+  font-size: 56px;
+  line-height: 60px;
+}
+
+* /deep/ .subtitle {
+  font-family: 'font-gotham';
+  text-transform: uppercase;
+  font-size: 26px;
+  line-height: 0.95em;
+}
+
+* /deep/ .date {
+  font-family: 'font-idlewild';
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+* /deep/ .sidlee {
+  font-family: 'font-sidlee';
+  text-transform: uppercase;
+  font-size: 26px;
+  word-spacing: -0.1em;
+}
+
+* /deep/ .hidden {
+  opacity: 0;
+}
+
+.wrapper {
+  width: 100%;
+  padding: 0 46px 0px 46px;
+  background: #000;
+}
+.wrapper.compact {
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.wrapper.compact dashlee-header, .wrapper.compact dashlee-footer {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.dashboard {
+  width: 100%;
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+}
+
+.wrapper.compact .dashboard {
+  border: 2px solid white;
+}
+
+.dashboard > .item {
+  position: relative;
+  display: block;
+  min-width: 180px;
+  height: 260px;
+  padding: 20px 0;
+  text-align: center;
+  border-bottom: 2px solid white;
+  border-left: 2px solid white;
+  background: black url('../images/dot.png') repeat 20px 20px;
+  flex: 1 1 auto;
+}
+
+dashlee-loader.loading {
+  opacity: 1;
+}
+
+dashlee-loader.loading + .wrapper {
+  height: 100%;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.wrapper.compact .dashboard > .item {
+  border-left: none;
+}
+
+.wrapper.compact .dashboard > .item:last-child {
+  border-bottom: none;
+}
+
+.dashboard > .item.invert {
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+}
+.dashboard > .item.large {
+  min-width: 360px;
+  flex: 2 1 auto;
+}
+.dashboard > .item /deep/ .column {
+  width: 50%;
+  height: 100%;
+  float: left;
+  position: relative;
+}

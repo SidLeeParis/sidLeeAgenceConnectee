@@ -1,0 +1,48 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-likes" attributes="">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div class="date">Now</div>
+    <div id="number" class="number">[[count]]</div>
+    <div class="sidlee">SID LEE</div>
+    <div class="subtitle" style="margin-bottom: 20px">facebook fans</div>
+    <a href="https://www.facebook.com/MeetSidLee" target="_blank"><img src="../../images/like.svg" width="66" height="74"></a>
+  </template>
+  <script>
+    (function () {
+      /*jslint nomen: true */
+      /*global Odometer */
+
+      var self_, od_;
+
+      Polymer({
+        count: 52348,
+        ready: function() {
+          self_ = this;
+        },
+        attached: function() {
+          od_ = new Odometer({
+            el: self_.$.number,
+            value: self_.count,
+            format: ''
+          });
+        },
+        initSensor: function(sensor) {
+          self_.setCountTo(sensor.value);
+        },
+        tick: function(sensor) {
+          self_.setCountTo(sensor.value);
+        },
+        setCountTo: function(count) {
+          self_.count = count;
+          od_.update(self_.count);
+        }
+      });
+    })();
+  </script>
+</polymer-element>

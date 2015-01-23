@@ -1,0 +1,88 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-sound" attributes="">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      #canvas {
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+      }
+      .bottom {
+        background-color: white;
+        height: 30px;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
+    </style>
+    <div class="date">Now</div>
+    <div class="number">45</div>
+    <div class="subtitle">decibels of noise<br>at the central table</div>
+    <canvas id="canvas" height="70" width="360"></canvas>
+    <div class="bottom"></div>
+
+  </template>
+  <script>
+    (function () {
+      /*jslint nomen: true */
+      /*global SmoothieChart, TimeSeries */
+      var line1_;
+      var timer_ = null;
+
+      function gotoZero(value) {
+          timer_ = setTimeout(function() {
+            var v = value;
+            v = Math.max(Math.random() / 10, v + 0.3 - Math.random() * 2);
+            line1_.append(new Date().getTime(), v);
+            gotoZero(v);
+          }, 100);
+
+      }
+
+      Polymer({
+        domReady: function() {
+          this.fitCanvas();
+
+          var smoothie = new SmoothieChart({
+            interpolation: 'beziers',
+            labels: {disabled: true},
+            minValue: 0,
+            maxValue: 3,
+            grid: {
+              fillStyle: 'transparent',
+              strokeStyle: 'transparent'
+            }
+          });
+          smoothie.streamTo(this.$.canvas, 100);
+          line1_ = new TimeSeries();
+          smoothie.addTimeSeries(line1_, {
+            fillStyle:'#fff',
+            strokeStyle: 'transparent'
+          });
+
+          line1_.append(new Date().getTime(), 0);
+          setInterval(function() {
+            var newVal = 1 + Math.random() * 2;
+            line1_.append(new Date().getTime(), newVal);
+            clearTimeout(timer_);
+            gotoZero(newVal);
+            // setTimeout(function() {
+            //     gotoZero(newVal);
+            //   }, 100);
+
+          }, 500);
+        },
+        fitCanvas: function() {
+          this.async(function() {
+            this.$.canvas.width  = this.clientWidth;
+          }, null, 400);
+        }
+      });
+    })();
+  </script>
+</polymer-element>

@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-lightswitch" attributes="switch">
+  <template>
+    <link rel="stylesheet" href="dashlee-lightswitch.css">
+    <div class="date">Today</div>
+    <div id="number" class="number odometer">[[count]]</div>
+    <div class="subtitle">persons have switched this button</div>
+    <div class="toggle">
+      <input type="checkbox" on-change="{{toggleLight}}">
+      <div class="switch"></div>
+    </div>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global _, Odometer */
+
+    var self_, od_;
+    var bufferClicks_ = 0;
+    var sendingClicks_ = 0;
+    var isStub_ = false;
+    Polymer({
+      switch: false,
+      count: 0,
+      ready: function() {
+        self_ = this;
+      },
+      attached: function() {
+        od_ = new Odometer({
+          el: self_.$.number,
+          value: self_.count,
+          format: '',
+        });
+      },
+      tick: function(sensor) {
+        self_.setCountTo(self_.count + sensor.value);
+      },
+      initSensor: function(sensor) {
+        self_.setCountTo(sensor.value);
+      },
+      setCountTo: function(count) {
+        self_.count = isStub_ ? count - sendingClicks_ : count;
+        od_.update(self_.count);
+        isStub_ = false;
+      },
+      toggleLight: function() {
+        bufferClicks_++;
+        od_.update(++self_.count);
+        self_.switch = !self_.switch;
+        self_.fireEvent();
+      },
+      fireEvent: _.debounce(function() {
+        isStub_ = true;
+        sendingClicks_ = bufferClicks_;
+        bufferClicks_ = 0;
+        self_.fire('switch-event', {value: sendingClicks_});
+      }, 400),
+      failFire: function(failedClicks) {
+        bufferClicks_ += failedClicks;
+        sendingClicks_ = 0;
+      }
+    });
+  })();
+  </script>
+</polymer-element>

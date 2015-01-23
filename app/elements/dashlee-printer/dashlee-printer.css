@@ -1,0 +1,81 @@
+:host {
+  display: block;
+}
+
+dashlee-printer-sheet {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+dashlee-printer-sheet[data-index="0"] {
+  transform: rotate(0deg);
+  animation: paper-right 200ms linear;
+}
+dashlee-printer-sheet[data-index="1"] {
+  transform: rotate(4deg) translate(8px, -4px);
+  animation: paper-left-left 200ms linear;
+}
+dashlee-printer-sheet[data-index="2"] {
+  transform: rotate(-1deg) translate(12px, -8px);
+  animation: paper-right 200ms linear;
+}
+dashlee-printer-sheet[data-index="3"] {
+  transform: rotate(2deg) translate(-6px, 4px);
+  animation: paper-left 200ms linear;
+}
+dashlee-printer-sheet[data-index="4"] {
+  transform: rotate(3deg) translate(-10px, -2px);
+  animation: paper-right-right 200ms linear;
+}
+
+dashlee-printer-sheet.noanim {
+  animation: none;
+}
+
+@keyframes paper-left {
+  0% {
+    left: 40px;
+    top: -100%;
+  }
+  100% {
+    left: 0;
+    top: 0;
+  }
+}
+
+@keyframes paper-left-left {
+  0% {
+    left: 60px;
+    top: -100%;
+  }
+  100% {
+    left: 0;
+    top: 0;
+  }
+}
+
+@keyframes paper-right {
+  0% {
+    left: -30px;
+    top: -100%;
+  }
+  100% {
+    left: 0;
+    top: 0;
+  }
+}
+
+@keyframes paper-right-right {
+  0% {
+    left: -50px;
+    top: -100%;
+  }
+  100% {
+    left: 0;
+    top: 0;
+  }
+}
