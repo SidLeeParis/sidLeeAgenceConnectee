@@ -31,7 +31,7 @@ client.today().exec(function(data) {
 	{
 		"_id": "undo",
 		"value": 160,
-		"date": DATE_OF_LAST_EVENT
+		"date": "DATE_OF_LAST_EVENT",
 		"app": "my app",
 		"user": "user"
 	}
