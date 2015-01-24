@@ -22,8 +22,8 @@ void setup() {
 void loop() {
 	int irBeamState = digitalRead(PIN_SENSOR);
 	if (irBeamState == LOW && previousState == HIGH) {
-		sendEvent("stairs", "12", "stairs");
-		delay(1000);
+		sendEvent("stairs", "20", "stairs");
+		delay(3000);
 	}
 	previousState = irBeamState;
 	delay(50);
