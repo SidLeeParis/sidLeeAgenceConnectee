@@ -21,19 +21,19 @@ client.today().exec(function(data) {
 ```json
 [
 	{
-		_id: "visits",
-		value: 2
+		"_id": "visits",
+		"value": 2
 	},
 	{
-		_id: "likes",
-		value: 86818
+		"_id": "likes",
+		"value": 86818
 	},
 	{
-		_id: "undo",
-		value: 160,
-		date: DATE_OF_LAST_EVENT
-		app: "my app",
-		user: "user"
+		"_id": "undo",
+		"value": 160,
+		"date": DATE_OF_LAST_EVENT
+		"app": "my app",
+		"user": "user"
 	}
 ]
 ```
@@ -52,31 +52,31 @@ client.last24().exec(function(data) {
 ```json
 [
 	{
-		_id: "red",
-		values: [
+		"_id": "red",
+		"values": [
 			{
-			hourAgo: 0,
-			value: 1
+				"hourAgo": 0,
+				"value": 1
 			},
 			{
-			hourAgo: 12,
-			value: 5
+				"hourAgo": 12,
+				"value": 5
 			},
 			{
-			hourAgo: 17,
-			value: 14
+				"hourAgo": 17,
+				"value": 14
 			},
 			{
-			hourAgo: 18,
-			value: 2
+				"hourAgo": 18,
+				"value": 2
 			},
 			{
-			hourAgo: 21,
-			value: 12
+				"hourAgo": 21,
+				"value": 12
 			},
 			{
-			hourAgo: 22,
-			value: 2
+				"hourAgo": 22,
+				"value": 2
 			}
 		]
 	},
