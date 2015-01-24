@@ -12,6 +12,8 @@ http_header_t headers[] = {
 http_request_t request;
 http_response_t response;
 
+int previousSensorVal = HIGH;
+
 void setup() {
 	Serial.begin(9600);
 	pinMode(PIN_SENSOR, INPUT_PULLUP);
@@ -25,10 +27,11 @@ void setup() {
 
 void loop() {
 	int sensorVal = digitalRead(2);
-	if (sensorVal == HIGH) {
+	if (sensorVal == HIGH && previousSensorVal == LOW) {
 		sendEvent("flush", "1", "flush");
-		delay(10000);
 	}
+	previousSensorVal = sensorVal;
+	delay(50);
 }
 
 void sendEvent(String name, String value, String unit) {
