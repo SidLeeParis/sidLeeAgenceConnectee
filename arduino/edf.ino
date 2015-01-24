@@ -4,19 +4,14 @@
 #include <Button.h>
 #include <elapsedMillis.h>
 
-#define DEBUT_TRAME 0x02
-#define DEBUT_LIGNE 0x0A
-#define FIN_LIGNE 0x0D
-
-byte inByte = 0;
-char teleInfoData[21] = "";
-byte index = 0;
+char inChar;
+String data = "";
 
 elapsedMillis timeElapsed;
 unsigned int interval = 5000;
 
 SoftwareSerial teleInfo(2, 3);
-int  watts;
+int watts;
 
 Button door = Button(A0, INPUT_PULLUP);
 
@@ -35,21 +30,15 @@ void setup() {
 void loop() {
 
 	if (teleInfo.available()) {
-		inByte = teleInfo.read() & 0x7F;;
-		if (inByte == DEBUT_TRAME || inByte == DEBUT_LIGNE) index = 0;
-		teleInfoData[index] = inByte;
-		index++;
-		if (index > 21) index=0;
-		if (inByte == FIN_LIGNE && index > 5) {
-			if (teleInfoData[1] == 'I' && teleInfoData[2] == 'I') {
-				char buffer[4];
-				buffer[0] = teleInfoData[7];
-				buffer[1] = teleInfoData[8];
-				buffer[2] = teleInfoData[9];
-				buffer[3] = '\0';
-				watts = atoi(buffer) * 230;
-
+		inChar = teleInfo.read() & 0x7F;
+		if (inChar == '\n') {
+			int current = getIINST();
+			if (current > 0) {
+				watts = current * 230;
 			}
+		}
+		else {
+			data += inChar;
 		}
 	}
 	if (timeElapsed > interval) {
@@ -62,6 +51,21 @@ void loop() {
 		delay(50);
 	}
 }
+
+int getIINST() {
+	int iinst = -1;
+	if(data.indexOf("IINST1") > 0 && data.indexOf("IINST2") > 0 && data.indexOf("IINST3") > 0) {
+		String line = data.substring(data.indexOf("IINST1"), data.indexOf("IINST3")+10);
+		//Serial.println(line);
+		//IINST1 002  3IINST2 012  6IINST3 006
+		iinst = line.substring(7,10).toInt() + line.substring(21,24).toInt() + line.substring(35,39).toInt();
+		//Serial.print("total: ");
+		//Serial.println(iinst);
+	}
+	data = "";
+	return iinst;
+}
+
 
 void sendEvent(String name, String value, String unit) {
 	String data = "name=" + name + "&value=" + value + "&unit=" + unit;
