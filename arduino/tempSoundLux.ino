@@ -29,15 +29,16 @@ EthernetClient client;
 void setup() {
 	Serial.begin(9600);
 	if (Ethernet.begin(mac) == 0) {
-		Serial.println(F("Failed to configure Ethernet using DHCP"));
+		Serial.println("Failed to configure Ethernet using DHCP");
 	}
 	// start and configure lux sensor
 	if(!tsl.begin()) {
-		Serial.print(F("Failed to configure lux sensor"));
+		Serial.print("Failed to configure lux sensor");
 	}
 	tsl.enableAutoRange(true);
 	//tsl.setGain(TSL2561_GAIN_16X);
-	tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_402MS);
+	//tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_402MS);
+	tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_13MS);
 
 	delay(1000);
 }
@@ -56,10 +57,7 @@ void loop() {
 	if (timeElapsed > interval) {
 		sendEvent("degrees", getTemp(PIN_TEMP), "C");
 		sendEvent("sound", String(currentdB, DEC), "dB");
-		int lux = getLux();
-		if (lux > -1) {
-			sendEvent("light", String(lux, DEC), "lux");
-		}
+		sendEvent("light", getLux(), "lux");
 		timeElapsed = 0;
 	}
 }
@@ -96,15 +94,10 @@ String getTemp(int tempPin) {
 	return t;
 }
 
-int getLux() {
+String getLux() {
 	sensors_event_t event;
 	tsl.getEvent(&event);
-	if(event.light) {
-		return (int) event.light;
-	}
-	else {
-		return -1;
-	}
+	return String((int) event.light, DEC);
 }
 
 
@@ -113,10 +106,10 @@ void sendEvent(String name, String value, String unit) {
 	data += "&token=***REMOVED***";
 	Serial.println(data);
 	if (client.connect("sidlee.herokuapp.com",80)) {
-		client.println(F("POST /api/1/event HTTP/1.1"));
-		client.println(F("Host: sidlee.herokuapp.com"));
-		client.println(F("Content-Type: application/x-www-form-urlencoded"));
-		client.print(F("Content-Length: "));
+		client.println("POST /api/1/event HTTP/1.1");
+		client.println("Host: sidlee.herokuapp.com");
+		client.println("Content-Type: application/x-www-form-urlencoded");
+		client.print("Content-Length: ");
 		client.println(data.length());
 		client.println();
 		client.print(data);
