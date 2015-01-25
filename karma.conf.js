@@ -5,7 +5,7 @@ module.exports = function(config) {
 		files: [
 			'node_modules/chai/chai.js',
 			'node_modules/socket.io-client/socket.io.js',
-			'public/js/sidlee-client.js',
+			'app/scripts/api/sidlee-client.js',
 			'test/app/js/sidlee-client.spec.js'
 		],
 		browsers: ['PhantomJS'],
