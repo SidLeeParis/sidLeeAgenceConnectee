@@ -8,17 +8,17 @@
 #define PIN_TEMP 0
 #define PIN_DB 2
 
-elapsedMillis timeElapsedDegrees;
-elapsedMillis timeElapsedSound;
-elapsedMillis timeElapsedLux;
-
-unsigned int interval = 20000;
+elapsedMillis timeElapsed;
+const unsigned int interval = 20000;
 
 boolean canSend = true;
 elapsedMillis canSendDelay;
-unsigned int canSendInterval = 2000;
+const unsigned int canSendInterval = 2000;
 
-int threshold = 25;
+const int numberOfSamples = 9;
+const int dB[] = {30, 32, 45, 60, 69, 72, 74, 76, 80};
+const double analogValues[] = {0.0, 0.14, 0.6, 1.39, 2.6, 3.68, 5.2, 6.24, 130.2};
+const int threshold = 25;
 int previousdB = 0;
 
 Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 12345);
@@ -29,11 +29,11 @@ EthernetClient client;
 void setup() {
 	Serial.begin(9600);
 	if (Ethernet.begin(mac) == 0) {
-		Serial.println("Failed to configure Ethernet using DHCP");
+		Serial.println(F("Failed to configure Ethernet using DHCP"));
 	}
 	// start and configure lux sensor
 	if(!tsl.begin()) {
-		Serial.print("Failed to configure lux sensor");
+		Serial.print(F("Failed to configure lux sensor"));
 	}
 	tsl.enableAutoRange(true);
 	//tsl.setGain(TSL2561_GAIN_16X);
@@ -53,26 +53,18 @@ void loop() {
 	if (canSendDelay > canSendInterval) {
 		canSend = true;
 	}
-	if (timeElapsedDegrees > interval) {
+	if (timeElapsed > interval) {
 		sendEvent("degrees", getTemp(PIN_TEMP), "C");
-		timeElapsedDegrees = 0;
-	}
-	if (timeElapsedSound > interval) {
 		sendEvent("sound", String(currentdB, DEC), "dB");
-		timeElapsedSound = 0;
-	}
-	if (timeElapsedLux > interval) {
-		sendEvent("light", getLux(), "lux");
-		timeElapsedLux = 0;
+		int lux = getLux();
+		if (lux > -1) {
+			sendEvent("light", String(lux, DEC), "lux");
+		}
+		timeElapsed = 0;
 	}
 }
 
 int getDb(int dBPin) {
-	// sampled data, as a referential
-	int numberOfSamples = 9;
-	int dB[] = {30, 32, 45, 60, 69, 72, 74, 76, 80};
-	double analogValues[] = {0.0, 0.14, 0.6, 1.39, 2.6, 3.68, 5.2, 6.24, 130.2};
-
 	int i;
 	double value = 0;
 	// take 1000 measures to get a more meaningful value
@@ -104,11 +96,14 @@ String getTemp(int tempPin) {
 	return t;
 }
 
-String getLux() {
+int getLux() {
 	sensors_event_t event;
 	tsl.getEvent(&event);
 	if(event.light) {
-		return String((int) event.light, DEC);
+		return (int) event.light;
+	}
+	else {
+		return -1;
 	}
 }
 
@@ -118,10 +113,10 @@ void sendEvent(String name, String value, String unit) {
 	data += "&token=***REMOVED***";
 	Serial.println(data);
 	if (client.connect("sidlee.herokuapp.com",80)) {
-		client.println("POST /api/1/event HTTP/1.1");
-		client.println("Host: sidlee.herokuapp.com");
-		client.println("Content-Type: application/x-www-form-urlencoded");
-		client.print("Content-Length: ");
+		client.println(F("POST /api/1/event HTTP/1.1"));
+		client.println(F("Host: sidlee.herokuapp.com"));
+		client.println(F("Content-Type: application/x-www-form-urlencoded"));
+		client.print(F("Content-Length: "));
 		client.println(data.length());
 		client.println();
 		client.print(data);
