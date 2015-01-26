@@ -49,13 +49,13 @@
     <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
     <dashlee-loader id="loader" class="loading"></dashlee-loader>
     <div id="wrapper" class="wrapper {{{invert: switchStatus, compact: phoneScreen}| tokenList }}">
-     <dashlee-header></dashlee-header>
+     <dashlee-header compact="{{phoneScreen}}"></dashlee-header>
      <div class="dashboard" layout vertical?="{{phoneScreen}}" horizontal?="{{!phoneScreen}}" wrap>
         <dashlee-degrees id="degrees" class="item large" auto-vertical></dashlee-degrees>
         <dashlee-coffee id="coffee" class="item large" auto-vertical></dashlee-coffee>
         <dashlee-sound id="sound" class="item large invert" auto-vertical></dashlee-sound>
         <dashlee-flush id="flush" class="item" auto-vertical></dashlee-flush>
-        <dashlee-stairs id="stairs" class="item large" auto-vertical count="2000"></dashlee-stairs>
+        <dashlee-stairs id="stairs" class="item large" auto-vertical></dashlee-stairs>
         <dashlee-water id="water" class="item large" auto-vertical></dashlee-water>
         <dashlee-baby id="baby" class="item" auto-vertical></dashlee-baby>
         <dashlee-door id="door" class="item large invert" auto-vertical></dashlee-door>
@@ -63,7 +63,7 @@
         <dashlee-fax id="fax" class="item invert" auto-vertical></dashlee-fax>
         <dashlee-fridge id="fridge" class="item large" auto-vertical></dashlee-fridge>
         <dashlee-devices id="devices" class="item" auto-vertical></dashlee-devices>
-        <dashlee-tracer id="tracer" class="item large" auto-vertical count="23"></dashlee-tracer>
+        <dashlee-tracer id="tracer" class="item large" auto-vertical></dashlee-tracer>
         <dashlee-printer id="printer" class="item large invert" auto-vertical></dashlee-printer>
         <dashlee-visits id="visits" class="item" auto-vertical></dashlee-visits>
         <dashlee-lightswitch id="lightswitch" class="item large invert" auto-vertical switch="{{switchStatus}}"></dashlee-lightswitch>

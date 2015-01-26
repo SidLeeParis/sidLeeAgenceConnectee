@@ -129,7 +129,8 @@ module.exports = function(grunt) {
     },
     clean: {
       dist: ['.tmp', '<%= yeoman.dist %>/*'],
-      server: '.tmp'
+      server: '.tmp',
+      postBuild: ['<%= yeoman.dist %>/bower_components', '<%= yeoman.dist %>/elements/*', '!<%= yeoman.dist %>/elements/elements.vulcanized.*']
     },
     jshint: {
       options: {
@@ -167,6 +168,8 @@ module.exports = function(grunt) {
     vulcanize: {
       default: {
         options: {
+          csp: true,
+          inline: true,
           strip: true
         },
         files: {
@@ -325,7 +328,8 @@ module.exports = function(grunt) {
     'cssmin',
     'vulcanize',
     'usemin',
-    'minifyHtml'
+    'minifyHtml',
+    'clean:postBuild'
   ]);
 
   grunt.registerTask('default', [

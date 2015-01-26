@@ -35,11 +35,13 @@ if (!DEBUG_MODE_ON) {
       }
       return;
     }
-    console.log(sensor);
 
     var sensorEl = (sensor._id === 'blue') || (sensor._id === 'red') ? dashboard_.$.baby : dashboard_.$[sensor._id];
     if (sensorEl && sensorEl.tick) {
       sensorEl.tick(sensor);
+    }
+    else {
+      //console.log('no element update for', sensor);
     }
   }
 
@@ -51,7 +53,7 @@ if (!DEBUG_MODE_ON) {
       if (sensorEl && sensorEl.initSensor) {
         sensorEl.initSensor(sensor);
       } else {
-        console.log('no element update for', sensor);
+        console.log('no element init for', sensor);
       }
     });
 
@@ -78,7 +80,8 @@ if (!DEBUG_MODE_ON) {
     dashboard_ = document.querySelector('#dashboard');
 
     PolymerExpressions.prototype.plus = function(value, i) {
-      return value + i;
+      var result = value + i;
+      return (result < 0) ? "" : result;
     };
 
     window.onresize = adjustCanvases;
