@@ -3,7 +3,7 @@
 <polymer-element name="dashlee-stairs" attributes="count">
   <template>
     <link rel="stylesheet" href="dashlee-stairs.css">
-    <div id="stairsWrapper" class="stairs-wrapper" on-click="{{tick}}">
+    <div id="stairsWrapper" class="stairs-wrapper">
       <div class="stairs">
         <div class="cube">
           <div class="face top"></div>
@@ -55,12 +55,17 @@
         stats_ = this.$.stats;
       },
       initSensor: function(sensor) {
-        self_.count = sensor.value - 20;
         var numbers = stairsWrapper_.querySelectorAll('.number');
         for (var i=0; i<numbers.length; i++) {
-          numbers[i].innerText = self_.count + 10 - i * 5;
+          numbers[i].innerText = sensor.value + 10 - i * 5;
         }
-        this.setCountTo(sensor.value);
+
+        self_.count = sensor.value;
+        catchup_ = 20;
+        timer_ = setTimeout(function() {
+          stats_.classList.add('hidden');
+          self_.animateStairs();
+        }, 2000);
       },
       tick: function(sensor) {
         this.setCountTo(this.count + sensor.value);
@@ -81,14 +86,14 @@
           stairsWrapper_.insertBefore(stair, stairsWrapper_.firstElementChild);
           timer_ = setTimeout(function () {
               self_.animateStairs();
-          }, 500);
+          }, 850);
         }
         else {
           setTimeout(function() {
             stats_.classList.remove('hidden');
           }, 100);
         }
-      }, 500, {trailing: true})
+      }, 850, {trailing: true})
     });
   })();
   </script>

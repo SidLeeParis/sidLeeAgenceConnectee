@@ -22,10 +22,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-* /deep/ .invert {
-  filter: invert(1);
-}
-
 * /deep/ .number {
   font-family: 'font-tsar';
   font-size: 56px;
@@ -72,6 +68,10 @@ body {
   padding-right: 10px;
 }
 
+body.not-android .wrapper.invert {
+  filter: invert(1);
+}
+
 .dashboard {
   width: 100%;
   border-top: 2px solid white;
@@ -93,6 +93,10 @@ body {
   border-left: 2px solid white;
   background: black url('../images/dot.png') repeat 20px 20px;
   flex: 1 1 auto;
+}
+
+.dashboard > .item.invert {
+  filter: invert(1);
 }
 
 dashlee-loader.loading {

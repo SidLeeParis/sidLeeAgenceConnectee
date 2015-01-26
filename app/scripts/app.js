@@ -14,6 +14,12 @@ if (!DEBUG_MODE_ON) {
 
   var dashboard_;
   var client_;
+  var ua = navigator.userAgent.toLowerCase();
+  var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+
+  if (isAndroid) {
+    document.body.classList.remove('not-android');
+  }
 
   var adjustCanvases = _.debounce(function(){
     dashboard_.$.degrees.fitCanvas();
@@ -66,8 +72,11 @@ if (!DEBUG_MODE_ON) {
   document.addEventListener('polymer-ready', function () {
     console.log('Polymer is ready to rock!');
 
+
+
     // Perform some behaviour
     dashboard_ = document.querySelector('#dashboard');
+
     PolymerExpressions.prototype.plus = function(value, i) {
       return value + i;
     };
@@ -75,6 +84,20 @@ if (!DEBUG_MODE_ON) {
     window.onresize = adjustCanvases;
 
     document.addEventListener('switch-event', function(event) {
+
+
+
+      if (isAndroid) {
+        // shitty workaround for Android Chrome
+        // applying invert filter to wrapper element works fine on desktop + iOS
+
+        var items = document.querySelectorAll('.item');
+
+        for (var i = 0; i < items.length; ++i) {
+          items[i].classList.toggle('invert');
+        }
+      }
+
       client_.postEvent({
         name:'lightswitch',
         value: event.detail.value,
