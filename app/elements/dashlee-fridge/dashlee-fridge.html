@@ -11,10 +11,10 @@
         <br>openings</div>
     </div>
     <div class="column">
-      <div id="door" class="door open">
+      <div id="door" class="door open" on-click="{{tick}}">
         <div class="back">
           <div class="floor">
-            <img class="object bottle" src="../../images/fridge_bottle2.svg" height="41">
+            <img class="object bottle" src="../../images/fridge_bottle2.svg" height="42">
             <div class="object glass empty"></div>
             <div class="object glass"></div>
           </div>
@@ -55,12 +55,12 @@
       tick: function(sensor) {
         clearTimeout(timeout_);
 
-        self_.setCountTo(self_.count + sensor.value);
+        self_.setCountTo(self_.count + 1);
 
         self_.$.door.classList.remove('open');
         timeout_ = setTimeout(function() {
           self_.$.door.classList.add('open');
-        }, 3000);
+        }, 2000);
       },
       initSensor: function(sensor) {
         self_.setCountTo(sensor.value);
