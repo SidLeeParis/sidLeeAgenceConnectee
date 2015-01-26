@@ -22,10 +22,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-* /deep/ .invert {
-  filter: invert(1);
-}
-
 * /deep/ .number {
   font-family: 'font-tsar';
   font-size: 56px;
@@ -72,6 +68,10 @@ body {
   padding-right: 10px;
 }
 
+body.not-android .wrapper.invert {
+  filter: invert(1);
+}
+
 .dashboard {
   width: 100%;
   border-top: 2px solid white;
@@ -95,6 +95,10 @@ body {
   flex: 1 1 auto;
 }
 
+.dashboard > .item.invert {
+  filter: invert(1);
+}
+
 dashlee-loader.loading {
   opacity: 1;
 }
@@ -103,10 +107,6 @@ dashlee-loader.loading + .wrapper {
   height: 100%;
   opacity: 0;
   overflow: hidden;
-}
-
-.wrapper.compact .dashboard > .item {
-  border-left: none;
 }
 
 .wrapper.compact .dashboard > .item:last-child {
@@ -121,6 +121,20 @@ dashlee-loader.loading + .wrapper {
   min-width: 360px;
   flex: 2 1 auto;
 }
+
+.wrapper.compact .dashboard > .item {
+  min-width: initial;
+  border-left: none;
+  flex: none;
+}
+
+.wrapper.compact .dashboard > .item.large {
+  min-width: initial;
+  flex: none;
+}
+
+
+
 .dashboard > .item /deep/ .column {
   width: 50%;
   height: 100%;

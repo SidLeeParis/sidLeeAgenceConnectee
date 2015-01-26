@@ -18,6 +18,7 @@
       s_,
       timer_,
       od_,
+      numberOfCups = 11;
       catchup_ = 0;
 
     function fillHalfCup(c) {
@@ -102,7 +103,7 @@
           y: 145
         });
 
-        for (var i=1;i<10;i++) {
+        for (var i=1;i<numberOfCups;i++) {
           var c = cup.clone().appendTo(s_).attr({
             x: i*80 -40,
             y: 145
