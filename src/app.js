@@ -14,7 +14,6 @@ var express = require('express'),
 	conf = require('./conf/conf'),
 	getLikes = require('./misc/facebookLikes'),
 	getVisits = require('./misc/googleAnalyticsVisits'),
-	postFridgeDegrees = require('./misc/fridgeDegrees'),
 	SensorsConf = require('./conf/sensorsConf');
 
 // connect to mongo
@@ -107,11 +106,6 @@ new CronJob('* * * * *', function(){
 			io.sockets.emit('event', data);
 		}
 	});
-}, null, true, 'Europe/Paris');
-
-// post fake fridge degrees, every minutes
-new CronJob('* * * * *', function() {
-	postFridgeDegrees();
 }, null, true, 'Europe/Paris');
 
 // websocket configuration
