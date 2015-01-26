@@ -1,7 +1,7 @@
 module.exports = function(config) {
 	config.set({
 		basePath: '',
-		frameworks: ['mocha'],
+		frameworks: ['mocha', 'chai', 'sinon'],
 		files: [
 			'node_modules/chai/chai.js',
 			'node_modules/socket.io-client/socket.io.js',
