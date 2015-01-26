@@ -178,7 +178,7 @@ describe('SidLeeClient', function() {
 		it('should return some data', function() {
 
 			var client = new SidLeeClient(server, function(data) {});
-			client.events('random').exec(function(events) {
+			client.events('random').limit(1).exec(function(events) {
 				events.length.should.equal(1);
 				events[0].name.should.equal('random');
 			});
