@@ -1,10 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="dashlee-tracer" attributes="count">
+<polymer-element name="dashlee-tracer">
   <template>
     <link rel="stylesheet" href="dashlee-tracer.css">
 
-    <div class="printer" on-click="{{tick}}">
+    <div class="printer">
       <div id="paper" class="paper">
         <div id="numbers" class="numbers">
           <div class="number">[[count | plus(2)]]</div>
@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <div class="date">This year</div>
+    <div class="date">This month</div>
     <div class="subtitle">meters of scroll paper printed</div>
   </template>
   <script>

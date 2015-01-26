@@ -37,7 +37,7 @@
     </div>
     <div id="stats" class="stats">
       <div class="date">Today</div>
-      <div class="subtitle">steps walked on the stairs</div>
+      <div class="subtitle">steps walk on the stairs</div>
     </div>
   </template>
   <script>
@@ -62,7 +62,7 @@
 
         self_.count = sensor.value;
         catchup_ = 20;
-        timer_ = setTimeout(function() {
+        setTimeout(function() {
           stats_.classList.add('hidden');
           self_.animateStairs();
         }, 2000);
