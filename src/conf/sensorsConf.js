@@ -34,8 +34,6 @@ SensorsConf.tracer = { name: 'tracer', sum: true };
 
 // printer
 SensorsConf.printer = { name: 'printer', sum: true };
-// fridge degrees
-SensorsConf.fridgeDegrees = { name: 'fridgeDegrees', sum: false };
 // switch button on the web page
 SensorsConf.lightswitch = { name: 'lightswitch', sum: true };
 // undo
