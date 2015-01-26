@@ -41,14 +41,14 @@
     <link rel="import" href="elements/elements.html">
     <!-- endbuild-->
   </head>
-  <body fullbleed unresolved>
+  <body class="not-android" fullbleed unresolved>
 
 
   <template id="dashboard" is="auto-binding">
 
     <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
     <dashlee-loader id="loader" class="loading"></dashlee-loader>
-    <div class="wrapper {{{invert: switchStatus} | tokenList }} {{{compact: phoneScreen} | tokenList }}">
+    <div id="wrapper" class="wrapper {{{invert: switchStatus, compact: phoneScreen}| tokenList }}">
      <dashlee-header></dashlee-header>
      <div class="dashboard" layout vertical?="{{phoneScreen}}" horizontal?="{{!phoneScreen}}" wrap>
         <dashlee-degrees id="degrees" class="item large" auto-vertical></dashlee-degrees>
@@ -57,17 +57,17 @@
         <dashlee-flush id="flush" class="item" auto-vertical></dashlee-flush>
         <dashlee-stairs id="stairs" class="item large" auto-vertical count="2000"></dashlee-stairs>
         <dashlee-water id="water" class="item large" auto-vertical></dashlee-water>
-        <dashlee-devices id="devices" class="item" auto-vertical></dashlee-devices>
+        <dashlee-baby id="baby" class="item" auto-vertical></dashlee-baby>
         <dashlee-door id="door" class="item large invert" auto-vertical></dashlee-door>
         <dashlee-undo id="undo" class="item" auto-vertical></dashlee-undo>
         <dashlee-fax id="fax" class="item invert" auto-vertical></dashlee-fax>
-        <dashlee-baby id="baby" class="item" auto-vertical></dashlee-baby>
         <dashlee-fridge id="fridge" class="item large" auto-vertical></dashlee-fridge>
-        <dashlee-likes id="likes" class="item" auto-vertical></dashlee-likes>
+        <dashlee-devices id="devices" class="item" auto-vertical></dashlee-devices>
+        <dashlee-tracer id="tracer" class="item large" auto-vertical count="23"></dashlee-tracer>
         <dashlee-printer id="printer" class="item large invert" auto-vertical></dashlee-printer>
         <dashlee-visits id="visits" class="item" auto-vertical></dashlee-visits>
         <dashlee-lightswitch id="lightswitch" class="item large invert" auto-vertical switch="{{switchStatus}}"></dashlee-lightswitch>
-        <dashlee-tracer id="tracer" class="item large" auto-vertical count="23"></dashlee-tracer>
+        <dashlee-likes id="likes" class="item" auto-vertical></dashlee-likes>
         <dashlee-jobs id="jobs" class="item" auto-vertical count="2"></dashlee-jobs>
      </div>
 
