@@ -7,7 +7,7 @@
     <div><span id="number" class="number">[[count]]</span><span class="cursor"></span></div>
     <div class="subtitle"><a href="https://undo.meteor.com" target="_blank"><i class="apple"></i>+z</a>
     </div>
-    <div id="stats">
+    <div id="stats" class="{{{hidden: count===0 } | tokenList}}">
       <div class="date" style="margin-top: 30px;width: 60%;display: inline-block;">Last:
         <br><span id="time">{{time}}</span>
         <br><span id="username">{{username}}</span>
@@ -104,8 +104,6 @@
         backspace(nb, function() {
           writeText(newCountText, countText.length - nb);
         });
-
-        self_.$.stats.style.visibility = self_.count > 0 ? 'visible' : 'hidden';
       },
       setDetails: function(sensor) {
         this.time = moment(sensor.last).tz('Europe/Paris').format('HH:mm:ss');

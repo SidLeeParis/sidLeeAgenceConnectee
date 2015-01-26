@@ -1,3 +1,9 @@
 :host {
   display: block;
 }
+
+.door-wrapper {
+  position: absolute;
+  width: 100%;
+  bottom: 17px;
+}

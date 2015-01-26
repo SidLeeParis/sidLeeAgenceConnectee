@@ -2,17 +2,16 @@
   "name": "dashlee",
   "version": "0.0.0",
   "dependencies": {
-    "polymer": "Polymer/polymer#0.5.2",
+    "polymer": "Polymer/polymer#^0.5.1",
     "underscore": "~1.7.0",
-    "core-media-query": "Polymer/core-media-query#0.5.2",
+    "core-media-query": "Polymer/core-media-query#~0.5.2",
     "Snap.svg": "~0.3.0",
     "gsap": "~1.15.0",
     "GSAPSnapPlugin": "~0.1.0",
     "smoothie": "~1.27.0",
     "odometer": "~0.4.7",
     "socket.io-client": "~1.3.2",
-    "moment-timezone": "~0.3.0",
-    "webcomponentsjs": "0.5.2"
+    "moment-timezone": "~0.3.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^2.0.0"

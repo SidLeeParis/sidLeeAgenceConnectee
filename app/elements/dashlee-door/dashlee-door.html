@@ -6,10 +6,34 @@
     <div class="date">Today</div>
     <div id="number" class="number odometer">[[count]]</div>
     <div class="subtitle">main door openings</div>
-    <svg id="svg" on-click="{{tick}}"></svg>
+    <div class="door-wrapper">
+      <svg width="74" height="108" on-click="{{tick}}">
+        <g>
+          <g style="display:none" class="">
+            <line fill="none" stroke="#fff" stroke-width="2" x1="33" y1="14" x2="25" y2="0" />
+            <line fill="none" stroke="#fff" stroke-width="2" x1="22" y1="20" x2="0" y2="14" />
+            <line fill="none" stroke="#fff" stroke-width="2" x1="22" y1="31" x2="0" y2="32" />
+            <set begin="open.begin" attributeName="display" to="block" dur="1550ms" />
+          </g>
+
+
+          <polygon fill="#fff" points="19,11 73,11 22,15 22,103 73,107 19,107">
+            <animate id="open" begin="indefinite" restart="whenNotActive" attributeName="points" dur="1500ms" keyTimes="0;0.2;0.9;1" values="19,11 73,11 22,15 22,103 73,107 19,107;
+                   19,11 73,11 42,21 42,98 73,107 19,107;
+                   19,11 73,11 42,21 42,98 73,107 19,107;
+                   19,11 73,11 22,15 22,103 73,107 19,107;" />
+          </polygon>
+
+          <line fill="none" stroke="#fff" stroke-width="2" x1="29" y1="55" x2="29" y2="69">
+            <animateTransform begin="open.begin" restart="whenNotActive" attributeName="transform" type="translate" dur="1500ms" fill="freeze" keyTimes="0;0.2;0.9;1" values="0 0;20 0;20 0;0 0" />
+          </line>
+        </g>
+
+      </svg>
+    </div>
   </template>
   <script>
-  (function () {
+  (function() {
     /*jslint nomen: true */
     /*global Odometer */
 
@@ -32,6 +56,7 @@
       },
       tick: function() {
         self_.setCountTo(self_.count + 1);
+        this.$.open.beginElement();
       },
       setCountTo: function(count) {
         self_.count = count;
