@@ -7,13 +7,13 @@
       <div class="stairs">
         <div class="cube">
           <div class="face top"></div>
-          <div class="face front"><div class="number">[[count | plus(2)]]</div></div>
+          <div class="face front"><div class="number">[[count | plus(10)]]</div></div>
         </div>
       </div>
       <div class="stairs">
         <div class="cube">
           <div class="face top"></div>
-          <div class="face front"><div class="number">[[count | plus(1)]]</div></div>
+          <div class="face front"><div class="number">[[count | plus(5)]]</div></div>
         </div>
       </div>
       <div class="stairs">
@@ -25,13 +25,13 @@
       <div class="stairs">
         <div class="cube">
           <div class="face top"></div>
-          <div class="face front"><div class="number">[[count | plus(-1)]]</div></div>
+          <div class="face front"><div class="number">[[count | plus(-5)]]</div></div>
         </div>
       </div>
       <div class="stairs">
         <div class="cube">
           <div class="face top"></div>
-          <div class="face front"><div class="number">[[count | plus(-2)]]</div></div>
+          <div class="face front"><div class="number">[[count | plus(-10)]]</div></div>
         </div>
       </div>
     </div>
@@ -55,12 +55,16 @@
         stats_ = this.$.stats;
       },
       initSensor: function(sensor) {
-        self_.count = sensor.value;
+        self_.count = sensor.value - 20;
+        var numbers = stairsWrapper_.querySelectorAll('.number');
+        for (var i=0; i<numbers.length; i++) {
+          numbers[i].innerText = self_.count + 10 - i * 5;
+        }
+        this.setCountTo(sensor.value);
       },
-      tick: function() {
-        catchup_++;
+      tick: function(sensor) {
+        this.setCountTo(this.count + sensor.value);
         stats_.classList.add('hidden');
-        setTimeout(this.animateStairs, 100);
       },
       setCountTo: function(count) {
         catchup_ = count - this.count;
@@ -70,10 +74,10 @@
       animateStairs: _.throttle(function() {
         clearTimeout(timer_);
         if (catchup_ > 0) {
-          self_.count++;
-          catchup_--;
+          self_.count += 5;
+          catchup_ -= 5;
           var stair = stairsWrapper_.lastElementChild;
-          stair.querySelector('.number').innerText = self_.count + 2;
+          stair.querySelector('.number').innerText = self_.count + 10;
           stairsWrapper_.insertBefore(stair, stairsWrapper_.firstElementChild);
           timer_ = setTimeout(function () {
               self_.animateStairs();

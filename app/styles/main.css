@@ -105,10 +105,6 @@ dashlee-loader.loading + .wrapper {
   overflow: hidden;
 }
 
-.wrapper.compact .dashboard > .item {
-  border-left: none;
-}
-
 .wrapper.compact .dashboard > .item:last-child {
   border-bottom: none;
 }
@@ -121,6 +117,20 @@ dashlee-loader.loading + .wrapper {
   min-width: 360px;
   flex: 2 1 auto;
 }
+
+.wrapper.compact .dashboard > .item {
+  min-width: initial;
+  border-left: none;
+  flex: none;
+}
+
+.wrapper.compact .dashboard > .item.large {
+  min-width: initial;
+  flex: none;
+}
+
+
+
 .dashboard > .item /deep/ .column {
   width: 50%;
   height: 100%;
