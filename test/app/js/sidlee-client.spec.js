@@ -13,14 +13,10 @@ describe('SidLeeClient', function() {
 			client.queryParams.length.should.equal(0);
 		});
 
-		it('should handle incoming websocket messages', function(done) {
-			var client = new SidLeeClient(server, function(data) {
-				data.name.should.exist();
-				data.date.should.exist();
-				data.value.should.exist();
-				data.unit.should.exist();
-				done();
-			});
+		it('should connect to the websocket', function() {
+			var spy = sinon.spy(io, 'connect');
+			var client = new SidLeeClient(server, function(data) {});
+			spy.called.should.equal(true);
 		});
 	});
 
@@ -163,17 +159,85 @@ describe('SidLeeClient', function() {
 	});
 
 	describe('#exec()', function(){
-		this.timeout(3000);
+		var fakeServer;
 
-		it('should return some data', function(done) {
+		before(function () {
+			var fakeData = [
+				{
+					name: 'random',
+					date: '2015-01-23T09:35:17.763Z',
+					value: 1,
+					unit: 'dummyUnit'
+				}
+			];
+			// fake the server
+			fakeServer = sinon.fakeServer.create();
+			fakeServer.respondWith(JSON.stringify(fakeData));
+		});
+
+		it('should return some data', function() {
+
 			var client = new SidLeeClient(server, function(data) {});
-			client.events('random').limit(5).exec(function(events) {
-				events.length.should.equal(5);
-				events.forEach(function(event) {
-					event.name.should.equal('random');
-				});
-				done();
+			client.events('random').exec(function(events) {
+				events.length.should.equal(1);
+				events[0].name.should.equal('random');
 			});
+			// make the fake server respond
+			fakeServer.respond();
+		});
+
+		after(function() {
+			fakeServer.restore();
+		});
+
+	});
+
+	describe('#postEvent()', function(){
+		var fakeServer;
+
+		before(function () {
+			// fake the server
+			fakeServer = sinon.fakeServer.create();
+			fakeServer.respondWith(
+				'POST',
+				server + 'api/1/event',
+				[201, { 'Content-Type': 'application/json' }, '']
+			);
+		});
+
+		it('should post some data', function() {
+			var fakeEvent = {
+				name: 'random',
+				value: 1,
+				unit: 'dummyUnit',
+				token: 'dummyToken'
+			};
+
+			var client = new SidLeeClient(server, function(data) {});
+			client.postEvent(fakeEvent, function(err) {
+				should.not.exist(err);
+			});
+			// make the fake server respond
+			fakeServer.respond();
+		});
+
+		it('should fail to post some data, because of missing token', function() {
+			var fakeEvent = {
+				name: 'random',
+				value: 1,
+				unit: 'dummyUnit'
+			};
+
+			var client = new SidLeeClient(server, function(data) {});
+			client.postEvent(fakeEvent, function(err) {
+				should.exist(err);
+			});
+			// make the fake server respond
+			fakeServer.respond();
+		});
+
+		after(function() {
+			fakeServer.restore();
 		});
 
 	});
