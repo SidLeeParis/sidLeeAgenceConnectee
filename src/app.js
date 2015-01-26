@@ -5,6 +5,7 @@ var express = require('express'),
 	io = require('socket.io')(server),
 	bodyParser = require('body-parser'),
 	cors = require('cors'),
+	compression = require('compression'),
 	mongoose = require('mongoose'),
 	CronJob = require('cron').CronJob,
 	moment = require('moment'),
@@ -30,6 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
+app.use(compression());
 // development only : set a NODE_ENV=development env variable on your dev machine
 // or run with NODE_ENV=development node app.js
 // production only : run with NODE_ENV=production node app.js
