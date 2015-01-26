@@ -3,17 +3,17 @@
 <polymer-element name="dashlee-stairs" attributes="count">
   <template>
     <link rel="stylesheet" href="dashlee-stairs.css">
-    <div id="stairsWrapper" class="stairs-wrapper" on-click="{{tick}}">
+    <div id="stairsWrapper" class="stairs-wrapper">
       <div class="stairs">
         <div class="cube">
           <div class="face top"></div>
-          <div class="face front"><div class="number">[[count | plus(2)]]</div></div>
+          <div class="face front"><div class="number">[[count | plus(10)]]</div></div>
         </div>
       </div>
       <div class="stairs">
         <div class="cube">
           <div class="face top"></div>
-          <div class="face front"><div class="number">[[count | plus(1)]]</div></div>
+          <div class="face front"><div class="number">[[count | plus(5)]]</div></div>
         </div>
       </div>
       <div class="stairs">
@@ -25,13 +25,13 @@
       <div class="stairs">
         <div class="cube">
           <div class="face top"></div>
-          <div class="face front"><div class="number">[[count | plus(-1)]]</div></div>
+          <div class="face front"><div class="number">[[count | plus(-5)]]</div></div>
         </div>
       </div>
       <div class="stairs">
         <div class="cube">
           <div class="face top"></div>
-          <div class="face front"><div class="number">[[count | plus(-2)]]</div></div>
+          <div class="face front"><div class="number">[[count | plus(-10)]]</div></div>
         </div>
       </div>
     </div>
@@ -55,12 +55,21 @@
         stats_ = this.$.stats;
       },
       initSensor: function(sensor) {
+        var numbers = stairsWrapper_.querySelectorAll('.number');
+        for (var i=0; i<numbers.length; i++) {
+          numbers[i].innerText = sensor.value + 10 - i * 5;
+        }
+
         self_.count = sensor.value;
+        catchup_ = 20;
+        timer_ = setTimeout(function() {
+          stats_.classList.add('hidden');
+          self_.animateStairs();
+        }, 2000);
       },
-      tick: function() {
-        catchup_++;
+      tick: function(sensor) {
+        this.setCountTo(this.count + sensor.value);
         stats_.classList.add('hidden');
-        setTimeout(this.animateStairs, 100);
       },
       setCountTo: function(count) {
         catchup_ = count - this.count;
@@ -70,21 +79,21 @@
       animateStairs: _.throttle(function() {
         clearTimeout(timer_);
         if (catchup_ > 0) {
-          self_.count++;
-          catchup_--;
+          self_.count += 5;
+          catchup_ -= 5;
           var stair = stairsWrapper_.lastElementChild;
-          stair.querySelector('.number').innerText = self_.count + 2;
+          stair.querySelector('.number').innerText = self_.count + 10;
           stairsWrapper_.insertBefore(stair, stairsWrapper_.firstElementChild);
           timer_ = setTimeout(function () {
               self_.animateStairs();
-          }, 500);
+          }, 850);
         }
         else {
           setTimeout(function() {
             stats_.classList.remove('hidden');
           }, 100);
         }
-      }, 500, {trailing: true})
+      }, 850, {trailing: true})
     });
   })();
   </script>
