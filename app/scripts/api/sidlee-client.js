@@ -49,6 +49,11 @@
 		return this;
 	};
 
+	Client.prototype.tracer = function() {
+		this.getUrl = this.getUrl + 'year/tracer';
+		return this;
+	};
+
 	Client.prototype.lastXX = function(nameFilter, appOrUserFilter, lastXX) {
 		this.getUrl = this.getUrl + lastXX;
 		if (nameFilter) {
