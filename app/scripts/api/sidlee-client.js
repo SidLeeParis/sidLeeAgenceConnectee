@@ -61,11 +61,11 @@
 	};
 
 	Client.prototype.last24 = function(nameFilter, appOrUserFilter) {
-		this.lastXX(nameFilter, appOrUserFilter, 'last24');
+		return this.lastXX(nameFilter, appOrUserFilter, 'last24');
 	};
 
 	Client.prototype.last30 = function(nameFilter, appOrUserFilter) {
-		this.lastXX(nameFilter, appOrUserFilter, 'last30');
+		return this.lastXX(nameFilter, appOrUserFilter, 'last30');
 	};
 
 	Client.prototype.oldestFirst = function() {
