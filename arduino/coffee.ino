@@ -3,8 +3,8 @@
 #include <SPI.h>
 #include <RunningMedian.h>
 
-#define PIN_GD_CAFE A0
-#define PIN_PT_CAFE A1
+#define PIN_GD_CAFE A1
+#define PIN_PT_CAFE A0
 
 RunningMedian gdCafe = RunningMedian(50);
 RunningMedian ptCafe = RunningMedian(50);
