@@ -269,6 +269,111 @@ var last30 = function(sensorConf, callback) {
 	aggregate.exec(callback);
 };
 
+// function to aggregate values of the last year of a given sensor, according to its strategy
+var last12 = function(sensorConf, callback) {
+	// get current day in order to make some relatie calculations
+	var current = moment();
+	// months in js go from 0 to 11, in mongo from 1 to 12, so add 1 to match mongo
+	var currentMonth = current.utc().month() + 1;
+	// get a year ago date
+	var oneYearAgo = current.startOf('month').add(1, 'M').subtract(1, 'y').toDate();
+
+	var aggregate = Event.aggregate();
+	if (sensorConf) {
+		// match events from date and with the given name
+		aggregate.match({
+			date: { $gte: oneYearAgo },
+			name: sensorConf.name
+		});
+	}
+	else {
+		// match events from date
+		aggregate.match({
+			date: { $gte: oneYearAgo }
+		});
+	}
+	// only keep the month part of the date
+	aggregate.project({
+		name: 1,
+		value: 1,
+		month: { '$month': '$date' }
+	});
+	// get sum and avg for each name/month tuple
+	aggregate.group({
+		_id: { name: '$name', month: '$month' },
+		sum: { $sum: '$value' },
+		avg: { $avg: '$value' }
+	});
+	// make a condition to calculate the sum or the avg according to the sensor name
+	aggregate.project({
+		_id: 1,
+		value: {
+			$cond: [
+				{ $or: [
+					{ $eq: [ '$_id.name', 'watt' ] },
+					{ $eq: [ '$_id.name', 'sound' ] },
+					{ $eq: [ '$_id.name', 'degrees' ] },
+					{ $eq: [ '$_id.name', 'light' ] },
+					{ $eq: [ '$_id.name', 'devices' ] }
+				]},
+				'$avg',
+				'$sum'
+			]
+		}
+	});
+	// if it's devices, we need to return an integer average value
+	aggregate.project({
+		_id: 1,
+		value: {
+			$cond: [
+				{ $eq: [ '$_id.name', 'devices' ] },
+				{ $subtract: [ '$value' , { $mod: [ '$value', 1 ] } ] },
+				'$value'
+			]
+		}
+	});
+	// re-arrange data
+	// calculate month ago instead of plain month
+	// first subtract the month returned by the query to the current month
+	aggregate.project({
+		_id: '$_id.name',
+		values: {
+			month: { $subtract: [ currentMonth, '$_id.month' ] },
+			value : '$value'
+		}
+	});
+	// then if the result of the subtraction is less than 0, it means it's a month before the beginning of the current year
+	// if so do (currentMonth - $values.month) + 12, else do currentMonth - $values.month
+	// example: if currentMonth is April (4), and $values.month = October (10)
+	// (4 - 10) + 12 = 6, October is 6 month before April
+	aggregate.project({
+		_id: '$_id',
+		values: {
+			monthAgo: {
+				$cond: [
+					{ $lt: [ '$values.month', 0 ] },
+					{ $add: [ '$values.month', 12 ] },
+					'$values.month'
+				]
+			},
+			value : '$values.value'
+		}
+	});
+	// sort the result by ascending values.monthAgo
+	aggregate.sort('values.monthAgo');
+	// then push each values in an array
+	aggregate.group({
+		_id: '$_id',
+		values: {
+			$push: {
+				monthAgo: '$values.monthAgo',
+				value: '$values.value'
+			}
+		}
+	});
+	aggregate.exec(callback);
+};
+
 // function to aggregate today values of a given sensor, according to its strategy
 var undo = function(sensorConf, callback) {
 	var date;
@@ -321,25 +426,10 @@ var undo = function(sensorConf, callback) {
 	aggregate.exec(callback);
 };
 
-// function to aggregate tracer values since the beginning
-var tracer = function(callback) {
-	var aggregate = Event.aggregate();
-	// match events from date and with the given name
-	aggregate.match({
-		name: 'tracer'
-	});
-	// group by name and calculate sum
-	aggregate.group({
-		_id: '$name',
-		value: { $sum: '$value' }
-	});
-	aggregate.exec(callback);
-};
-
 module.exports = {
 	today: today,
 	last24: last24,
 	last30 : last30,
-	undo: undo,
-	tracer: tracer
+	last12: last12,
+	undo: undo
 };

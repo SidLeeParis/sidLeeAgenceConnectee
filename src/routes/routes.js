@@ -92,6 +92,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 			case 'today' : functionToUse = helper.today; break;
 			case 'last24' : functionToUse = helper.last24; break;
 			case 'last30' : functionToUse = helper.last30; break;
+			case 'last12' : functionToUse = helper.last12; break;
 			case 'last24/user' : functionToUse = helper.undo.bind({ groupBy: 'user', dateRange: 'last24' }); break;
 			case 'last24/app' : functionToUse = helper.undo.bind({ groupBy: 'app', dateRange: 'last24' }); break;
 			case 'last30/user' : functionToUse = helper.undo.bind({ groupBy: 'user', dateRange: 'last30' }); break;

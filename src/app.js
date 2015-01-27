@@ -55,7 +55,7 @@ router.get('/event/last24/:name?/app', routes.aggregate.bind('last24/app'));
 router.get('/event/last30/:name?', routes.aggregate.bind('last30'));
 router.get('/event/last30/:name?/user', routes.aggregate.bind('last30/user'));
 router.get('/event/last30/:name?/app', routes.aggregate.bind('last30/app'));
-router.get('/event/year/tracer', routes.tracer);
+router.get('/event/last12/:name?', routes.aggregate.bind('last12'));
 router.get('/event/:name?', routes.find);
 
 // cron configuration
