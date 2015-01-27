@@ -166,7 +166,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 		helper.tracer(function(err, data) {
 			res.status(200).send(data);
 		});
-	}
+	};
 
 	var isValidDate = function(date) {
 		if (Object.prototype.toString.call(date) !== "[object Date]" ) {
@@ -181,7 +181,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 		create : _create,
 		find: _find,
 		aggregate: _aggregate,
-		tracer: tracer
+		tracer: _tracer
 	};
 };
 
