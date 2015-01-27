@@ -283,16 +283,56 @@ var undo = function(sensorConf, callback) {
 
 	var aggregate = Event.aggregate();
 	// match events from date and with the given name
-	aggregate.match({ date: { $gte : date }, name: 'undo' });
+	aggregate.match({
+		date: { $gte : date },
+		name: 'undo'
+	});
 	// group by user, or by app
 	if (this.groupBy === 'user') {
-		aggregate.group({ _id: '$user', value: { $sum: '$value' } });
-		aggregate.group({ _id: 'undo', values: { $push: { user: '$_id', value: '$value' } } });
+		aggregate.group({
+			_id: '$user',
+			value: { $sum: '$value' }
+		});
+		aggregate.group({
+			_id: 'undo',
+			values: {
+				$push: {
+					user: '$_id',
+					value: '$value'
+				}
+			}
+		});
 	}
 	else {
-		aggregate.group({ _id: '$app', value: { $sum: '$value' } });
-		aggregate.group({ _id: 'undo', values: { $push: { app: '$_id', value: '$value' } } });
+		aggregate.group({
+			_id: '$app',
+			value: { $sum: '$value' }
+		});
+		aggregate.group({
+			_id: 'undo',
+			values: {
+				$push: {
+					app: '$_id',
+					value: '$value'
+				}
+			}
+		});
 	}
+	aggregate.exec(callback);
+};
+
+// function to aggregate tracer values since the beginning
+var tracer = function(callback) {
+	var aggregate = Event.aggregate();
+	// match events from date and with the given name
+	aggregate.match({
+		name: 'tracer'
+	});
+	// group by name and calculate sum
+	aggregate.group({
+		_id: '$name',
+		value: { $sum: '$value' }
+	});
 	aggregate.exec(callback);
 };
 
