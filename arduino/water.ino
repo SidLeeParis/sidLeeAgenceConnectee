@@ -8,7 +8,7 @@ byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02 };
 EthernetClient client;
 String data;
 
-float calibrationFactor = 4.5;
+float calibrationFactor = 6.8;
 volatile byte pulseCount;
 float flowRate;
 unsigned int flowMilliLitres;
