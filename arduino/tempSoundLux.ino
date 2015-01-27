@@ -4,6 +4,7 @@
 #include <Ethernet.h>
 #include <SPI.h>
 #include <elapsedMillis.h>
+#include <RunningMedian.h>
 
 #define PIN_TEMP 0
 #define PIN_DB 2
@@ -14,6 +15,10 @@ const unsigned int interval = 20000;
 boolean canSend = true;
 elapsedMillis canSendDelay;
 const unsigned int canSendInterval = 2000;
+
+RunningMedian dbSamples = RunningMedian(40);
+elapsedMillis canSampleDbDelay;
+const unsigned int canSampleDbInterval = 500;
 
 const int numberOfSamples = 9;
 const int dB[] = {30, 32, 45, 60, 69, 72, 74, 76, 80};
@@ -45,6 +50,9 @@ void setup() {
 
 void loop() {
 	int currentdB = getDb(PIN_DB);
+	if (canSampleDbDelay > canSampleDbInterval) {
+		dbSamples.add(currentdB);
+	}
 	if (abs(currentdB - previousdB) > threshold && canSend) {
 		sendEvent("sound", String(currentdB, DEC), "dB");
 		canSend = false;
@@ -56,7 +64,7 @@ void loop() {
 	}
 	if (timeElapsed > interval) {
 		sendEvent("degrees", getTemp(PIN_TEMP), "C");
-		sendEvent("sound", String(currentdB, DEC), "dB");
+		sendEvent("sound", String((int) dbSamples.getAverage(), DEC), "dB");
 		sendEvent("light", getLux(), "lux");
 		timeElapsed = 0;
 	}

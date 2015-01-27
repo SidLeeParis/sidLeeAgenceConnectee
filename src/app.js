@@ -14,7 +14,6 @@ var express = require('express'),
 	conf = require('./conf/conf'),
 	getLikes = require('./misc/facebookLikes'),
 	getVisits = require('./misc/googleAnalyticsVisits'),
-	postFridgeDegrees = require('./misc/fridgeDegrees'),
 	SensorsConf = require('./conf/sensorsConf');
 
 // connect to mongo
@@ -56,6 +55,7 @@ router.get('/event/last24/:name?/app', routes.aggregate.bind('last24/app'));
 router.get('/event/last30/:name?', routes.aggregate.bind('last30'));
 router.get('/event/last30/:name?/user', routes.aggregate.bind('last30/user'));
 router.get('/event/last30/:name?/app', routes.aggregate.bind('last30/app'));
+router.get('/event/last12/:name?', routes.aggregate.bind('last12'));
 router.get('/event/:name?', routes.find);
 
 // cron configuration
@@ -107,11 +107,6 @@ new CronJob('* * * * *', function(){
 			io.sockets.emit('event', data);
 		}
 	});
-}, null, true, 'Europe/Paris');
-
-// post fake fridge degrees, every minutes
-new CronJob('* * * * *', function() {
-	postFridgeDegrees();
 }, null, true, 'Europe/Paris');
 
 // websocket configuration
