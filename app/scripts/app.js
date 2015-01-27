@@ -120,6 +120,11 @@ if (!DEBUG_MODE_ON) {
       removeLoader();
     });
 
+    client_.last12('tracer').exec(function(data) {
+      dashboard_.$.tracer.initSensor(sensor);
+    });
+
+
     client_.socket.on('disconnect', function() {
       console.log('disconnected !!!');
       initialized_ = false;
