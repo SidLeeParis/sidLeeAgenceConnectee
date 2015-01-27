@@ -162,6 +162,12 @@ var Routes = function(sockets, Event, SensorsConf) {
 		}
 	};
 
+	var _tracer = function(req, res) {
+		helper.tracer(function(err, data) {
+			res.status(200).send(data);
+		});
+	}
+
 	var isValidDate = function(date) {
 		if (Object.prototype.toString.call(date) !== "[object Date]" ) {
 			return false;

@@ -54,7 +54,7 @@
 		if (nameFilter) {
 			this.getUrl = this.getUrl + '/' + nameFilter;
 		}
-		if (appOrUserFilter && nameFilter === 'ctrlz') {
+		if (appOrUserFilter && nameFilter === 'undo') {
 			this.getUrl = this.getUrl + '/' + appOrUserFilter;
 		}
 		return this;
