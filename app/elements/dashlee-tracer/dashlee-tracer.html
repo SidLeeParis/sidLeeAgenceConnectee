@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="date">This month</div>
-    <div class="subtitle">meters of scroll paper printed</div>
+    <div class="subtitle">cm of scroll paper printed</div>
   </template>
   <script>
   (function() {
@@ -36,10 +36,20 @@
         numbers_ = this.$.numbers;
       },
       initSensor: function(sensor) {
+
+        var numbers = numbers_.querySelectorAll('.number');
+        for (var i=0; i<numbers.length; i++) {
+          numbers[i].innerText = sensor.value - 8 + 2 - i;
+        }
+
         self_.count = sensor.value;
+        catchup_ = 8;
+        setTimeout(function() {
+          self_.printStuff();
+        }, 3000);
       },
-      tick: function() {
-        catchup_++;
+      tick: function(sensor) {
+        catchup_ += sensor.value;
         this.printStuff();
       },
       setCountTo: function(count) {
