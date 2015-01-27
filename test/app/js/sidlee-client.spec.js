@@ -111,8 +111,8 @@ describe('SidLeeClient', function() {
 
 		it('should create the right url with name filter and appOrUser filter', function() {
 			var client = new SidLeeClient(server, function(data) {});
-			client.last24('ctrlz', 'app');
-			client.getUrl.should.equal(server + 'api/1/event/' + 'last24/ctrlz/app');
+			client.last24('undo', 'app');
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last24/undo/app');
 		});
 
 		it('should create the right url with name filter and reject appOrUser filter', function() {
@@ -138,8 +138,8 @@ describe('SidLeeClient', function() {
 
 		it('should create the right url with name filter and appOrUser filter', function() {
 			var client = new SidLeeClient(server, function(data) {});
-			client.last30('ctrlz', 'app');
-			client.getUrl.should.equal(server + 'api/1/event/' + 'last30/ctrlz/app');
+			client.last30('undo', 'app');
+			client.getUrl.should.equal(server + 'api/1/event/' + 'last30/undo/app');
 		});
 
 		it('should create the right url with name filter and reject appOrUser filter', function() {

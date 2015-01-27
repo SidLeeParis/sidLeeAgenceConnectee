@@ -92,6 +92,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 			case 'today' : functionToUse = helper.today; break;
 			case 'last24' : functionToUse = helper.last24; break;
 			case 'last30' : functionToUse = helper.last30; break;
+			case 'last12' : functionToUse = helper.last12; break;
 			case 'last24/user' : functionToUse = helper.undo.bind({ groupBy: 'user', dateRange: 'last24' }); break;
 			case 'last24/app' : functionToUse = helper.undo.bind({ groupBy: 'app', dateRange: 'last24' }); break;
 			case 'last30/user' : functionToUse = helper.undo.bind({ groupBy: 'user', dateRange: 'last30' }); break;
@@ -116,6 +117,11 @@ var Routes = function(sockets, Event, SensorsConf) {
 			}
 			else {
 				functionToUse(sensorConf, function(err, data) {
+					if (data[0] && data[0]._id && data[0]._id !== 'undo') {
+							delete data[0].app;
+							delete data[0].user;
+							delete data[0].last;
+					}
 					res.status(200).send(data[0]);
 				});
 			}
@@ -123,35 +129,44 @@ var Routes = function(sockets, Event, SensorsConf) {
 		// else query all sensors
 		else {
 			var aggregationResult = [];
-			var allSensors = Object.keys(SensorsConf);
-			async.each(
-				allSensors,
-				function(sensor, callback) {
-					if (SensorsConf[sensor].name === 'likes') {
-						getLikes(function(err, likes) {
-							aggregationResult.push(likes);
-							callback();
-						});
-					}
-					else if (SensorsConf[sensor].name === 'visits') {
+			async.parallel([
+					function(callback) {
 						getVisits(function(err, visits) {
 							aggregationResult.push(visits);
 							callback();
 						});
-					}
-					else {
-						functionToUse(SensorsConf[sensor], function(err, data) {
-							if (data.length) aggregationResult.push(data[0]);
+					},
+					function(callback) {
+						getLikes(function(err, likes) {
+							aggregationResult.push(likes);
+							callback();
+						});
+					},
+					function(callback) {
+						functionToUse(null, function(err, data) {
+							if (data.length) aggregationResult.push.apply(aggregationResult, data);
 							callback();
 						});
 					}
-
-				},
-				function(err){
+				],
+				function(err, results){
+					aggregationResult.forEach(function(event) {
+						if (event && event._id && event._id !== 'undo') {
+							delete event.app;
+							delete event.user;
+							delete event.last;
+						}
+					});
 					res.status(200).send(aggregationResult);
 				}
 			);
 		}
+	};
+
+	var _tracer = function(req, res) {
+		helper.tracer(function(err, data) {
+			res.status(200).send(data);
+		});
 	};
 
 	var isValidDate = function(date) {
@@ -166,7 +181,8 @@ var Routes = function(sockets, Event, SensorsConf) {
 	return {
 		create : _create,
 		find: _find,
-		aggregate: _aggregate
+		aggregate: _aggregate,
+		tracer: _tracer
 	};
 };
 

@@ -1,6 +1,7 @@
 'use strict';
 /*jshint expr: true*/
 var should = require('chai').should(),
+	nock = require('nock'),
 	utils = require('../utils'),
 	helpers = require('../helpers'),
 	Response = require('../mocks/response.mock'),
@@ -145,13 +146,33 @@ describe('Routes', function() {
 
 	describe('#aggregate()', function() {
 
+		beforeEach(function() {
+			// mock GA
+			var date = new Date();
+			var start = date.getFullYear() + '-' + date.getMonth() +1 + '-' + date.getDate();
+			var end = start;
+			var fakeUrl = '/ga?ids=ga%3A96546222&start-date=' + start + '&end-date=' + end + '&metrics=ga%3Apageviews';
+			var fakeData = {
+				totalsForAllResults: {
+					'ga:pageviews': 15
+				}
+			};
+			nock('https://www.googleapis.com/analytics/v3/data')
+				.get(fakeUrl)
+				.reply(200, fakeData);
+			// mock facebook graph
+			nock('http://graph.facebook.com')
+				.get('/203384865593')
+				.reply(200, {likes: 1000});
+		});
+
 		describe('- today routes', function() {
 
 			it('should group events in two categories when called for today', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
-						response.getData().length.should.equal(2);
+						response.getData().length.should.equal(4);
 						done();
 					});
 
@@ -180,7 +201,7 @@ describe('Routes', function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'undo') {
+							if (currentSensor && currentSensor._id === 'undo') {
 								currentSensor.value.should.equal(5);
 								should.exist(currentSensor.last);
 								should.exist(currentSensor.user);
@@ -202,7 +223,7 @@ describe('Routes', function() {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
-						response.getData().length.should.equal(2);
+						response.getData().length.should.equal(4);
 						done();
 					});
 
@@ -231,7 +252,7 @@ describe('Routes', function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
 						response.getData().forEach(function(currentSensor) {
-							if (currentSensor._id === 'undo') {
+							if (currentSensor && currentSensor._id === 'undo') {
 								currentSensor.values[0].hourAgo.should.equal(0);
 								currentSensor.values[0].value.should.equal(5);
 								done();
@@ -286,11 +307,11 @@ describe('Routes', function() {
 
 		describe('- last30 routes', function() {
 
-			it('should group events in two categories when called for last24', function(done) {
+			it('should group events in two categories when called for last30', function(done) {
 				helpers.insertEvents(5, 5, function() {
 					var response = new Response(function() {
 						response.getStatus().should.equal(200);
-						response.getData().length.should.equal(2);
+						response.getData().length.should.equal(4);
 						done();
 					});
 

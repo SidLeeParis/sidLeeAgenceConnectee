@@ -54,18 +54,22 @@
 		if (nameFilter) {
 			this.getUrl = this.getUrl + '/' + nameFilter;
 		}
-		if (appOrUserFilter && nameFilter === 'ctrlz') {
+		if (appOrUserFilter && nameFilter === 'undo') {
 			this.getUrl = this.getUrl + '/' + appOrUserFilter;
 		}
 		return this;
 	};
 
 	Client.prototype.last24 = function(nameFilter, appOrUserFilter) {
-		this.lastXX(nameFilter, appOrUserFilter, 'last24');
+		return this.lastXX(nameFilter, appOrUserFilter, 'last24');
 	};
 
 	Client.prototype.last30 = function(nameFilter, appOrUserFilter) {
-		this.lastXX(nameFilter, appOrUserFilter, 'last30');
+		return this.lastXX(nameFilter, appOrUserFilter, 'last30');
+	};
+
+	Client.prototype.last12 = function(nameFilter, appOrUserFilter) {
+		return this.lastXX(nameFilter, null, 'last12');
 	};
 
 	Client.prototype.oldestFirst = function() {

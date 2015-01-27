@@ -31,7 +31,10 @@ var googleAnalyticsVisits = function(callback) {
 			'metrics': 'ga:pageviews'
 		}, function(err, result) {
 			if (err) callback(err, null);
-			var visits = parseInt(result.totalsForAllResults['ga:pageviews']);
+			var visits = -1;
+			if (result && result.totalsForAllResults) {
+				visits = parseInt(result.totalsForAllResults['ga:pageviews']);
+			}
 			var data = {
 				_id: 'visits',
 				value: visits
