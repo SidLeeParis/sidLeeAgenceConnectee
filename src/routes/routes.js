@@ -180,7 +180,8 @@ var Routes = function(sockets, Event, SensorsConf) {
 	return {
 		create : _create,
 		find: _find,
-		aggregate: _aggregate
+		aggregate: _aggregate,
+		tracer: tracer
 	};
 };
 

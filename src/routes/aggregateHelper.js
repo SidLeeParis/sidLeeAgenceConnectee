@@ -340,5 +340,6 @@ module.exports = {
 	today: today,
 	last24: last24,
 	last30 : last30,
-	undo: undo
+	undo: undo,
+	tracer: tracer
 };
