@@ -4,9 +4,10 @@
   <template>
     <link rel="stylesheet" href="dashlee-coffee.css">
     <div class="date">Today</div>
-    <div id="number" class="number odometer">[[count]]</div>
+    <div id="number" class="number">[[count]]</div>
     <div class="subtitle">coffees poured</div>
-    <svg id="svg" on-click="{{tick}}"></svg>
+    <svg id="svg"></svg>
+    <dashlee-stats-button id="button" sensorId="coffee"></dashlee-stats-button>
   </template>
   <script>
   (function() {
@@ -18,8 +19,9 @@
       s_,
       timer_,
       od_,
-      numberOfCups = 11;
-      catchup_ = 0;
+      numberOfCups_ = 11,
+      catchupSmall_ = 0;
+      catchupBig_ = 0;
 
     function fillHalfCup(c) {
       c.coffee.animate({
@@ -27,10 +29,16 @@
       }, 500, mina.backin);
     }
 
-    function fillFullCup(c) {
+    function fillFullCup(c, isBig) {
+
+      var path = isBig ? 'M11,82 h43,0 l2,-52 c-48,7.5 -48,7.5 -48,7.5Z'
+                       : 'M11,82 h43,0 l1,-33 c-46,7.5 -46,7.5 -46,7.5Z';
+
+      var duration = isBig ? 700 : 500;
+
       c.coffee.animate({
-        'path': 'M11,82 h43,0 l2,-44 c-48,7.5 -48,7.5 -48,7.5Z'
-      }, 500, mina.backout);
+        'path': path
+      }, duration, mina.backout);
     }
 
     function moveCups() {
@@ -65,24 +73,30 @@
         });
       },
       initSensor: function(sensor) {
-        catchup_ = 0;
         self_.count = sensor.value;
         od_.update(self_.count);
       },
-      tick: function() {
-        catchup_++;
+      tick: function(sensor) {
+        if (sensor.big) catchupBig_++;
+        else catchupSmall_++;
         self_.animateCount();
       },
       setCountTo: function(count) {
-        catchup_ = count - self_.count;
+        catchupSmall_ = count - self_.count;
         self_.animateCount();
       },
       animateCount: _.throttle(function() {
         clearTimeout(timer_);
-        if (catchup_ > 0) {
+        if (catchupSmall_ > 0) {
           od_.update(++self_.count);
-          catchup_--;
-          self_.fillFirstCup();
+          catchupSmall_--;
+          self_.fillFirstCup(false);
+          timer_ = setTimeout(self_.animateCount, 1800);
+        }
+        else if (catchupBig_ > 0) {
+          od_.update(++self_.count);
+          catchupBig_--;
+          self_.fillFirstCup(true);
           timer_ = setTimeout(self_.animateCount, 1800);
         }
       }, 1700, {trailing: true}),
@@ -103,7 +117,7 @@
           y: 145
         });
 
-        for (var i=1;i<numberOfCups;i++) {
+        for (var i=1;i<numberOfCups_;i++) {
           var c = cup.clone().appendTo(s_).attr({
             x: i*80 -40,
             y: 145
@@ -115,11 +129,11 @@
         this.fillCup(cups_[1], false);
         this.fillCup(cups_[2], false);
       },
-      fillFirstCup : function() {
-        this.fillCup(cups_[filledIndex_], true);
+      fillFirstCup : function(isBig) {
+        this.fillCup(cups_[filledIndex_], isBig, true);
         filledIndex_ = ++filledIndex_ % cups_.length;
       },
-      fillCup : function(c, animFlag) {
+      fillCup : function(c, isBig, animFlag) {
         if(c.coffee) {
           c.coffee.remove();
         }
@@ -138,7 +152,7 @@
             //.fromTo(c.coffee.node, 0.3, {scaleX:0}, {scaleX:1}, 0.2)
             .call(function() {c.coffee.addClass('prefilled');}, null, 0.2)
             .call(fillHalfCup, [c], null, 0.4)
-            .call(fillFullCup, [c], null, 0.8)
+            .call(fillFullCup, [c, isBig], null, 0.8)
             .to(fluid, 0.3, {snap: {y:187, height: 1, width: 1}})
             .call(function(){fluid.remove();})
             .call(moveCups);

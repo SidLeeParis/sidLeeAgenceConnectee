@@ -1,0 +1,162 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-stats" class="closed">
+  <template>
+    <link rel="stylesheet" href="dashlee-stats.css">
+    <div id="loader" class="loader-wrapper loading">
+      <div class="loader"></div>
+    </div>
+    <div class="content">
+      <div id="filters" class="filters">
+        <div class="button active" data-query="last24" on-click="{{requestStats}}">Hours</div>
+        <div class="button" data-query="last30" on-click="{{requestStats}}">Days</div>
+        <div class="button" data-query="last12" on-click="{{requestStats}}">Months</div>
+      </div>
+      <div id="chart" class="ct-chart"></div>
+    </div>
+  </template>
+  <script>
+    (function () {
+
+      var self_, timeout_ = null;
+      var chart_ = null;
+
+      var options_ = {
+        axisX: {
+          showGrid: false,
+          labelOffset: {
+            x: 0,
+            y: 10
+          },
+          labelInterpolationFnc: function (value, index) {
+            return self_.currentQuery !== 'last30' || index % 2 === 0 ? value : null;
+          }
+        },
+        axisY: {
+          labelOffset: {
+            x: 0,
+            y: 10
+          },
+          showGrid: false,
+          showLabel: true,
+        },
+        centerBars: true,
+        seriesBarDistance: 15
+      };
+
+      var responsiveOptions_ = [
+        ['screen and (min-width: 641px) and (max-width: 1024px)', {
+          seriesBarDistance: 10
+        }],
+        ['screen and (max-width: 640px)', {
+          seriesBarDistance: 5,
+          axisX: {
+            labelInterpolationFnc: function (value, index) {
+              if (self_.currentQuery === 'last12')
+                return index % 2 === 0 ? value : null;
+              else return index % 5 === 0 ? value : null;
+            }
+          }
+        }]
+      ];
+
+      Polymer({
+        sensorId: '',
+        currentQuery: 'last24',
+        domReady: function() {
+          self_ = this;
+          this.classList.remove('closed');
+          timeout_ = setTimeout(function() {
+            self_.fire('request-stats', {query: self_.currentQuery, sensorId: self_.sensorId});
+          });
+
+
+        },
+        requestStats: function(event, detail, sender) {
+          if (sender.classList.contains('active')) return;
+          this.$.filters.querySelector('.active').classList.remove('active');
+          sender.classList.add('active');
+          this.currentQuery = sender.getAttribute('data-query');
+          this.$.loader.classList.add('loading');
+          if (chart_) chart_.detach();
+          this.fire('request-stats', {query: this.currentQuery, sensorId: this.sensorId});
+        },
+        initWithData: function(data) {
+          var values = data.values.map(function(v) {
+            return v.value;
+          });
+          var labels = [];
+          switch(this.currentQuery) {
+            case 'last24':
+              for (var a=0; a<24; a++) {
+                var h = moment().endOf('day').subtract(a, 'h');
+                labels.push(h.format('HH[h]'));
+              }
+              var date = new Date();
+              var remainingHours = 24 - date.getHours();
+              console.log(values);
+              for (var a1=0; a1<remainingHours; a1++) {
+                values.unshift('');
+              }
+              values.splice(24, Number.MAX_VALUE);
+              console.log(values);
+
+              break;
+            case 'last12':
+              for (var b=0; b<12; b++) {
+                var m = moment().subtract(b, 'months');
+                labels.push(m.format('MMM'));
+              }
+              break;
+            case 'last30':
+              for (var c=0; c<30; c++) {
+                var d = moment().subtract(c, 'd');
+                labels.push(d.format('D/M'));
+              }
+              break;
+            default:
+          }
+
+          // fill with empty values
+          for(var j=values.length;j<labels.length;j++) {
+            values.push('');
+          }
+
+          var chartData = {
+            labels: labels.reverse(),
+              series: [
+              values.reverse()
+            ]
+          };
+
+          chart_ = new Chartist.Bar(this.$.chart, chartData, options_, responsiveOptions_);
+          var seq = 0;
+          chart_.on('draw', function(data) {
+            if(data.type === 'bar' && data.y2 !== data.y1) {
+              // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
+              data.element.animate({
+                y2: {
+                  begin: seq++ * 80,
+                  dur: 500,
+                  from: data.y1,
+                  to: data.y2,
+                  // You can specify an easing function name or use easing functions from Chartist.Svg.Easing directly
+                  easing: Chartist.Svg.Easing.easeOutQuart
+                }
+              });
+            }
+          });
+          this.$.loader.classList.remove('loading');
+        },
+        close: function(callback) {
+          this.classList.add('closed');
+          clearTimeout(timeout_);
+          if(callback) {
+            if (chart_) chart_.detach();
+            setTimeout(callback, 400);
+          }
+        }
+      });
+    })();
+  </script>
+</polymer-element>
