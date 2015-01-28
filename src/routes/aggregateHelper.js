@@ -6,7 +6,7 @@ var moment = require('moment'),
 // function to aggregate today values of a given sensor, according to its strategy
 var today = function(sensorConf, callback) {
 	// get the current date (beginning of the day: 0h00m00s000ms)
-	var today = moment().startOf('day').toDate();
+	var today = moment().startOf('day').add(6,'h').toDate();
 
 	var aggregate = Event.aggregate();
 	if (sensorConf) {

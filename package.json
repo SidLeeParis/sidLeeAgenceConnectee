@@ -41,8 +41,7 @@
     "mongoose": "^3.8.19",
     "serve-static": "^1.7.1",
     "socket.io": "^1.2.1",
-    "time-grunt": "^1.0.0",
-    "web-component-tester": "^2.0.3"
+    "time-grunt": "^1.0.0"
   },
   "devDependencies": {
     "chai": "^1.10.0",
