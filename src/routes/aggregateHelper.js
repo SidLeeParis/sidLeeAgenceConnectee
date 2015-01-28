@@ -5,8 +5,15 @@ var moment = require('moment'),
 
 // function to aggregate today values of a given sensor, according to its strategy
 var today = function(sensorConf, callback) {
-	// get the current date (beginning of the day: 0h00m00s000ms)
-	var today = moment().startOf('day').add(6,'h').toDate();
+	// get the current date
+	// if it is less than 5h utc, set the day as the day before
+	// else keep the current day
+	var currentTime = moment().utc();
+	var today;
+	if (currentTime.hour() < 5) {
+		currentTime = currentTime.subtract(1, 'd');
+	}
+	today = currentTime.startOf('day').add(5,'h').toDate();
 
 	var aggregate = Event.aggregate();
 	if (sensorConf) {
@@ -68,8 +75,8 @@ var today = function(sensorConf, callback) {
 // function to aggregate values of the last 24h of a given sensor, according to its strategy
 var last24 = function(sensorConf, callback) {
 	// get current hour in order to make some relative calculations
-	var current = moment();
-	var currentHour = current.utc().hour();
+	var current = moment().utc();
+	var currentHour = current.hour();
 	// get yesterday date (from h-23 to h+1 to get the running hour, e.g. from 2h yesterday to 2h today when it's 1h)
 	var yesterday = current.startOf('hour').add(1, 'h').subtract(24, 'h').toDate();
 
@@ -91,7 +98,7 @@ var last24 = function(sensorConf, callback) {
 	aggregate.project({
 		name: 1,
 		value: 1,
-		hour : {'$hour' : '$date'}
+		hour : { $hour: '$date'}
 	});
 	// get sum and avg for each name/hour tuple
 	aggregate.group({
@@ -169,11 +176,10 @@ var last24 = function(sensorConf, callback) {
 
 // function to aggregate values of the last month of a given sensor, according to its strategy
 var last30 = function(sensorConf, callback) {
-	// get current day in order to make some relatie calculations
-	var current = moment();
-	var currentDay = current.utc().date();
-	// get a month ago date (from d+1/M-1 to d/M, e.g. from 19/12 to 18/01)
-	var oneMonthAgo = current.startOf('day').add(1, 'd').subtract(1, 'M').toDate();
+	// begining of the day when the request has been done
+	var today = moment().utc().startOf('day');
+	// get 30 days before date (starting at 5h utc)
+	var oneMonthAgo = moment().utc().startOf('day').subtract(30, 'd').add(5, 'h').toDate();
 
 	var aggregate = Event.aggregate();
 	if (sensorConf) {
@@ -189,15 +195,93 @@ var last30 = function(sensorConf, callback) {
 			date: { $gte: oneMonthAgo }
 		});
 	}
-	// only keep the hour part of the date, since we know all matched events happened during the last 24h
+	// only keep the day and hour part of the date, since we know all matched events happened during the last 24h
 	aggregate.project({
 		name: 1,
 		value: 1,
-		day: { '$dayOfMonth': '$date' }
+		year: { $year: '$date' },
+		month: { $month: '$date' },
+		day: { $dayOfMonth: '$date' },
+		hour: { $hour: '$date' }
 	});
-	// get sum and avg for each name/hour tuple
+	// if hour < 5, then it should be considered as the day before
+	aggregate.project({
+		name: 1,
+		value: 1,
+		year: 1,
+		month: 1,
+		day: {
+			$cond: [
+				{ $lt: [ '$hour', 5 ] },
+				{ $subtract: [ '$day', 1 ]},
+				'$day'
+			]
+		}
+	});
+	// if day equals 0, replace it by the according last day of previous month
+	aggregate.project({
+		name: 1,
+		value: 1,
+		year: 1,
+		month: {
+			$cond: [
+				{ $eq: [ '$day', 0 ] },
+				{ $subtract: [ '$month', 1 ]},
+				'$month'
+			]
+		},
+		day: {
+			$cond: [
+				{ $eq: [ '$day', 0 ] },
+				{
+					$cond: [
+						{ $or: [
+							{ $eq: [ '$month', 1 ] },
+							{ $eq: [ '$month', 2 ] },
+							{ $eq: [ '$month', 4 ] },
+							{ $eq: [ '$month', 6 ] },
+							{ $eq: [ '$month', 8 ] },
+							{ $eq: [ '$month', 9 ] },
+							{ $eq: [ '$month', 11 ] }
+						]},
+						31,
+						{
+							$cond: [
+								{ $eq: [ '$month', 3 ] },
+								28,
+								30
+							]
+						}
+					]
+				},
+				'$day'
+			]
+		}
+	});
+	// if month equals 0, make it point to the last month of the previous year and remove 1 to the current year
+	aggregate.project({
+		name: 1,
+		value: 1,
+		year: {
+			$cond: [
+				{ $eq: [ '$month', 0 ] },
+				{ $subtract: [ '$year', 1 ]},
+				'$year'
+			]
+		},
+		month: {
+			$cond: [
+				{ $lt: [ '$month', 1 ] },
+				{ $add: [ '$month', 12 ]},
+				'$month'
+			]
+		},
+		day: 1
+	});
+
+	// get sum and avg for each name/hour/month/year combination
 	aggregate.group({
-		_id: { name: '$name', day: '$day' },
+		_id: { name: '$name', day: '$day', month: '$month', year: '$year' },
 		sum: { $sum: '$value' },
 		avg: { $avg: '$value' }
 	});
@@ -235,38 +319,40 @@ var last30 = function(sensorConf, callback) {
 	aggregate.project({
 		_id: '$_id.name',
 		values: {
-			day: { $subtract: [ currentDay, '$_id.day' ] },
+			day: '$_id.day',
+			month: '$_id.month',
+			year: '$_id.year',
 			value : '$value'
 		}
 	});
-	// then if the result of the subtraction is less than 1, it means it's a day before the beginning of the current month
-	// if so subtract it to the currentDay, else leave the day as is
-	aggregate.project({
-		_id: '$_id',
-		values: {
-			dayAgo: {
-				$cond: [
-					{ $lt: [ '$values.day', 0 ] },
-					{ $subtract: [ currentDay - 1, '$values.day' ] },
-					'$values.day'
-				]
-			},
-			value : '$values.value'
-		}
-	});
-	// sort the result by ascending values.dayAgo
-	aggregate.sort('values.dayAgo');
+	// sort the result by dates (newest first)
+	aggregate.sort('values.year values.month values.day');
 	// then push each values in an array
 	aggregate.group({
 		_id: '$_id',
 		values: {
 			$push: {
-				dayAgo: '$values.dayAgo',
+				day: '$values.day',
+				month: '$values.month',
+				year: '$values.year',
 				value: '$values.value'
 			}
 		}
 	});
-	aggregate.exec(callback);
+	aggregate.exec(function(err, events) {
+		// for each events, replace the triple year/month/date by a dayAgo property
+		events.forEach(function(event) {
+			event.values.forEach(function(value) {
+				var computedDate = moment().utc().startOf('day').date(value.day).month(value.month - 1).year(value.year);
+				var diff = today.diff(computedDate, 'd');
+				delete value.day;
+				delete value.month;
+				delete value.year;
+				value.dayAgo = diff;
+			});
+		});
+		callback(err, events);
+	});
 };
 
 // function to aggregate values of the last year of a given sensor, according to its strategy
