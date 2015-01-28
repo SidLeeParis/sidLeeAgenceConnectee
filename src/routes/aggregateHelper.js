@@ -326,7 +326,7 @@ var last30 = function(sensorConf, callback) {
 		}
 	});
 	// sort the result by dates (newest first)
-	aggregate.sort('values.year values.month values.day');
+	aggregate.sort('-values.year -values.month -values.day');
 	// then push each values in an array
 	aggregate.group({
 		_id: '$_id',
