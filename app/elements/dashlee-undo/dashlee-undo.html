@@ -15,6 +15,7 @@
         <br><span id="appname">{{appname}}</span>
       </div>
     </div>
+    <dashlee-stats-button id="button" sensorId="undo"></dashlee-stats-button>
   </template>
   <script>
   (function() {
@@ -28,9 +29,9 @@
 
     function backspace(nb, callback) {
       clearTimeout(backTimeout_);
-      var innerText = counterEl_.innerText;
+      var innerHTML = counterEl_.innerHTML;
       if (nb > 0) {
-        counterEl_.innerText = innerText.substr(0, innerText.length - 1);
+        counterEl_.innerHTML = innerHTML.substr(0, innerHTML.length - 1);
         var duration =  200 + Math.floor(Math.random() * 100);
         var simulateError = (Math.random() > 0.6);
         if (simulateError) {
@@ -55,8 +56,8 @@
     function writeText(text, nb, callback) {
       clearTimeout(writeTimeout_);
       if (nb <= text.length) {
-        var innerText = counterEl_.innerText;
-        counterEl_.innerText = innerText + text.substr(nb, 1);
+        var innerHTML = counterEl_.innerHTML;
+        counterEl_.innerHTML = innerHTML + text.substr(nb, 1);
         var duration = 100 + Math.floor(Math.random() * 100);
         writeTimeout_ = setTimeout(function() {
           writeText(text, ++nb, callback);
@@ -87,12 +88,12 @@
         }
         clearTimeout(writeTimeout_);
         clearTimeout(backTimeout_);
-        var countText = counterEl_.innerText;
+        var countText = counterEl_.innerHTML;
         var newCountText = count.toString();
         self_.count = count;
 
         var i = 0;
-        while(countText[i] === newCountText[i] && i < countText.length) {
+        while(i < countText.length && countText[i] === newCountText[i]) {
           i++;
         }
 

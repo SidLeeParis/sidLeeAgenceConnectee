@@ -4,7 +4,7 @@
   <template>
     <link rel="stylesheet" href="dashlee-door.css">
     <div class="date">Today</div>
-    <div id="number" class="number odometer">[[count]]</div>
+    <div id="number" class="number">[[count]]</div>
     <div class="subtitle">times main doors opened</div>
     <div class="door-wrapper">
       <svg width="74" height="108">
@@ -31,6 +31,7 @@
 
       </svg>
     </div>
+    <dashlee-stats-button id="button" sensorId="door"></dashlee-stats-button>
   </template>
   <script>
   (function() {
