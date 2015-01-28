@@ -39,6 +39,7 @@
       <div class="date">Today</div>
       <div class="subtitle">steps walk on the stairs</div>
     </div>
+    <dashlee-stats-button id="button" sensorId="stairs"></dashlee-stats-button>
   </template>
   <script>
   (function() {
@@ -57,7 +58,7 @@
       initSensor: function(sensor) {
         var numbers = stairsWrapper_.querySelectorAll('.number');
         for (var i=0; i<numbers.length; i++) {
-          numbers[i].innerText = sensor.value + 10 - i * 5;
+          numbers[i].innerHTML = sensor.value + 10 - i * 5;
         }
 
         self_.count = sensor.value;
@@ -82,7 +83,7 @@
           self_.count += 5;
           catchup_ -= 5;
           var stair = stairsWrapper_.lastElementChild;
-          stair.querySelector('.number').innerText = self_.count + 10;
+          stair.querySelector('.number').innerHTML = self_.count + 10;
           stairsWrapper_.insertBefore(stair, stairsWrapper_.firstElementChild);
           timer_ = setTimeout(function () {
               self_.animateStairs();

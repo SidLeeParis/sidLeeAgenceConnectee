@@ -21,7 +21,7 @@
       }
     </style>
     <div class="date">Now</div>
-    <div id="number" class="number odometer">[[count]]</div>
+    <div id="number" class="number">[[count]]</div>
     <div class="subtitle">degrees indoors</div>
     <canvas id="canvas" height="70" width="360"></canvas>
     <div class="bottom"></div>
@@ -42,7 +42,7 @@
           od_ = new Odometer({
             el: self_.$.number,
             value: self_.count,
-            format: '(dd).d',
+            format: '(dd).d'
           });
         },
         domReady: function() {

@@ -1,7 +1,7 @@
 :host {
   display: block;
   padding: 0 !important;
-  background: white url(../../images/dot-black.png) repeat 20px 20px !important;
+  background: white url(../../images/dot-black.gif) repeat 20px 20px !important;
 }
 
 .stats {
@@ -54,7 +54,8 @@
 }
 .stairs .front {
   transform: translate3d(-50%, 0, 53px);
-  background: black url(../../images/dot.png) repeat 20px 20px;
+  /*background: black url(../../images/dot.gif) repeat 20px 20px;*/
+  background-color: black;
 }
 
 .stairs .front > .number {

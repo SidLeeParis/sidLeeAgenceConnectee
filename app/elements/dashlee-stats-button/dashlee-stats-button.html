@@ -1,14 +1,19 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="dashlee-stats-button" attributes="">
+<polymer-element name="dashlee-stats-button" attributes="isChecked sensorId">
   <template>
     <link rel="stylesheet" href="dashlee-stats-button.css">
-    <input type="checkbox">
+    <input type="checkbox" on-change="{{toggleStats}}" checked="{{isChecked}}">
     <div class="clicker">+</div>
   </template>
   <script>
     (function () {
       Polymer({
+        isChecked: false,
+        sensorId: '',
+        toggleStats: function(event, detail, sender) {
+          this.fire('toggle-stats', {sensorId: this.sensorId, hide: this.isChecked});
+        }
         // define element prototype here
       });
     })();

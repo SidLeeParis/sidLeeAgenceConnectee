@@ -1,14 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../dashlee-stats-button/dashlee-stats-button.html">
 
 <polymer-element name="dashlee-coffee">
   <template>
     <link rel="stylesheet" href="dashlee-coffee.css">
     <div class="date">Today</div>
-    <div id="number" class="number odometer">[[count]]</div>
+    <div id="number" class="number">[[count]]</div>
     <div class="subtitle">coffees poured</div>
     <svg id="svg"></svg>
-    <dashlee-stats-button></dashlee-stats-button>
+    <dashlee-stats-button id="button" sensorId="coffee"></dashlee-stats-button>
   </template>
   <script>
   (function() {
