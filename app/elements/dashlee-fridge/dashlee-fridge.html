@@ -6,9 +6,10 @@
     <div class="column">
       <div class="date">Today</div>
       <div id="number" class="number">[[count]]</div>
-      <div class="subtitle">fridge
-        <br>door
-        <br>openings</div>
+      <div class="subtitle">times
+        <br>fridge
+        <br>doors
+        <br>opened</div>
     </div>
     <div class="column">
       <div id="door" class="door open" on-click="{{tick}}">
@@ -32,6 +33,7 @@
         </div>
       </div>
     </div>
+    <dashlee-stats-button id="button" sensorId="fridge"></dashlee-stats-button>
   </template>
   <script>
   (function() {

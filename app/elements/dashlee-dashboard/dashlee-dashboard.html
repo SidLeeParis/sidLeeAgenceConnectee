@@ -1,0 +1,197 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-dashboard" attributes="">
+  <template>
+    <link rel="stylesheet" href="dashlee-dashboard.css">
+    <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
+    <dashlee-loader id="loader" class="loading"></dashlee-loader>
+    <div id="wrapper" class="wrapper {{{invert: switchStatus, compact: phoneScreen}| tokenList }}">
+      <dashlee-header compact="{{phoneScreen}}"></dashlee-header>
+      <div id="container" class="dashboard" layout vertical?="{{phoneScreen}}" horizontal?="{{!phoneScreen}}" wrap>
+        <dashlee-degrees id="degrees" class="item large" auto-vertical></dashlee-degrees>
+        <dashlee-coffee id="coffee" class="item large" auto-vertical></dashlee-coffee>
+        <dashlee-sound id="sound" class="item large invert" auto-vertical></dashlee-sound>
+        <dashlee-flush id="flush" class="item" auto-vertical></dashlee-flush>
+        <dashlee-stairs id="stairs" class="item large" auto-vertical></dashlee-stairs>
+        <dashlee-water id="water" class="item large" auto-vertical></dashlee-water>
+        <dashlee-baby id="baby" class="item" auto-vertical></dashlee-baby>
+        <dashlee-door id="door" class="item large invert" auto-vertical></dashlee-door>
+        <dashlee-undo id="undo" class="item" auto-vertical></dashlee-undo>
+        <dashlee-fax id="fax" class="item invert" auto-vertical></dashlee-fax>
+        <dashlee-fridge id="fridge" class="item large" auto-vertical></dashlee-fridge>
+        <dashlee-devices id="devices" class="item" auto-vertical></dashlee-devices>
+        <dashlee-tracer id="tracer" class="item large" auto-vertical></dashlee-tracer>
+        <dashlee-printer id="printer" class="item large invert" auto-vertical></dashlee-printer>
+        <dashlee-visits id="visits" class="item" auto-vertical></dashlee-visits>
+        <dashlee-lightswitch id="lightswitch" class="item large invert" auto-vertical switch="{{switchStatus}}"></dashlee-lightswitch>
+        <dashlee-likes id="likes" class="item" auto-vertical></dashlee-likes>
+        <dashlee-jobs id="jobs" class="item" auto-vertical count="2"></dashlee-jobs>
+      </div>
+
+      <dashlee-footer></dashlee-footer>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global _, PolymerExpressions, SidLeeClient */
+
+    PolymerExpressions.prototype.plus = function(value, i) {
+      var result = value + i;
+      return (result < 0) ? "" : result;
+    };
+
+    var self_,
+      container_,
+      client_ = null,
+      initialized_ = false,
+      initializing_ = true,
+      statsEl_ = null,
+      ua = navigator.userAgent.toLowerCase(),
+      isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+
+
+
+    function computeData(sensor) {
+      if (!initialized_) {
+        if (!initializing_) {
+          console.log('reconnecting...');
+          initializing_ = true;
+          client_.today().exec(initData);
+        }
+        return;
+      }
+
+      var sensorEl = (sensor._id === 'blue') || (sensor._id === 'red') ? self_.$.baby : self_.$[sensor._id];
+      if (sensorEl && sensorEl.tick) {
+        sensorEl.tick(sensor);
+      } else {
+        //console.log('no element update for', sensor);
+      }
+    }
+
+    function initData(data) {
+      document.sensorData = data;
+      console.log(data);
+      _.each(data, function(sensor) {
+        if (sensor._id === 'tracer') return;
+        var sensorEl = (sensor._id === 'blue') || (sensor._id === 'red') ? self_.$.baby : self_.$[sensor._id];
+        if (sensorEl && sensorEl.initSensor) {
+          sensorEl.initSensor(sensor);
+        } else {
+          console.log('no element init for', sensor);
+        }
+      });
+
+      initialized_ = true;
+      initializing_ = false;
+    }
+
+    function removeLoader() {
+      setTimeout(function() {
+        self_.$.loader.classList.remove('loading');
+        self_.adjustCanvases();
+      }, 300);
+      setTimeout(function() {
+        self_.$.loader.remove();
+      }, 1000);
+    }
+
+    function showStats(event) {
+
+      var sensorId = event.detail.sensorId,
+        target = self_.$[sensorId],
+        index = Array.prototype.indexOf.call(container_.children, target);
+
+      // finding first element in next row
+      var i = index + 1;
+      while (i < container_.children.length && container_.children[i].offsetLeft > target.offsetLeft) i++;
+
+      statsEl_ = document.createElement('dashlee-stats');
+      statsEl_.sensorId = sensorId;
+      container_.insertBefore(statsEl_, container_.children[i]);
+    }
+
+    function toggleStats(event) {
+      var shouldHide = event.detail.hide;
+
+      if (statsEl_) {
+        var prevStats = statsEl_;
+        statsEl_ = null;
+        if (!shouldHide) {
+          self_.$[prevStats.sensorId].$.button.isChecked = false;
+        }
+        prevStats.close(function() {
+          prevStats.remove();
+          if (!shouldHide)
+            showStats(event);
+        });
+      } else {
+        showStats(event);
+      }
+    }
+
+    function sendSwitchEvent(event) {
+      if (isAndroid) {
+        // shitty workaround for Android Chrome
+        // applying invert filter to wrapper element works fine on desktop + iOS
+
+        var items = self_.querySelectorAll('.item');
+
+        for (var i = 0; i < items.length; ++i) {
+          items[i].classList.toggle('invert');
+        }
+      }
+
+      client_.postEvent({
+        name: 'lightswitch',
+        value: event.detail.value,
+        unit: 'click',
+        token: 'b3f2ad85-a221-6fbf-19e2-9bcca6994c44'
+      }, function(err) {
+        if (err) {
+          console.log(err);
+          self_.$.lightswitch.failFire(event.detail.value);
+        }
+      });
+    }
+
+    function queryStats(event) {
+      client_[event.detail.query](event.detail.sensorId).exec(function(data) {
+        if (! statsEl_ || statsEl_.sensorId !== event.detail.sensorId) return;
+        statsEl_.initWithData(data);
+      });
+    }
+
+    Polymer({
+      adjustCanvases: _.debounce(function() {
+        self_.$.degrees.fitCanvas();
+        self_.$.sound.fitCanvas();
+      }, 300),
+      ready: function() {
+        self_ = this;
+        container_ = this.$.container;
+
+        client_ = new SidLeeClient('https://sidlee.herokuapp.com/', computeData);
+        client_.today().exec(function(data) {
+          initData(data);
+          removeLoader();
+        });
+
+        client_.last12('tracer').exec(function(data) {
+          self_.$.tracer.initSensor(data);
+        });
+
+
+        client_.socket.on('disconnect', function() {
+          console.log('disconnected !!!');
+          initialized_ = false;
+        });
+
+        self_.addEventListener('toggle-stats', toggleStats);
+        self_.addEventListener('switch-event', sendSwitchEvent);
+        self_.addEventListener('request-stats', queryStats);
+      }
+    });
+  })();
+  </script>
+</polymer-element>

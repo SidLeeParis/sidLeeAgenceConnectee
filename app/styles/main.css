@@ -17,7 +17,7 @@ html {
 
 body {
   background: #000;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   color: #fff;
   -webkit-font-smoothing: antialiased;
 }
@@ -50,94 +50,4 @@ body {
 
 * /deep/ .hidden {
   opacity: 0;
-}
-
-.wrapper {
-  width: 100%;
-  padding: 0 46px 0px 46px;
-  background: #000;
-}
-.wrapper.compact {
-  width: 100%;
-  padding-right: 0;
-  padding-left: 0;
-}
-
-.wrapper.compact dashlee-header, .wrapper.compact dashlee-footer {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-body.not-android .wrapper.invert {
-  filter: invert(1);
-}
-
-.dashboard {
-  width: 100%;
-  border-top: 2px solid white;
-  border-right: 2px solid white;
-}
-
-.wrapper.compact .dashboard {
-  border: 2px solid white;
-}
-
-.dashboard > .item {
-  position: relative;
-  display: block;
-  min-width: 180px;
-  height: 260px;
-  padding: 20px 0;
-  text-align: center;
-  border-bottom: 2px solid white;
-  border-left: 2px solid white;
-  background: black url('../images/dot.png') repeat 20px 20px;
-  flex: 1 1 auto;
-}
-
-.dashboard > .item.invert {
-  filter: invert(1);
-}
-
-dashlee-loader.loading {
-  opacity: 1;
-}
-
-dashlee-loader.loading + .wrapper {
-  height: 100%;
-  opacity: 0;
-  overflow: hidden;
-}
-
-.wrapper.compact .dashboard > .item:last-child {
-  border-bottom: none;
-}
-
-.dashboard > .item.invert {
-  border-bottom: 2px solid black;
-  border-left: 2px solid black;
-}
-.dashboard > .item.large {
-  min-width: 360px;
-  flex: 2 1 auto;
-}
-
-.wrapper.compact .dashboard > .item {
-  min-width: initial;
-  border-left: none;
-  flex: none;
-}
-
-.wrapper.compact .dashboard > .item.large {
-  min-width: initial;
-  flex: none;
-}
-
-
-
-.dashboard > .item /deep/ .column {
-  width: 50%;
-  height: 100%;
-  float: left;
-  position: relative;
 }

@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="dashlee-water.css">
 <div class="column">
   <div class="date">Today</div>
-  <div class="number">2</div>
+  <div id="number" class="number">[[count]]</div>
   <div class="subtitle">liters
     <br>of
     <br>fountain
@@ -14,7 +14,7 @@
 </div>
 <div class="column">
   <div class="bottle" on-click="{{giveMeADrink}}">
-    <div id="level" class="level" data-level="0">
+    <div id="level" class="level" data-level="4">
       <div class="wave"></div>
       <div id="bubbles" class="bubbles"></div>
     </div>
@@ -25,15 +25,40 @@
   <script>
     (function () {
       /*jslint nomen: true */
-      /*global _ */
+      /*global _, Odometer */
 
-      var counter_ = 0;
+      var self_, od_;
+      var counter_ = 4;
 
 
       Polymer({
+        count: 0,
+        ready: function() {
+          self_ = this;
+        },
+        attached: function() {
+          od_ = new Odometer({
+            el: self_.$.number,
+            value: self_.count,
+            format: '(dd).dd',
+          });
+        },
+        tick: function(sensor) {
+          self_.setCountTo(self_.count + sensor.value);
+          self_.giveMeADrink();
+        },
+        initSensor: function(sensor) {
+          self_.setCountTo(sensor.value);
+          timeout_ = setTimeout(self_.giveMeADrink, 3000);
+        },
+        setCountTo: function(count) {
+          self_.count = count;
+          var odValue = self_.count / 1000;
+          od_.update(odValue.toFixed(2));
+        },
         giveMeADrink: function() {
           counter_++;
-          this.$.level.setAttribute('data-level', counter_ % 5);
+          self_.$.level.setAttribute('data-level', counter_ % 5);
           var numBubbles = 3 + Math.floor(Math.random() * 3);
 
           for (var i = 0; i < numBubbles; i++) {
@@ -57,12 +82,12 @@
             bubble.style.animationDuration = 1000 + leftOffset * 100 + 'ms';
             bubble.style.left = leftOffset - 15 + 'px';
             bubble.style.bottom = -30 + leftOffset + 'px';
-            this.$.bubbles.appendChild(bubble);
+            self_.$.bubbles.appendChild(bubble);
           }
-          this.emptyBubbles_();
+          self_.emptyBubbles_();
         },
         emptyBubbles_ : _.debounce(function() {
-          this.$.bubbles.innerHTML = '';
+          self_.$.bubbles.innerHTML = '';
         }, 3000)
       });
     })();
