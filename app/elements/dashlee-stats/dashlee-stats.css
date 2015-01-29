@@ -14,6 +14,10 @@
   height: 0px;
 }
 
+:host dashlee-stats-button /deep/ .clicker {
+  display: block;
+}
+
 .content {
   padding: 10px 30px;
 }
@@ -43,7 +47,7 @@
 
 .filters .button {
   display: inline-block;
-  width: 100px;
+  width: 80px;
   margin-right: 10px;
   text-align: center;
   border: 2px solid white;
@@ -95,9 +99,27 @@
   stroke-width: 8px;
 }
 
-.ct-chart .ct-series.ct-series-a .ct-bar {
+.ct-bar {
   stroke: white;
 }
+
+.ct-series.red .ct-bar  {
+  stroke: #F66;
+}
+
+.ct-series.blue .ct-bar  {
+  stroke: #7BA0FF;
+}
+
+:host-context(.invert) .ct-series.red .ct-bar {
+  stroke: #009999;
+}
+
+:host-context(.invert) .ct-series.blue .ct-bar {
+  stroke: #845F00;
+}
+
+
 
 @keyframes expand {
   0% {

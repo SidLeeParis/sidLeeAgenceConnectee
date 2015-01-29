@@ -7,6 +7,9 @@
   height: 208px;
   text-align: center;
   background: url('../../images/bottle.svg') no-repeat;
+  position: relative;
+  left: -8px;
+  top: 4px;
 }
 .wave {
   position: absolute;
