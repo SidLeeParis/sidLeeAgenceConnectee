@@ -177,7 +177,10 @@ var last24 = function(sensorConf, callback) {
 // function to aggregate values of the last month of a given sensor, according to its strategy
 var last30 = function(sensorConf, callback) {
 	// begining of the day when the request has been done
-	var today = moment().utc().startOf('day');
+	var today = moment().utc();
+	// if the request is before 5h utc, consider it like one day ago
+	if (today.hour() < 5) today.subtract(1, 'd');
+	today = today.startOf('day');
 	// get 30 days before date (starting at 5h utc)
 	var oneMonthAgo = moment().utc().startOf('day').subtract(30, 'd').add(5, 'h').toDate();
 
