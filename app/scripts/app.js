@@ -9,12 +9,6 @@ if (!DEBUG_MODE_ON) {
   'use strict';
 
   var dashboard_;
-  var ua = navigator.userAgent.toLowerCase();
-  var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-
-  if (isAndroid) {
-    document.body.classList.remove('not-android');
-  }
 
   window.addEventListener('polymer-ready', function () {
     console.log('Polymer is ready to rock!');
