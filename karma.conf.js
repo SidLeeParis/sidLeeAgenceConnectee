@@ -4,7 +4,7 @@ module.exports = function(config) {
 		frameworks: ['mocha', 'chai', 'sinon'],
 		files: [
 			'node_modules/chai/chai.js',
-			'node_modules/socket.io-client/socket.io.js',
+			'app/bower_components/socket.io-client/socket.io.js',
 			'app/scripts/api/sidlee-client.js',
 			'test/app/js/sidlee-client.spec.js'
 		],
