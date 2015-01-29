@@ -16,7 +16,6 @@ var express = require('express'),
 	getVisits = require('./misc/googleAnalyticsVisits'),
 	SensorsConf = require('./conf/sensorsConf');
 
-
 // connect to mongo
 mongoose.connect(conf.MONGO_URL);
 var db = mongoose.connection;
