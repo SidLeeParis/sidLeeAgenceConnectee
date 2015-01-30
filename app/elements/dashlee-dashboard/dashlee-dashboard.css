@@ -8,6 +8,7 @@
   width: 100%;
   padding: 0 46px 0px 46px;
   background: #000;
+  overflow: hidden;
 }
 .wrapper.compact {
   width: 100%;
@@ -24,7 +25,7 @@
   border-left: none;
 }
 
-body.not-android .wrapper.invert {
+:host(.not-android) .wrapper.invert {
   filter: invert(1);
 }
 
@@ -99,4 +100,23 @@ dashlee-loader.loading + .wrapper {
   height: 100%;
   float: left;
   position: relative;
+}
+
+.dashboard > .item /deep/ .triangle {
+  display: none;
+  position: absolute;
+  margin: 0 auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent #ffffff transparent;
+  z-index: 10000;
+}
+
+.dashboard > .item /deep/ dashlee-stats-button[ischecked] + .triangle {
+  display: block;
 }
