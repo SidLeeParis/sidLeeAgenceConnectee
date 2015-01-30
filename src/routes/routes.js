@@ -132,9 +132,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 			async.parallel([
 					function(callback) {
 						getVisits(function(err, visits) {
-							console.log(err);
-							console.log(visits);
-							aggregationResult.push(visits);
+							if (!err) aggregationResult.push(visits);
 							callback();
 						});
 					},
