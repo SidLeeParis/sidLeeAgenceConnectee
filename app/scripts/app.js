@@ -1,4 +1,4 @@
-var DEBUG_MODE_ON = false;
+var DEBUG_MODE_ON = true;
 
 if (!DEBUG_MODE_ON) {
   console = console || {};
