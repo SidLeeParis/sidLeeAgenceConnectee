@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="dashlee-lightswitch" attributes="switch">
+<polymer-element name="dashlee-lightswitch" attributes="switchStatus">
   <template>
     <link rel="stylesheet" href="dashlee-lightswitch.css">
     <div class="date">Today</div>
@@ -10,6 +10,8 @@
       <input type="checkbox" on-change="{{toggleLight}}">
       <div class="switch"></div>
     </div>
+    <dashlee-stats-button id="button" sensorId="lightswitch"></dashlee-stats-button>
+    <div class="triangle"></div>
   </template>
   <script>
   (function() {
@@ -21,7 +23,7 @@
     var sendingClicks_ = 0;
     var isStub_ = false;
     Polymer({
-      switch: false,
+      switchStatus: false,
       count: 0,
       ready: function() {
         self_ = this;
@@ -47,7 +49,8 @@
       toggleLight: function() {
         bufferClicks_++;
         od_.update(++self_.count);
-        self_.switch = !self_.switch;
+        self_.switchStatus = !self_.switchStatus;
+        self_.fire('switch-for-android');
         self_.fireEvent();
       },
       fireEvent: _.debounce(function() {

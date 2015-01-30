@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="dashlee-dashboard" attributes="">
+<polymer-element name="dashlee-dashboard" class="not-android">
   <template>
     <link rel="stylesheet" href="dashlee-dashboard.css">
     <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
@@ -22,8 +22,10 @@
         <dashlee-devices id="devices" class="item" auto-vertical></dashlee-devices>
         <dashlee-tracer id="tracer" class="item large" auto-vertical></dashlee-tracer>
         <dashlee-printer id="printer" class="item large invert" auto-vertical></dashlee-printer>
+        <dashlee-light id="light" class="item large" auto-vertical></dashlee-light>
+        <dashlee-watt id="watt" class="item large" auto-vertical></dashlee-watt>
         <dashlee-visits id="visits" class="item" auto-vertical></dashlee-visits>
-        <dashlee-lightswitch id="lightswitch" class="item large invert" auto-vertical switch="{{switchStatus}}"></dashlee-lightswitch>
+        <dashlee-lightswitch id="lightswitch" class="item large invert" auto-vertical switchStatus="{{switchStatus}}"></dashlee-lightswitch>
         <dashlee-likes id="likes" class="item" auto-vertical></dashlee-likes>
         <dashlee-jobs id="jobs" class="item" auto-vertical count="2"></dashlee-jobs>
       </div>
@@ -47,7 +49,7 @@
       initializing_ = true,
       statsEl_ = null,
       ua = navigator.userAgent.toLowerCase(),
-      isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+      isAndroid_ = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 
 
 
@@ -99,8 +101,9 @@
     function showStats(event) {
 
       var sensorId = event.detail.sensorId,
-        target = self_.$[sensorId],
-        index = Array.prototype.indexOf.call(container_.children, target);
+          dividor = event.detail.dividor,
+          target = self_.$[sensorId],
+          index = Array.prototype.indexOf.call(container_.children, target);
 
       // finding first element in next row
       var i = index + 1;
@@ -108,6 +111,7 @@
 
       statsEl_ = document.createElement('dashlee-stats');
       statsEl_.sensorId = sensorId;
+      statsEl_.dividor = dividor;
       container_.insertBefore(statsEl_, container_.children[i]);
     }
 
@@ -117,9 +121,7 @@
       if (statsEl_) {
         var prevStats = statsEl_;
         statsEl_ = null;
-        if (!shouldHide) {
-          self_.$[prevStats.sensorId].$.button.isChecked = false;
-        }
+        self_.$[prevStats.sensorId].$.button.isChecked = false;
         prevStats.close(function() {
           prevStats.remove();
           if (!shouldHide)
@@ -131,17 +133,6 @@
     }
 
     function sendSwitchEvent(event) {
-      if (isAndroid) {
-        // shitty workaround for Android Chrome
-        // applying invert filter to wrapper element works fine on desktop + iOS
-
-        var items = self_.querySelectorAll('.item');
-
-        for (var i = 0; i < items.length; ++i) {
-          items[i].classList.toggle('invert');
-        }
-      }
-
       client_.postEvent({
         name: 'lightswitch',
         value: event.detail.value,
@@ -156,10 +147,34 @@
     }
 
     function queryStats(event) {
-      client_[event.detail.query](event.detail.sensorId).exec(function(data) {
-        if (! statsEl_ || statsEl_.sensorId !== event.detail.sensorId) return;
-        statsEl_.initWithData(data);
-      });
+      var sensorId = event.detail.sensorId,
+          query = event.detail.query;
+
+      if (sensorId === 'baby') {
+        async.parallel([
+          function(callback){
+            client_[query]('red').exec(function(redData) {
+              callback(null, redData);
+            });
+          },
+          function(callback){
+            client_[query]('blue').exec(function(blueData) {
+              callback(null, blueData);
+            });
+          }
+        ],
+        // optional callback
+        function(err, data){
+          if (! statsEl_ || statsEl_.sensorId !== sensorId) return;
+          statsEl_.initWithData(data);
+        });
+      }
+      else {
+        client_[query](sensorId).exec(function(data) {
+          if (! statsEl_ || statsEl_.sensorId !== sensorId) return;
+          statsEl_.initWithData([data]);
+        });
+      }
     }
 
     Polymer({
@@ -170,6 +185,10 @@
       ready: function() {
         self_ = this;
         container_ = this.$.container;
+
+        if (isAndroid_) {
+          this.classList.remove('not-android');
+        }
 
         client_ = new SidLeeClient('https://sidlee.herokuapp.com/', computeData);
         client_.today().exec(function(data) {
@@ -190,6 +209,18 @@
         self_.addEventListener('toggle-stats', toggleStats);
         self_.addEventListener('switch-event', sendSwitchEvent);
         self_.addEventListener('request-stats', queryStats);
+
+        self_.addEventListener('switch-for-android', function() {
+          if (isAndroid_) {
+            // shitty workaround for Android Chrome
+            // applying invert filter to wrapper element works fine on desktop + iOS
+            var items = self_.$.wrapper.querySelectorAll('.item');
+
+            for (var i = 0; i < items.length; ++i) {
+              items[i].classList.toggle('invert');
+            }
+          }
+        });
       }
     });
   })();

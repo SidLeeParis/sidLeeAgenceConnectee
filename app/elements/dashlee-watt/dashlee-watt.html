@@ -1,0 +1,69 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-watt" attributes="">
+  <template>
+    <link rel="stylesheet" href="dashlee-watt.css">
+    <div class="date">Now</div>
+    <div id="number" class="number">[[count]]</div>
+    <div class="subtitle">kilowatts burning</div>
+    <div class="tachometer">
+      <div class="ii">
+        <div class="dash"><b></b></div>
+        <div class="dash"><b></b></div>
+        <div class="dash"><b></b></div>
+        <div class="dash"><b></b></div>
+        <div class="dash"><b></b></div>
+        <div class="dash"><b></b></div>
+        <div class="dash"><b></b></div>
+        <div>
+          <div class="num">0</div>
+          <div class="num">10</div>
+        </div>
+         <div class="dot"></div>
+         <div id="line" class="line"></div>
+      </div>
+    </div>
+    <dashlee-stats-button id="button" sensorId="watt" dividor="1000"></dashlee-stats-button>
+    <div class="triangle"></div>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global Odometer */
+
+    var od_, self_, line_;
+    Polymer({
+      count: 0,
+      attached: function() {
+        od_ = new Odometer({
+          el: self_.$.number,
+          value: self_.count,
+          format: '(dd).d'
+        });
+      },
+      ready: function() {
+        self_ = this;
+        line_ = this.$.line;
+      },
+      tick: function(sensor) {
+        self_.setCountTo(sensor.value);
+      },
+      initSensor: function(sensor) {
+        self_.setCountTo(sensor.value);
+      },
+      setCountTo: function(value) {
+        value /= 1000;
+
+        if (Math.round((value % 1) * 10) % 10 === 0) {
+          value += 0.1;
+        }
+        self_.count = value.toFixed(1);
+        od_.update(self_.count);
+        var rotation = value * 18;
+        line_.style.transform = 'rotate(' + rotation + 'deg)';
+        line_.style.webkitTransform = 'rotate(' + rotation + 'deg)';
+      }
+    });
+  })();
+  </script>
+</polymer-element>
