@@ -13,13 +13,12 @@
 
 .coffee {
   fill: white;
-  transform: scale(0);
-  transform-origin: 50% 0%;
+  transform: scaleX(0);
+  transform-origin: 50% 0;
   transition: transform .3s ease;
 }
 .coffee.prefilled {
-  transform: scale(1);
-  transform-origin: 50% 50%;
+  transform: scaleX(1);
 }
 .glass, .handle {
   fill: none;
