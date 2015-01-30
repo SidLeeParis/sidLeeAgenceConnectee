@@ -4,8 +4,7 @@
   "description": "Server side of Sid Lee x Agence Conectée project",
   "author": "Xavier Seignard <xavier.seignard@gmail.com>",
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install && ./node_modules/.bin/grunt build",
-    "start" : "node src/app.js"
+    "postinstall": "./node_modules/.bin/bower install && ./node_modules/.bin/grunt build"
   },
   "license": "MIT",
   "dependencies": {
