@@ -46,32 +46,34 @@
           });
         },
         domReady: function() {
-          self_.fitCanvas();
+          setTimeout(function() {
+            self_.fitCanvas();
 
-          var smoothie = new SmoothieChart({
-            interpolation: 'linear',
-            labels: {disabled: true},
-            minValue: -5,
-            maxValue: 35,
-            millisPerPixel:50,
-            grid: {
-              fillStyle: 'transparent',
+            var smoothie = new SmoothieChart({
+              interpolation: 'linear',
+              labels: {disabled: true},
+              minValue: -5,
+              maxValue: 35,
+              millisPerPixel:50,
+              grid: {
+                fillStyle: 'transparent',
+                strokeStyle: 'transparent'
+              }
+            });
+            smoothie.streamTo(self_.$.canvas, 2000);
+            // Data
+            line1_ = new TimeSeries();
+            // Add to SmoothieChart
+            smoothie.addTimeSeries(line1_, {
+              fillStyle:'#fff',
               strokeStyle: 'transparent'
-            }
-          });
-          smoothie.streamTo(self_.$.canvas, 2000);
-          // Data
-          line1_ = new TimeSeries();
-          // Add to SmoothieChart
-          smoothie.addTimeSeries(line1_, {
-            fillStyle:'#fff',
-            strokeStyle: 'transparent'
-          });
+            });
 
-          line1_.append(new Date().getTime(), -5);
-          setInterval(function() {
-            var newVal = (1 + (Math.random() - 0.5) / 3) * self_.count;
-            line1_.append(new Date().getTime(), newVal);
+            line1_.append(new Date().getTime(), -5);
+            setInterval(function() {
+              var newVal = (1 + (Math.random() - 0.5) / 3) * self_.count;
+              line1_.append(new Date().getTime(), newVal);
+            }, 2000);
           }, 2000);
         },
         fitCanvas: function() {
@@ -90,7 +92,7 @@
 
           self_.count = value.toFixed(1);
           od_.update(self_.count);
-          line1_.append(new Date().getTime(), self_.count);
+          // if(line1_ && line1_.append) line1_.append(new Date().getTime(), self_.count);
         }
       });
     })();
