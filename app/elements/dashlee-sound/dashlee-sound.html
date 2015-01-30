@@ -25,7 +25,7 @@
     <div class="subtitle">decibels of noise<br>around the central table</div>
     <canvas id="canvas" height="90" width="360"></canvas>
     <div class="bottom"></div>
-
+    <dashlee-stats-button id="button" sensorId="sound"></dashlee-stats-button>
   </template>
   <script>
     (function () {
@@ -57,32 +57,34 @@
           });
         },
         domReady: function() {
-          this.fitCanvas();
+          setTimeout(function() {
+            self_.fitCanvas();
 
-          var smoothie = new SmoothieChart({
-            interpolation: 'beziers',
-            labels: {disabled: true},
-            minValue: 0,
-            maxValue: 3,
-            grid: {
-              fillStyle: 'transparent',
+            var smoothie = new SmoothieChart({
+              interpolation: 'beziers',
+              labels: {disabled: true},
+              minValue: 0,
+              maxValue: 3,
+              grid: {
+                fillStyle: 'transparent',
+                strokeStyle: 'transparent'
+              }
+            });
+            smoothie.streamTo(self_.$.canvas, 100);
+            line1_ = new TimeSeries();
+            smoothie.addTimeSeries(line1_, {
+              fillStyle:'#fff',
               strokeStyle: 'transparent'
-            }
-          });
-          smoothie.streamTo(this.$.canvas, 100);
-          line1_ = new TimeSeries();
-          smoothie.addTimeSeries(line1_, {
-            fillStyle:'#fff',
-            strokeStyle: 'transparent'
-          });
+            });
 
-          line1_.append(new Date().getTime(), 0);
-          setInterval(function() {
-            var newVal = Math.min(3, 0.3 + (1 + Math.random() * 2 * (self_.count - 20) / 50) * (self_.count - 20) / 50);
-            line1_.append(new Date().getTime(), newVal);
-            clearTimeout(timer_);
-            gotoZero(newVal);
-          }, 500);
+            line1_.append(new Date().getTime(), 0);
+            setInterval(function() {
+              var newVal = Math.min(3, 0.3 + (1 + Math.random() * 2 * (self_.count - 20) / 50) * (self_.count - 20) / 50);
+              line1_.append(new Date().getTime(), newVal);
+              clearTimeout(timer_);
+              gotoZero(newVal);
+            }, 500);
+          }, 4000);
         },
         tick: function(sensor) {
           self_.setCountTo(sensor.value);
