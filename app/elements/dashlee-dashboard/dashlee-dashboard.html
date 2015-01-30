@@ -73,7 +73,7 @@
 
     function initData(data) {
       document.sensorData = data;
-      // console.log(data);
+      console.log(data);
       _.each(data, function(sensor) {
         if (sensor._id === 'tracer') return;
         var sensorEl = (sensor._id === 'blue') || (sensor._id === 'red') ? self_.$.baby : self_.$[sensor._id];
