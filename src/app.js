@@ -58,6 +58,11 @@ router.get('/event/last30/:name?/app', routes.aggregate.bind('last30/app'));
 router.get('/event/last12/:name?', routes.aggregate.bind('last12'));
 router.get('/event/:name?', routes.find);
 
+// blitz conf
+app.get('/mu-743ebbfb-1a4bf856-3393c110-02a21851', function(req, res) {
+	res.status(200).send(42);
+});
+
 // cron configuration
 // remove events that are one month old every day at 0h05
 // except for the tracer paper printer
