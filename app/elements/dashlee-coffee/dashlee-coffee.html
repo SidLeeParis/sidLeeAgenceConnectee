@@ -26,14 +26,14 @@
 
     function fillHalfCup(c) {
       c.coffee.animate({
-        'path': 'M11,82 h43,0 l1,-13 c-18,3 -31,-17 -45.5,-4Z'
+        'path': 'M-30,100 h120,0 v0,-33 c-65,20 -51,-40 -120,10Z'
       }, 500, mina.backin);
     }
 
     function fillFullCup(c, isBig) {
 
-      var path = isBig ? 'M11,82 h43,0 l2,-52 c-48,0 -48,0 -48,0Z'
-                       : 'M11,82 h43,0 l1,-33 c-46,0 -46,0 -46,0Z';
+      var path = isBig ? 'M-30,100 h120,0 v0,-82 c-120,0 -120,0 -120,0Z'
+                       : 'M-30,100 h120,0 v0,-52 c-120,0 -120,0 -120,0Z';
 
       var duration = isBig ? 700 : 500;
 
@@ -107,13 +107,21 @@
         //   console.log(event.alpha);
 
         // });
-        s_ = Snap(this.$.svg);
+
+        s_ = Snap(self_.$.svg);
+
         var cup = Snap();
         var glass = cup.polygon('57,85 8,85 2,2 60,2');
         var handle = cup.path('M58,52 c8,0 15,-7 15,-15 c0,-8 -6,-15 -13,-15');
+        var mask = cup.polygon('54,81.5 11,81.5 6,5.5 56.5,5.5').attr({fill: '#FFF'}).addClass('mask');
+        var holder = cup.g();
+
 
         glass.addClass('glass');
         handle.addClass('handle');
+        holder.attr({mask: mask});
+        holder.addClass('holder');
+        cup.holder = holder;
 
         s_.add(cup);
         cups_ = [cup];
@@ -129,11 +137,13 @@
             y: 145
           });
           cups_.push(c);
+          c.holder = c.select('.holder');
         }
 
-        this.fillCup(cups_[0], false);
-        this.fillCup(cups_[1], false);
-        this.fillCup(cups_[2], false);
+        self_.fillCup(cups_[0], false);
+        self_.fillCup(cups_[1], false);
+        self_.fillCup(cups_[2], false);
+
       },
       fillFirstCup : function(isBig) {
         this.fillCup(cups_[filledIndex_], isBig, true);
@@ -143,8 +153,9 @@
         if(c.coffee) {
           c.coffee.remove();
         }
-        var coffee = animFlag ? c.path('M11,82 h43,0 l0,-3 c3,-1 -18,3 -43.5,0Z') : c.path('M11,82 h43,0 l2,-44 c-48,0-48,0 -48,0Z');
+        var coffee = animFlag ? c.path('M-30,100 h120,0 v0,-24 c-65,0 -30,12 -120,-4Z') : c.path('M-30,100 h120,0 v0,-68 c-120,0 -120,0 -120,0Z');
         coffee.addClass('coffee');
+        c.holder.add(coffee);
         c.coffee = coffee;
 
         if (animFlag) {
@@ -154,8 +165,7 @@
           fluid.addClass('fluid');
 
           var tl = new TimelineLite();
-          tl.to(fluid, 0.3, {snap: {height: 227, width: 2.5}})
-            //.fromTo(c.coffee.node, 0.3, {scaleX:0}, {scaleX:1}, 0.2)
+          tl.to(fluid, 0.3, {snap: {height: 226, width: 2.5}})
             .call(function() {c.coffee.addClass('prefilled');}, null, 0.2)
             .call(fillHalfCup, [c], null, 0.4)
             .call(fillFullCup, [c, isBig], null, 0.8)
