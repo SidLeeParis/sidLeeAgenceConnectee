@@ -40,18 +40,23 @@ var googleAnalyticsVisits = function(callback) {
 				'start-date': start,
 				'end-date': end,
 				'metrics': 'ga:pageviews'
-			}, function(err, result) {
-				if (err) callback(err, null);
-				var visits = -1;
-				if (result && result.totalsForAllResults) {
-					visits = parseInt(result.totalsForAllResults['ga:pageviews']);
+			},
+			function(err, result) {
+				if (err) {
+					callback(err, null);
 				}
-				data = {
-					_id: 'visits',
-					value: visits
-				};
-				lastCall = moment.utc();
-				callback(null, data);
+				else {
+					var visits = -1;
+					if (result && result.totalsForAllResults) {
+						visits = parseInt(result.totalsForAllResults['ga:pageviews']);
+					}
+					data = {
+						_id: 'visits',
+						value: visits
+					};
+					lastCall = moment.utc();
+					callback(null, data);
+				}
 			});
 		});
 	}
