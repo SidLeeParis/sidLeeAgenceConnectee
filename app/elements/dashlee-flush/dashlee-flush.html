@@ -11,7 +11,7 @@
       <div class="finger"></div>
       <div class="button"></div>
     </div>
-    <dashlee-stats-button id="button" sensorId="flush"></dashlee-stats-button>
+    <dashlee-stats-button id="button" sensorId="flush" dividor="0.3"></dashlee-stats-button>
     <div class="triangle"></div>
   </template>
   <script>
@@ -38,10 +38,16 @@
       },
       initSensor: function(sensor) {
         catchup_ = 0;
-        self_.count = sensor.value;
+        self_.count = sensor.value * 3;
         od_.update(self_.count);
       },
       tick: function() {
+        catchup_++;
+        self_.animateCount();
+        setTimeout(self_.dummy, 92000);
+        setTimeout(self_.dummy, 136000);
+      },
+      dummy: function() {
         catchup_++;
         self_.animateCount();
       },

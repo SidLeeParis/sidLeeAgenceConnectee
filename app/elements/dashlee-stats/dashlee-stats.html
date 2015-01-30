@@ -69,7 +69,7 @@
         var computedData = Array.apply(null, new Array(max)).map(Number.prototype.valueOf, 0);
         // plae each values at the right place
         data.values.forEach(function(current) {
-          computedData.splice(current[key], 1, current.value);
+          computedData.splice(current[key], 1, current.value / self_.dividor);
         });
         return computedData.reverse();
       }
