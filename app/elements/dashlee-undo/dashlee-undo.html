@@ -16,6 +16,7 @@
       </div>
     </div>
     <dashlee-stats-button id="button" sensorId="undo"></dashlee-stats-button>
+    <div class="triangle"></div>
   </template>
   <script>
   (function() {
@@ -44,7 +45,8 @@
             });
           }
           else {
-            backspace(--nb, callback);
+            nb--;
+            backspace(nb, callback);
           }
         }, duration);
       }
@@ -60,7 +62,8 @@
         counterEl_.innerHTML = innerHTML + text.substr(nb, 1);
         var duration = 100 + Math.floor(Math.random() * 100);
         writeTimeout_ = setTimeout(function() {
-          writeText(text, ++nb, callback);
+          nb++;
+          writeText(text, nb, callback);
         }, duration);
       }
       else if (callback) {
@@ -88,9 +91,10 @@
         }
         clearTimeout(writeTimeout_);
         clearTimeout(backTimeout_);
-        var countText = counterEl_.innerHTML;
+        var countText = self_.count.toString();
         var newCountText = count.toString();
         self_.count = count;
+        counterEl_.innerHTML = countText;
 
         var i = 0;
         while(i < countText.length && countText[i] === newCountText[i]) {

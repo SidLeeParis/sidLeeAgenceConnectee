@@ -40,6 +40,7 @@
       <div class="subtitle">steps walk on the stairs</div>
     </div>
     <dashlee-stats-button id="button" sensorId="stairs"></dashlee-stats-button>
+    <div class="triangle"></div>
   </template>
   <script>
   (function() {
@@ -61,7 +62,7 @@
           numbers[i].innerHTML = sensor.value + 10 - i * 5;
         }
 
-        self_.count = sensor.value;
+        self_.count = sensor.value - 20;
         catchup_ = 20;
         setTimeout(function() {
           stats_.classList.add('hidden');

@@ -8,6 +8,7 @@
     <div class="subtitle">coffees poured</div>
     <svg id="svg"></svg>
     <dashlee-stats-button id="button" sensorId="coffee"></dashlee-stats-button>
+    <div class="triangle"></div>
   </template>
   <script>
   (function() {
@@ -31,8 +32,8 @@
 
     function fillFullCup(c, isBig) {
 
-      var path = isBig ? 'M11,82 h43,0 l2,-52 c-48,7.5 -48,7.5 -48,7.5Z'
-                       : 'M11,82 h43,0 l1,-33 c-46,7.5 -46,7.5 -46,7.5Z';
+      var path = isBig ? 'M11,82 h43,0 l2,-52 c-48,0 -48,0 -48,0Z'
+                       : 'M11,82 h43,0 l1,-33 c-46,0 -46,0 -46,0Z';
 
       var duration = isBig ? 700 : 500;
 
@@ -101,6 +102,11 @@
         }
       }, 1700, {trailing: true}),
       domReady: function() {
+
+        // this.addEventListener('deviceorientation', function(event) {
+        //   console.log(event.alpha);
+
+        // });
         s_ = Snap(this.$.svg);
         var cup = Snap();
         var glass = cup.polygon('57,85 8,85 2,2 60,2');
@@ -137,7 +143,7 @@
         if(c.coffee) {
           c.coffee.remove();
         }
-        var coffee = animFlag ? c.path('M11,82 h43,0 l0,-3 c3,-1 -18,3 -43.5,0Z') : c.path('M11,82 h43,0 l2,-44 c-48,7.5 -48,7.5 -48,7.5Z');
+        var coffee = animFlag ? c.path('M11,82 h43,0 l0,-3 c3,-1 -18,3 -43.5,0Z') : c.path('M11,82 h43,0 l2,-44 c-48,0-48,0 -48,0Z');
         coffee.addClass('coffee');
         c.coffee = coffee;
 
