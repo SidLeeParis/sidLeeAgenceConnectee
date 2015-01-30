@@ -1,0 +1,69 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="dashlee-light">
+  <template>
+    <link rel="stylesheet" href="dashlee-light.css">
+    <div class="date">Now</div>
+    <div id="number" class="number">[[count]]</div>
+    <div class="subtitle">lux</div>
+    <div id="circles" class="circles"></div>
+    <dashlee-stats-button id="button" sensorId="light"></dashlee-stats-button>
+    <div class="triangle"></div>
+  </template>
+  <script>
+  (function() {
+    /*jslint nomen: true */
+    /*global Odometer */
+
+    var od_, self_, circles_;
+    Polymer({
+      count: 0,
+      attached: function() {
+        od_ = new Odometer({
+          el: self_.$.number,
+          value: self_.count
+        });
+      },
+      ready: function() {
+        self_ = this;
+        circles_ = this.$.circles;
+      },
+      tick: function(sensor) {
+        self_.setCountTo(sensor.value);
+      },
+      initSensor: function(sensor) {
+        self_.setCountTo(sensor.value);
+      },
+      setCountTo: function(value) {
+        self_.count = Math.floor(value);
+        od_.update(self_.count);
+
+        var count = Math.min(50, self_.count);
+
+        var circles = circles_.querySelectorAll('.circle');
+        var width = circles_.offsetWidth,
+          height = circles_.offsetHeight;
+
+        for (var j = circles.length - 1; j >= count; j--) {
+          circles[j].remove();
+        }
+        for (var i = 0; i < count; i++) {
+          var el;
+          if (i < circles.length) {
+            el = circles[i];
+          } else {
+            el = document.createElement('div');
+            el.classList.add('circle');
+            circles_.appendChild(el);
+          }
+          var d = Math.round(30 + i * width * 2 / count);
+          el.style.width = el.style.height = d + 'px';
+          el.style.borderRadius = Math.round(d / 2) + 'px';
+          el.style.top = ((height - d) / 2) + 'px';
+          el.style.left = ((width - d) / 2) + 'px';
+        }
+      }
+    });
+  })();
+  </script>
+</polymer-element>
