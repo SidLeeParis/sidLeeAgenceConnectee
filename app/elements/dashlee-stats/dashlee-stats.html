@@ -144,9 +144,15 @@
 
           chart_ = new Chartist.Bar(this.$.chart, chartData, options_, responsiveOptions_);
           var seq = 0;
+          var index = 0;
+          var changes = 1;
           chart_.on('draw', function(data) {
             if (chart_.created) return;
             if(data.type === 'bar' && data.y2 !== data.y1) {
+              if (data.index <= index) {
+                seq = ++changes;
+              }
+              index = data.index;
               // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
               data.element.animate({
                 y2: {
