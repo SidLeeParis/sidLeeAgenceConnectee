@@ -39,7 +39,7 @@
         var value = sensor.values[0].value;
         var numbers = numbers_.querySelectorAll('.number');
         for (var i=0; i<numbers.length; i++) {
-          numbers[i].innerHTML = numeral((value - 4 + 2 - i) / 100).format('0.00');
+          numbers[i].innerHTML = numeral((value - 4 + 2 - i) / 100).format('0[.]00');
         }
 
         self_.count = value - 4;
@@ -64,7 +64,7 @@
           index_++;
 
           var number = numbers_.lastElementChild;
-          number.innerHTML = numeral((self_.count + 2) / 100).format('0.00');
+          number.innerHTML = numeral((self_.count + 2) / 100).format('0[.]00');
           numbers_.insertBefore(number, numbers_.firstElementChild);
           paper_.style.backgroundPositionY = (60 * index_ + 4) + 'px';
           timer_ = setTimeout(self_.printStuff, 600);

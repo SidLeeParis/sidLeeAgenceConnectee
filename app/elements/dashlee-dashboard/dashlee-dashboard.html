@@ -2,6 +2,21 @@
 
 <polymer-element name="dashlee-dashboard" class="not-android">
   <template>
+    <template if="{{unsupportedBrowser}}" >
+      <style>
+        .unsupported-message {
+          width: 100%;
+          padding: 8px 10px 8px 10px;
+          background-color: #F66;
+          font-size: 14px;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+      </style>
+      <div class="unsupported-message">
+        Sorry, we were too lazy to optimize this site for your current browser. Please download <b><a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a></b> for the best viewing experience.
+      </div>
+    </template>
     <link rel="stylesheet" href="dashlee-dashboard.css">
     <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
     <dashlee-loader id="loader" class="loading"></dashlee-loader>
@@ -47,11 +62,7 @@
       client_ = null,
       initialized_ = false,
       initializing_ = true,
-      statsEl_ = null,
-      ua = navigator.userAgent.toLowerCase(),
-      isAndroid_ = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-
-
+      statsEl_ = null;
 
     function computeData(sensor) {
       if (!initialized_) {
@@ -178,6 +189,7 @@
     }
 
     Polymer({
+      unsupportedBrowser: !bowser.webkit && !bowser.gecko,
       adjustCanvases: _.debounce(function() {
         self_.$.degrees.fitCanvas();
         self_.$.sound.fitCanvas();
@@ -186,7 +198,7 @@
         self_ = this;
         container_ = this.$.container;
 
-        if (isAndroid_) {
+        if (bowser.android) {
           this.classList.remove('not-android');
         }
 
@@ -211,14 +223,12 @@
         self_.addEventListener('request-stats', queryStats);
 
         self_.addEventListener('switch-for-android', function() {
-          if (isAndroid_) {
-            // shitty workaround for Android Chrome
-            // applying invert filter to wrapper element works fine on desktop + iOS
-            var items = self_.$.wrapper.querySelectorAll('.item');
+          // shitty workaround for Android Chrome
+          // applying invert filter to wrapper element works fine on desktop + iOS
+          var items = self_.$.wrapper.querySelectorAll('.item');
 
-            for (var i = 0; i < items.length; ++i) {
-              items[i].classList.toggle('invert');
-            }
+          for (var i = 0; i < items.length; ++i) {
+            items[i].classList.toggle('invert');
           }
         });
       }

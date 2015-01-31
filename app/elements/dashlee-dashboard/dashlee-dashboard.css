@@ -48,7 +48,7 @@
   text-align: center;
   border-bottom: 2px solid white;
   border-left: 2px solid white;
-  background: black url('../../images/dot.gif') repeat 20px 20px;
+  background: black url(../../images/dot.gif) repeat 20px 20px;
   flex: 1 1 auto;
 }
 
@@ -120,3 +120,5 @@ dashlee-loader.loading + .wrapper {
 .dashboard > .item /deep/ dashlee-stats-button[ischecked] + .triangle {
   display: block;
 }
+
+
