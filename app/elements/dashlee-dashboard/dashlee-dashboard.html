@@ -161,7 +161,9 @@
       var sensorId = event.detail.sensorId,
           query = event.detail.query;
 
-      if (sensorId === 'baby') {
+      if (sensorId === 'fax') {
+        statsEl_.initWithData([{values: []}]);
+      } else if (sensorId === 'baby') {
         async.parallel([
           function(callback){
             client_[query]('red').exec(function(redData) {
