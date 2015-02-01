@@ -93,8 +93,9 @@ new CronJob('* * * * *', function(){
 var previousVisits = -1;
 new CronJob('* * * * *', function(){
 	getVisits(function(err, visits) {
+		if (err) console.log(err);
 		// only send data if changed
-		if (visits.value !== previousVisits) {
+		if (visits && visits.value !== previousVisits) {
 			// update previous visits
 			previousVisits = visits.value;
 			// construct data
