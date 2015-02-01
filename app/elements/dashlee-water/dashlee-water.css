@@ -1,12 +1,15 @@
 :host {
   display: block;
 }
+svg {
+  position: absolute;
+}
 .bottle {
   display: inline-block;
   width: 138px;
   height: 208px;
   text-align: center;
-  background: url('../../images/bottle.svg') no-repeat;
+  background: url(../../images/bottle.svg) no-repeat;
   position: relative;
   left: -8px;
   top: 4px;
@@ -19,7 +22,7 @@
   height: 178px;
   animation: wave-animation 3s infinite linear;
   background-color: transparent;
-  background-image: url('../../images/wave.png');
+  background-image: url(../../images/wave.png);
   background-repeat: repeat-x;
   background-size: 118px 178px;
 }
@@ -64,8 +67,17 @@
   display: inline-block;
   width: 118px;
   height: 178px;
-  mask: url('../../images/wave_mask.svg');
+  /*mask: url(#mask);*/
+  mask: url(../../images/wave_mask.svg);
 }
+
+@-moz-document url-prefix() {
+  .level {
+    mask: url(#mask) !important;
+  }
+}
+
+
 .level[data-level='0'] .wave, .level[data-level='0'] .bubbles {
   transition: height 1.4s linear;
   height: 178px;
@@ -86,7 +98,6 @@
   transition: height .6s cubic-bezier(.175, .885, .32, 1.275);
   height: 8px;
 }
-
 @keyframes wave-animation {
   0% {
     background-position: 0 0;

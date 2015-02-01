@@ -50,7 +50,7 @@
         bufferClicks_++;
         od_.update(++self_.count);
         self_.switchStatus = !self_.switchStatus;
-        self_.fire('switch-for-android');
+        if (bowser.android) self_.fire('switch-for-android');
         self_.fireEvent();
       },
       fireEvent: _.debounce(function() {

@@ -6,7 +6,7 @@
   border-left: 2px solid white;
   border-bottom: 2px solid white;
   transition: height .4s ease;
-  background: black url('../../images/dot.gif') repeat 20px 20px;
+  background: black url(../../images/dot.gif) repeat 20px 20px;
   overflow: hidden;
 }
 

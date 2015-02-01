@@ -16,11 +16,24 @@ html {
 }
 
 body {
+  position: relative;
   background: #000;
+  margin: 0;
+  height: 100%;
   font-family: Helvetica, Arial, sans-serif;
   color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.likebox {
+  position: absolute;
+  right: 14px;
+  top: 13px;
+}
+
+.likebox .fb-like {
+  top: -4px;
 }
 
 * /deep/ .number {
@@ -51,4 +64,13 @@ body {
 
 * /deep/ .hidden {
   opacity: 0;
+}
+
+@media screen and (max-width: 640px) {
+  .likebox {
+    right: auto;
+    top: auto;
+    left: 10px;
+    bottom: 10px;
+  }
 }

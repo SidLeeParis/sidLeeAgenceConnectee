@@ -3,6 +3,14 @@
 <polymer-element name="dashlee-water">
   <template>
     <link rel="stylesheet" href="dashlee-water.css">
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <defs>
+        <mask id="mask">
+          <polygon fill="#FFFFFF" points="0,0 0,160.1 43.4,160.1 51.5,178 67.1,178 74.2,160.1 118,160.1 118,0 "></polygon>
+          </polygon>
+        </mask>
+      </defs>
+    </svg>
     <div class="column">
       <div class="date">Today</div>
       <div id="number" class="number">[[count]]</div>
