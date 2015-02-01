@@ -58,7 +58,7 @@
           }
           var d = Math.round(30 + i * width * 2 / count);
           el.style.width = el.style.height = d + 'px';
-          el.style.borderRadius = Math.round(d / 2) + 'px';
+          el.style.borderRadius = Math.floor(d / 2) + 'px';
           el.style.top = ((height - d) / 2) + 'px';
           el.style.left = ((width - d) / 2) + 'px';
         }
