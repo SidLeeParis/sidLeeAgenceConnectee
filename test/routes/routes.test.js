@@ -148,10 +148,7 @@ describe('Routes', function() {
 
 		beforeEach(function() {
 			// mock GA
-			var date = new Date();
-			var start = date.getFullYear() + '-' + date.getMonth() +1 + '-' + date.getDate();
-			var end = start;
-			var fakeUrl = '/ga?ids=ga%3A96546222&start-date=' + start + '&end-date=' + end + '&metrics=ga%3Apageviews';
+			var fakeUrl = '/ga?ids=ga%3A96546222&start-date=today&end-date=today&metrics=ga%3Apageviews';
 			var fakeData = {
 				totalsForAllResults: {
 					'ga:pageviews': 15

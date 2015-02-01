@@ -30,15 +30,11 @@ var googleAnalyticsVisits = function(callback) {
 				callback(err, null);
 			}
 
-			var date = new Date();
-			var start = date.getFullYear() + '-' + date.getMonth() +1 + '-' + date.getDate();
-			var end = start;
-
 			analytics.data.ga.get({
 				auth: authClient,
 				'ids': 'ga:96546222',
-				'start-date': start,
-				'end-date': end,
+				'start-date': 'today',
+				'end-date': 'today',
 				'metrics': 'ga:pageviews'
 			},
 			function(err, result) {

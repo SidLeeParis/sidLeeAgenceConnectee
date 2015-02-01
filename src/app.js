@@ -73,18 +73,20 @@ new CronJob('5 0 * * *', function(){
 var previousLikes = 0;
 new CronJob('* * * * *', function(){
 	getLikes(function(err, likes) {
-		// only send data if changed
-		if (likes.value !== previousLikes) {
-			// update previous likes
-			previousLikes = likes.value;
-			// construct data
-			var data = {
-				_id: likes._id,
-				date: new Date(),
-				value: likes.value,
-				unit: 'likes'
-			};
-			io.sockets.emit('event', data);
+		if (!err) {
+			// only send data if changed
+			if (likes && likes.value !== previousLikes) {
+				// update previous likes
+				previousLikes = likes.value;
+				// construct data
+				var data = {
+					_id: likes._id,
+					date: new Date(),
+					value: likes.value,
+					unit: 'likes'
+				};
+				io.sockets.emit('event', data);
+			}
 		}
 	});
 }, null, true, 'Europe/Paris');
@@ -93,19 +95,20 @@ new CronJob('* * * * *', function(){
 var previousVisits = -1;
 new CronJob('* * * * *', function(){
 	getVisits(function(err, visits) {
-		if (err) console.log(err);
-		// only send data if changed
-		if (visits && visits.value !== previousVisits) {
-			// update previous visits
-			previousVisits = visits.value;
-			// construct data
-			var data = {
-				_id: visits._id,
-				date: new Date(),
-				value: visits.value,
-				unit: 'visits'
-			};
-			io.sockets.emit('event', data);
+		if (!err) {
+			// only send data if changed
+			if (visits && visits.value !== previousVisits) {
+				// update previous visits
+				previousVisits = visits.value;
+				// construct data
+				var data = {
+					_id: visits._id,
+					date: new Date(),
+					value: visits.value,
+					unit: 'visits'
+				};
+				io.sockets.emit('event', data);
+			}
 		}
 	});
 }, null, true, 'Europe/Paris');
