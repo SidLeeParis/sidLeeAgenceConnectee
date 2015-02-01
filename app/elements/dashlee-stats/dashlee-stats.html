@@ -41,7 +41,9 @@
           showGrid: false,
           showLabel: true,
           labelInterpolationFnc: function (value, index) {
-            return value >= 1000 ? numeral(value / self_.dividor).format('0a') : value;
+            return value >= 1000 ?
+              numeral(value).format('0a') :
+              numeral(value).format('0.[00]');
           }
         },
         centerBars: true,

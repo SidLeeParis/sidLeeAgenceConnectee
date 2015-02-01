@@ -1,67 +1,94 @@
 <!doctype html>
 <html lang="EN_en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="blitz" content="mu-743ebbfb-1a4bf856-3393c110-02a21851">
-    <title>Sid Lee - Dashboard</title>
 
-    <meta property="og:title" content="Sid Lee - Monitoring Sid Lee Paris">
-    <meta property="og:site_name" content="Sid Lee">
-    <meta property="og:description" content="Monitor Sid Lee Paris in real-time.">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="blitz" content="mu-743ebbfb-1a4bf856-3393c110-02a21851">
+  <title>Sid Lee - Dashboard</title>
+
+  <meta property="og:title" content="Sid Lee - Monitoring Sid Lee Paris">
+  <meta property="og:site_name" content="Sid Lee">
+  <meta property="og:description" content="Monitor Sid Lee Paris in real-time.">
 
 
-    <!-- build:css styles/fonts.css -->
-    <link rel="stylesheet" href="styles/fonts.css" type="text/css">
-    <!-- endbuild-->
+  <!-- build:css styles/fonts.css -->
+  <link rel="stylesheet" href="styles/fonts.css" type="text/css">
+  <!-- endbuild-->
 
-    <!-- build:css styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css" type="text/css" shim-shadowdom>
-    <link rel="stylesheet" href="styles/odometer.css" type="text/css" shim-shadowdom>
-    <!-- endbuild-->
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css" type="text/css" shim-shadowdom>
+  <link rel="stylesheet" href="styles/odometer.css" type="text/css" shim-shadowdom>
+  <!-- endbuild-->
 
-    <script>
-      window.odometerOptions = {
-        auto: false,
-        duration: 2000
-      };
-    </script>
+  <script>
+  window.odometerOptions = {
+    auto: false,
+    duration: 2000
+  };
+  </script>
 
-    <!-- build:js scripts/vendors.min.js -->
-    <script src="bower_components/socket.io-client/socket.io.js"></script>
-    <script src="scripts/api/sidlee-client.js"></script>
-    <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
-    <script src="bower_components/async/lib/async.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
-    <script src="bower_components/Snap.svg/dist/snap.svg.js"></script>
-    <script src="bower_components/gsap/src/uncompressed/TweenMax.js"></script>
-    <script src="bower_components/GSAPSnapPlugin/SnapPlugin.js"></script>
-    <script src="bower_components/smoothie/smoothie.js"></script>
-    <script src="bower_components/numeral/numeral.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
-    <script src="bower_components/moment-timezone/builds/moment-timezone-with-data.js"></script>
-    <script src="bower_components/odometer/odometer.js"></script>
-    <script src="bower_components/chartist/dist/chartist.js"></script>
-    <!-- endbuild-->
+  <!-- build:js scripts/vendors.min.js -->
+  <script src="bower_components/socket.io-client/socket.io.js"></script>
+  <script src="scripts/api/sidlee-client.js"></script>
+  <script src="bower_components/bowser/src/bowser.js"></script>
+  <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+  <script src="bower_components/async/lib/async.js"></script>
+  <script src="bower_components/underscore/underscore.js"></script>
+  <script src="bower_components/Snap.svg/dist/snap.svg.js"></script>
+  <script src="bower_components/gsap/src/uncompressed/TweenMax.js"></script>
+  <script src="bower_components/GSAPSnapPlugin/SnapPlugin.js"></script>
+  <script src="bower_components/smoothie/smoothie.js"></script>
+  <script src="bower_components/numeral/numeral.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/moment-timezone/builds/moment-timezone-with-data.js"></script>
+  <script src="bower_components/odometer/odometer.js"></script>
+  <script src="bower_components/chartist/dist/chartist.js"></script>
+  <!-- endbuild-->
 
-    <!-- build:vulcanized elements/elements.vulcanized.html -->
-    <link rel="import" href="elements/elements.html">
-    <!-- endbuild-->
-  </head>
-  <body fullbleed unresolved>
+  <!-- build:vulcanized elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endbuild-->
+</head>
 
-    <dashlee-dashboard id="dashboard"></dashlee-dashboard>
-    <!-- build:js scripts/app.js -->
-    <script src="scripts/app.js"></script>
-    <!-- endbuild-->
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-57128919-2', 'auto');
-        ga('send', 'pageview');
-    </script>
-  </body>
+<body unresolved>
+  <div id="fb-root"></div>
+  <script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.0&appId=263843257087746";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+  <div class="likebox">
+    <div class="fb-like" data-href="https://dashboard.sidlee.com" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false" data-colorscheme="dark"></div>&nbsp;
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://dashboard.sidlee.com/" data-hashtags="sidleeparis">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+
+  <dashlee-dashboard id="dashboard"></dashlee-dashboard>
+  <!-- build:js scripts/app.js -->
+  <script src="scripts/app.js"></script>
+  <!-- endbuild-->
+  <script>
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-57128919-2', 'auto');
+  ga('send', 'pageview');
+  </script>
+</body>
+
 </html>

@@ -14,7 +14,8 @@
     "moment-timezone": "~0.3.0",
     "chartist": "~0.6.1",
     "numeral": "~1.5.3",
-    "async": "~0.9.2"
+    "async": "~0.9.2",
+    "bowser": "~0.7.2"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^2.0.0"

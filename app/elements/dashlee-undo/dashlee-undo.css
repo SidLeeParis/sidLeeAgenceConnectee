@@ -12,7 +12,7 @@
 
 i.apple {
   display: inline-block;
-  background: url('../../images/apple.svg') no-repeat;
+  background: url(../../images/apple.svg) no-repeat;
   width: 19px;
   height: 23px;
   position: relative;
