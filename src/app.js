@@ -61,13 +61,13 @@ router.get('/event/:name?', routes.find);
 // cron configuration
 // remove events that are one month old every day at 0h05
 // except for the tracer paper printer
-new CronJob('5 0 * * *', function(){
-	console.log('Removing events older than a month');
-	var oneMonthAgo = moment().startOf('day').subtract(1, 'M').toDate();
-	Event.remove({ name: { $ne: SensorsConf.tracer.name }, date : { $lt : oneMonthAgo } }).exec(function(err) {
-		console.log('Done removing old events');
-	});
-}, null, true, 'Europe/Paris');
+// new CronJob('5 0 * * *', function(){
+// 	console.log('Removing events older than a month');
+// 	var oneMonthAgo = moment().startOf('day').subtract(1, 'M').toDate();
+// 	Event.remove({ name: { $ne: SensorsConf.tracer.name }, date : { $lt : oneMonthAgo } }).exec(function(err) {
+// 		console.log('Done removing old events');
+// 	});
+// }, null, true, 'Europe/Paris');
 
 // query facebook graph to get likes, every minutes
 var previousLikes = 0;
