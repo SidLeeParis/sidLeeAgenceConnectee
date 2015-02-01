@@ -8,6 +8,11 @@
   transition: height .4s ease;
   background: black url(../../images/dot.gif) repeat 20px 20px;
   overflow: hidden;
+  flex: 1 1 auto;
+}
+
+:host-context(.compact) {
+  transition: none;
 }
 
 :host(.closed) {
