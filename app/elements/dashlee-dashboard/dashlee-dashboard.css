@@ -21,10 +21,6 @@
   padding-right: 10px;
 }
 
-.wrapper.compact dashlee-stats {
-  border-left: none;
-}
-
 :host(.not-android) .wrapper.invert {
   filter: invert(1);
 }

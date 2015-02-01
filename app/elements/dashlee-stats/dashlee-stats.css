@@ -13,14 +13,15 @@
 
 :host-context(.compact) {
   transition: none;
+  border-left: none;
 }
 
 :host(.closed) {
   height: 0px;
 }
 
-:host dashlee-stats-button /deep/ .clicker {
-  display: block;
+:host-context(.compact):host(.closed) {
+  border: none;
 }
 
 .content {
