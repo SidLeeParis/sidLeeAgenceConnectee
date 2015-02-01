@@ -41,3 +41,7 @@ input:checked + .clicker {
   display: block;
   transform: rotateZ(315deg);
 }
+
+:host-context(dashlee-stats) .clicker {
+  display: block;
+}
