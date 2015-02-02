@@ -18,13 +18,6 @@
       </div>
     </template>
     <link rel="stylesheet" href="dashlee-dashboard.css">
-    <!--[if IE]>
-    <style>
-      .dashboard > .item.invert {
-        border-color: white;
-      }
-    </style>
-    <![endif]-->
     <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
     <dashlee-loader id="loader" class="loading"></dashlee-loader>
     <div id="wrapper" class="wrapper {{{invert: switchStatus, compact: phoneScreen}| tokenList }}">
@@ -209,6 +202,12 @@
 
         if (bowser.android) {
           this.classList.remove('not-android');
+        }
+        else if (bowser.msie) {
+          var items = self_.$.wrapper.querySelectorAll('.item');
+          for (var i = 0; i < items.length; ++i) {
+            items[i].classList.remove('invert');
+          }
         }
 
         client_ = new SidLeeClient('https://sidlee.herokuapp.com/', computeData);
