@@ -52,11 +52,7 @@
   filter: invert(1);
 }
 
-dashlee-loader.loading {
-  opacity: 1;
-}
-
-dashlee-loader.loading + .wrapper {
+:host(.loading) .wrapper {
   height: 100vh;
   opacity: 0;
   overflow: hidden;

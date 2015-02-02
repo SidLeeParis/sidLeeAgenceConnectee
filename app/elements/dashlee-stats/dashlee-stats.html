@@ -80,6 +80,7 @@
       sensorId: '',
       currentQuery: 'last24',
       dividor: 1,
+      unit: '',
       domReady: function() {
         self_ = this;
         tooltip_ = this.$.tooltip;
@@ -199,12 +200,14 @@
           }
 
           tooltip_.style.display = 'block';
-          tooltip_.innerHTML = target.getAttribute('ct:value');
+          tooltip_.innerHTML = numeral(target.getAttribute('ct:value')).format('0.[00]') + self_.unit;
         });
 
         this.$.chart.addEventListener('mousemove', function(e) {
-          tooltip_.style.left = (e.offsetX < self_.offsetWidth - 100) ? (e.offsetX + 16) + 'px' : (e.offsetX - tooltip_.offsetWidth - 12) + 'px';
-          tooltip_.style.top = (e.offsetY - 8) + 'px';
+          var x = e.offsetX || e.layerX,
+              y = e.offsetY || e.layerY;
+          tooltip_.style.left = (x < self_.offsetWidth - 100) ? (x + 16) + 'px' : (x - tooltip_.offsetWidth - 12) + 'px';
+          tooltip_.style.top = (y - 8) + 'px';
         });
 
         this.$.loader.classList.remove('loading');

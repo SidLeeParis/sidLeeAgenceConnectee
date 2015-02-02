@@ -95,7 +95,7 @@
 
 .ct-chart .ct-label {
   display: block;
-  fill: none;
+  fill: white;
   color: white;
   text-transform: uppercase;
   font-family: 'font-idlewild';
