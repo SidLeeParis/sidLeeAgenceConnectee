@@ -52,12 +52,6 @@
   filter: invert(1);
 }
 
-:host(.loading) .wrapper {
-  height: 100vh;
-  opacity: 0;
-  overflow: hidden;
-}
-
 .wrapper.compact .dashboard > .item:last-child {
   border-bottom: none;
 }
