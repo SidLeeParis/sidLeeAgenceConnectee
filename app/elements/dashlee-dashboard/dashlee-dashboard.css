@@ -68,6 +68,7 @@ dashlee-loader.loading + .wrapper {
 
 .dashboard > .item.invert {
   border-color: black;
+  _border-color: white;
 }
 .dashboard > .item.large {
   min-width: 360px;
