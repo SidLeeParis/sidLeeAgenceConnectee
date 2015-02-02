@@ -192,13 +192,12 @@
 
     Polymer({
       get unsupportedBrowser() {
-        var supported = true;
         for (var feature in Modernizr) {
-          if (typeof Modernizr[feature] === "boolean" && Modernizr[feature] == false) {
-            supported = false;
-            break;
+          if (typeof Modernizr[feature] === "boolean" && !Modernizr[feature]) {
+            return true;
           }
         }
+        return false;
       },
       adjustCanvases: _.debounce(function() {
         self_.$.degrees.fitCanvas();
