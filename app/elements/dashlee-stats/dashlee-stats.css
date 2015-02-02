@@ -97,10 +97,8 @@
   display: block;
   fill: none;
   color: white;
-  font-family: 'Idlewild SSm A', 'Idlewild SSm B';
   text-transform: uppercase;
-  font-weight: 800;
-  font-style: normal;
+  font-family: 'font-idlewild';
   font-size: 7px;
   width: 100%;
   height: 100%;

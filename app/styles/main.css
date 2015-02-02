@@ -44,19 +44,15 @@ body {
 }
 
 * /deep/ .subtitle {
-  font-family: 'Gotham Cond SSm A', 'Gotham Cond SSm B';
-  font-weight: 200;
-  font-style: normal;
+  font-family: 'font-gotham';
   text-transform: uppercase;
   font-size: 26px;
   line-height: 0.95em;
 }
 
 * /deep/ .date {
-  font-family: 'Idlewild A', 'Idlewild B';
+  font-family: 'font-idlewild';
   text-transform: uppercase;
-  font-weight: 800;
-  font-style: normal;
   font-size: 10px;
 }
 
