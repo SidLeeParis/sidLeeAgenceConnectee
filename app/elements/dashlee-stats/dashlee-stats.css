@@ -77,8 +77,20 @@
 }
 
 .ct-chart {
+  position: relative;
   width: 100%;
   height: 210px;
+}
+
+.ct-chart .tooltip {
+  font-family: 'font-tsar';
+  font-size: 14px;
+  color: white;
+  border: 1px solid white;
+  padding: 3px 6px;
+  background-color: black;
+  position: absolute;
+  z-index: 1000;
 }
 
 .ct-chart .ct-label {
