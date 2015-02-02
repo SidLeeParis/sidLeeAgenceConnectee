@@ -18,6 +18,13 @@
       </div>
     </template>
     <link rel="stylesheet" href="dashlee-dashboard.css">
+    <!--[if IE]>
+    <style>
+      .dashboard > .item.invert {
+        border-color: white;
+      }
+    </style>
+    <![endif]-->
     <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
     <dashlee-loader id="loader" class="loading"></dashlee-loader>
     <div id="wrapper" class="wrapper {{{invert: switchStatus, compact: phoneScreen}| tokenList }}">

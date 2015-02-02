@@ -29,7 +29,7 @@ body {
 .likebox {
   position: absolute;
   right: 14px;
-  top: 13px;
+  bottom: 136px;
   z-index: 500;
 }
 
@@ -70,7 +70,6 @@ body {
 @media screen and (max-width: 640px) {
   .likebox {
     right: auto;
-    top: auto;
     left: 10px;
     bottom: 10px;
   }
