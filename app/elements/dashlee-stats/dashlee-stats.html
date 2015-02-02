@@ -12,176 +12,212 @@
         <div class="button" data-query="last30" on-click="{{requestStats}}">Days</div>
         <div class="button" data-query="last12" on-click="{{requestStats}}">Months</div>
       </div>
-      <div id="chart" class="ct-chart"></div>
+      <div id="chart" class="ct-chart"><div id="tooltip" class="tooltip" style="display:none">0</div></div>
     </div>
     <dashlee-stats-button id="button" sensorId="{{sensorId}}" isChecked="true"></dashlee-stats-button>
   </template>
   <script>
-    (function () {
+  (function() {
 
-      var self_, timeout_ = null;
-      var chart_ = null;
+    var self_, tooltip_, timeout_ = null;
+    var chart_ = null;
 
-      var options_ = {
+    var options_ = {
+      axisX: {
+        showGrid: false,
+        labelOffset: {
+          x: 0,
+          y: 10
+        },
+        labelInterpolationFnc: function(value, index) {
+          return self_.currentQuery !== 'last30' || index % 2 === 0 ? value : null;
+        }
+      },
+      axisY: {
+        labelOffset: {
+          x: 0,
+          y: 10
+        },
+        showGrid: false,
+        showLabel: true,
+        labelInterpolationFnc: function(value, index) {
+          return value >= 1000 ?
+            numeral(value).format('0a') :
+            numeral(value).format('0.[00]');
+        }
+      },
+      centerBars: true,
+      seriesBarDistance: 15
+    };
+
+    var responsiveOptions_ = [
+      ['screen and (min-width: 641px) and (max-width: 1024px)', {
+        seriesBarDistance: 10
+      }],
+      ['screen and (max-width: 640px)', {
+        seriesBarDistance: 5,
         axisX: {
-          showGrid: false,
-          labelOffset: {
-            x: 0,
-            y: 10
-          },
-          labelInterpolationFnc: function (value, index) {
-            return self_.currentQuery !== 'last30' || index % 2 === 0 ? value : null;
-          }
-        },
-        axisY: {
-          labelOffset: {
-            x: 0,
-            y: 10
-          },
-          showGrid: false,
-          showLabel: true,
-          labelInterpolationFnc: function (value, index) {
-            return value >= 1000 ?
-              numeral(value).format('0a') :
-              numeral(value).format('0.[00]');
-          }
-        },
-        centerBars: true,
-        seriesBarDistance: 15
-      };
-
-      var responsiveOptions_ = [
-        ['screen and (min-width: 641px) and (max-width: 1024px)', {
-          seriesBarDistance: 10
-        }],
-        ['screen and (max-width: 640px)', {
-          seriesBarDistance: 5,
-          axisX: {
-            labelInterpolationFnc: function (value, index) {
-              if (self_.currentQuery === 'last12')
-                return index % 2 === 0 ? value : null;
-              else return index % 5 === 0 ? value : null;
-            }
-          }
-        }]
-      ];
-
-      function normalizeData(data, max, key) {
-        // create a 0 filled array
-        var computedData = Array.apply(null, new Array(max)).map(Number.prototype.valueOf, 0);
-        // place each values at the right place
-        data.values.forEach(function(current) {
-          computedData.splice(current[key], 1, current.value / self_.dividor);
-        });
-        return computedData.reverse();
-      }
-
-      Polymer({
-        sensorId: '',
-        currentQuery: 'last24',
-        dividor: 1,
-        domReady: function() {
-          self_ = this;
-          this.classList.remove('closed');
-          timeout_ = setTimeout(function() {
-            self_.fire('request-stats', {query: self_.currentQuery, sensorId: self_.sensorId});
-          }, 400);
-        },
-        requestStats: function(event, detail, sender) {
-          if (sender.classList.contains('active')) return;
-          this.$.filters.querySelector('.active').classList.remove('active');
-          sender.classList.add('active');
-          this.currentQuery = sender.getAttribute('data-query');
-          this.$.loader.classList.add('loading');
-          if (chart_) chart_.detach();
-          this.fire('request-stats', {query: this.currentQuery, sensorId: this.sensorId});
-        },
-        initWithData: function(data) {
-
-          var key;
-          var labels = [];
-          switch(this.currentQuery) {
-            case 'last24':
-              key = 'hourAgo';
-              for (var a=0; a<24; a++) {
-                var h = moment().startOf('day').add(a, 'h');
-                labels.push(h.format('HH[h]'));
-              }
-              break;
-            case 'last12':
-              key = 'monthAgo';
-              for (var b=11; b>=0; b--) {
-                var m = moment().subtract(b, 'months');
-                labels.push(m.format('MMM'));
-              }
-              break;
-            case 'last30':
-              key = 'dayAgo';
-              for (var c=30; c>=0; c--) {
-                var d = moment().subtract(c, 'd');
-                labels.push(d.format('D/M'));
-              }
-              break;
-            default:
-              return;
-          }
-
-          var series = [];
-
-          _.each(data, function(values) {
-            var serie = normalizeData(values, labels.length, key);
-            if (self_.currentQuery === 'last24') {
-              var date = new Date();
-              var remainingHours = 24 - date.getHours() - 1;
-              serie = serie.concat(Array.apply(null, new Array(remainingHours)).map(function() { return '';})).slice(-24);
-            }
-            series.push({data: serie, className: values._id});
-          });
-
-
-          var chartData = {
-            labels: labels,
-            series: series
-          };
-
-          chart_ = new Chartist.Bar(this.$.chart, chartData, options_, responsiveOptions_);
-          var seq = 0;
-          var index = 0;
-          var changes = 1;
-          chart_.on('draw', function(data) {
-            if (chart_.created) return;
-            if(data.type === 'bar' && data.y2 !== data.y1) {
-              if (data.index <= index) {
-                seq = ++changes;
-              }
-              index = data.index;
-              // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
-              data.element.animate({
-                y2: {
-                  begin: seq++ * 80,
-                  dur: 500,
-                  from: data.y1,
-                  to: data.y2,
-                  // You can specify an easing function name or use easing functions from Chartist.Svg.Easing directly
-                  easing: Chartist.Svg.Easing.easeOutQuart
-                }
-              });
-            }
-          });
-          chart_.on('created', function() {
-            chart_.created = true;
-          });
-          this.$.loader.classList.remove('loading');
-        },
-        close: function(callback) {
-          this.classList.add('closed');
-          clearTimeout(timeout_);
-          if(callback) {
-            if (chart_) chart_.detach();
-            setTimeout(callback, 400);
+          labelInterpolationFnc: function(value, index) {
+            if (self_.currentQuery === 'last12')
+              return index % 2 === 0 ? value : null;
+            else return index % 5 === 0 ? value : null;
           }
         }
+      }]
+    ];
+
+    function normalizeData(data, max, key) {
+      // create a 0 filled array
+      var computedData = Array.apply(null, new Array(max)).map(Number.prototype.valueOf, 0);
+      // place each values at the right place
+      data.values.forEach(function(current) {
+        computedData.splice(current[key], 1, current.value / self_.dividor);
       });
-    })();
+      return computedData.reverse();
+    }
+
+    Polymer({
+      sensorId: '',
+      currentQuery: 'last24',
+      dividor: 1,
+      domReady: function() {
+        self_ = this;
+        tooltip_ = this.$.tooltip;
+        console.log(tooltip_);
+        this.classList.remove('closed');
+        timeout_ = setTimeout(function() {
+          self_.fire('request-stats', {
+            query: self_.currentQuery,
+            sensorId: self_.sensorId
+          });
+        }, 400);
+      },
+      requestStats: function(event, detail, sender) {
+        if (sender.classList.contains('active')) return;
+        this.$.filters.querySelector('.active').classList.remove('active');
+        sender.classList.add('active');
+        this.currentQuery = sender.getAttribute('data-query');
+        this.$.loader.classList.add('loading');
+        if (chart_) chart_.detach();
+        this.fire('request-stats', {
+          query: this.currentQuery,
+          sensorId: this.sensorId
+        });
+      },
+      initWithData: function(data) {
+
+        var key;
+        var labels = [];
+        switch (this.currentQuery) {
+          case 'last24':
+            key = 'hourAgo';
+            for (var a = 0; a < 24; a++) {
+              var h = moment().startOf('day').add(a, 'h');
+              labels.push(h.format('HH[h]'));
+            }
+            break;
+          case 'last12':
+            key = 'monthAgo';
+            for (var b = 11; b >= 0; b--) {
+              var m = moment().subtract(b, 'months');
+              labels.push(m.format('MMM'));
+            }
+            break;
+          case 'last30':
+            key = 'dayAgo';
+            for (var c = 30; c >= 0; c--) {
+              var d = moment().subtract(c, 'd');
+              labels.push(d.format('D/M'));
+            }
+            break;
+          default:
+            return;
+        }
+
+        var series = [];
+
+        _.each(data, function(values) {
+          var serie = normalizeData(values, labels.length, key);
+          if (self_.currentQuery === 'last24') {
+            var date = new Date();
+            var remainingHours = 24 - date.getHours() - 1;
+            serie = serie.concat(Array.apply(null, new Array(remainingHours)).map(function() {
+              return '';
+            })).slice(-24);
+          }
+          series.push({
+            data: serie,
+            className: values._id
+          });
+        });
+
+
+        var chartData = {
+          labels: labels,
+          series: series
+        };
+
+        chart_ = new Chartist.Bar(this.$.chart, chartData, options_, responsiveOptions_);
+        var seq = 0;
+        var index = 0;
+        var changes = 1;
+        chart_.on('draw', function(data) {
+          if (chart_.created) return;
+          if (data.type === 'bar' && data.y2 !== data.y1) {
+            if (data.index <= index) {
+              seq = ++changes;
+            }
+            index = data.index;
+            // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
+            data.element.animate({
+              y2: {
+                begin: seq++ * 80,
+                dur: 500,
+                from: data.y1,
+                to: data.y2,
+                // You can specify an easing function name or use easing functions from Chartist.Svg.Easing directly
+                easing: Chartist.Svg.Easing.easeOutQuart
+              }
+            });
+          }
+        });
+        chart_.on('created', function() {
+          chart_.created = true;
+        });
+
+        this.$.chart.addEventListener('mouseover', function(e) {
+          var target = e.target,
+                  related = e.relatedTarget,
+                  match;
+
+          while (target && target != document && target.matches && !(match = target.matches('.ct-bar'))) {
+            target = target.parentNode;
+          }
+          if (!match) {
+            tooltip_.style.display = 'none';
+            return;
+          }
+
+          tooltip_.style.display = 'block';
+          tooltip_.innerHTML = target.getAttribute('ct:value');
+        });
+
+        this.$.chart.addEventListener('mousemove', function(e) {
+          tooltip_.style.left = (e.offsetX < self_.offsetWidth - 100) ? (e.offsetX + 16) + 'px' : (e.offsetX - tooltip_.offsetWidth - 12) + 'px';
+          tooltip_.style.top = (e.offsetY - 8) + 'px';
+        });
+
+        this.$.loader.classList.remove('loading');
+      },
+      close: function(callback) {
+        this.classList.add('closed');
+        clearTimeout(timeout_);
+        if (callback) {
+          if (chart_) chart_.detach();
+          setTimeout(callback, 400);
+        }
+      }
+    });
+  })();
   </script>
 </polymer-element>
