@@ -84,7 +84,7 @@
       domReady: function() {
         self_ = this;
         tooltip_ = this.$.tooltip;
-        console.log(tooltip_);
+
         this.classList.remove('closed');
         timeout_ = setTimeout(function() {
           self_.fire('request-stats', {

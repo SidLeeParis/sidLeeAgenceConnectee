@@ -3,7 +3,7 @@
 <polymer-element name="dashlee-stats-button" attributes="sensorId dividor unit">
   <template>
     <link rel="stylesheet" href="dashlee-stats-button.css">
-    <input type="checkbox" on-change="{{toggleStats}}" checked="{{isChecked}}">
+    <input type="checkbox" on-click="{{toggleStats}}" checked="{{isChecked}}">
     <div class="clicker"></div>
   </template>
   <script>
@@ -19,9 +19,9 @@
         dividor: 1,
         unit: '',
         toggleStats: function(event, detail, sender) {
-          this.fire('toggle-stats', {sensorId: this.sensorId, dividor: this.dividor, unit: this.unit, hide: this.isChecked});
+          console.log(this.isChecked);
+          this.fire('toggle-stats', {sensorId: this.sensorId, dividor: this.dividor, unit: this.unit, hide: !this.isChecked});
         }
-        // define element prototype here
       });
     })();
   </script>
