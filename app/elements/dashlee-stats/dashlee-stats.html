@@ -7,13 +7,20 @@
       <div class="loader"></div>
     </div>
     <div class="content">
-      <div id="filters" class="filters">
-        <div class="button active" data-query="last24" on-click="{{requestStats}}">Hours</div>
-        <div class="button" data-query="last30" on-click="{{requestStats}}">Days</div>
-        <div class="button" data-query="last12" on-click="{{requestStats}}">Months</div>
+      <div class="filters-wrapper">
+        <div id="filters" class="filters">
+          <div class="button active" data-query="last24" on-click="{{requestStats}}">Hours</div>
+          <div class="button" data-query="last30" on-click="{{requestStats}}">Days</div>
+          <div class="button" data-query="last12" on-click="{{requestStats}}">Months</div>
+        </div>
+        <div id="moreFilters" class="more-filters {{{hidden: !isUndo, inactive: isLast12}| tokenList }}">
+          <div class="checkbox" data-filter="app" on-click="{{requestFilter}}">App</div>
+          <div class="checkbox" data-filter="user" on-click="{{requestFilter}}">User</div>
+        </div>
       </div>
-      <div id="chart" class="ct-chart"><div id="tooltip" class="tooltip" style="display:none">0</div></div>
-    </div>
+      <div id="chart" class="ct-chart {{{'filters-active': filtersActive}| tokenList }}">
+        <div id="tooltip" class="tooltip" style="display:none">0</div></div>
+      </div>
     <dashlee-stats-button id="button" sensorId="{{sensorId}}" isChecked="true"></dashlee-stats-button>
   </template>
   <script>
@@ -30,7 +37,11 @@
           y: 10
         },
         labelInterpolationFnc: function(value, index) {
-          return self_.currentQuery !== 'last30' || index % 2 === 0 ? value : null;
+          if(self_.currentFilter) {
+            return value;
+          } else {
+            return self_.currentQuery !== 'last30' || index % 2 === 0 ? value : null;
+          }
         }
       },
       axisY: {
@@ -42,7 +53,7 @@
         showLabel: true,
         labelInterpolationFnc: function(value, index) {
           return value >= 1000 ?
-            numeral(value).format('0a') :
+            numeral(value).format('0.[0]a') :
             numeral(value).format('0.[00]');
         }
       },
@@ -51,16 +62,31 @@
     };
 
     var responsiveOptions_ = [
-      ['screen and (min-width: 641px) and (max-width: 1024px)', {
-        seriesBarDistance: 10
+      ['screen and (min-width: 641px) and (max-width: 900px)', {
+        seriesBarDistance: 10,
+        axisX: {
+          labelInterpolationFnc: function(value, index) {
+            if(self_.currentFilter) {
+              return value;
+            }
+            else {
+              return self_.currentQuery === 'last12' || index % 2 === 0 ? value : null;
+            }
+          }
+        }
       }],
       ['screen and (max-width: 640px)', {
         seriesBarDistance: 5,
         axisX: {
           labelInterpolationFnc: function(value, index) {
-            if (self_.currentQuery === 'last12')
-              return index % 2 === 0 ? value : null;
-            else return index % 5 === 0 ? value : null;
+            if(self_.currentFilter) {
+              return value;
+            }
+            else {
+              if (self_.currentQuery === 'last12')
+                return index % 2 === 0 ? value : null;
+              else return index % 5 === 0 ? value : null;
+            }
           }
         }
       }]
@@ -79,8 +105,14 @@
     Polymer({
       sensorId: '',
       currentQuery: 'last24',
+      currentFilter: null,
       multiplicator: 1,
       unit: '',
+      computed: {
+        isUndo: 'sensorId === "undo"',
+        isLast12: 'currentQuery === "last12"',
+        filtersActive: 'currentFilter !== null && currentQuery !== "last12"'
+      },
       domReady: function() {
         self_ = this;
         tooltip_ = this.$.tooltip;
@@ -95,6 +127,7 @@
       },
       requestStats: function(event, detail, sender) {
         if (sender.classList.contains('active')) return;
+        tooltip_.style.display = 'none';
         this.$.filters.querySelector('.active').classList.remove('active');
         sender.classList.add('active');
         this.currentQuery = sender.getAttribute('data-query');
@@ -102,55 +135,95 @@
         if (chart_) chart_.detach();
         this.fire('request-stats', {
           query: this.currentQuery,
-          sensorId: this.sensorId
+          sensorId: this.sensorId,
+          filter: this.currentFilter
+        });
+      },
+      requestFilter: function(event, detail, sender) {
+        if (self_.currentQuery ===  'last12') {
+          return;
+        }
+        tooltip_.style.display = 'none';
+        if (sender.classList.contains('active')) {
+          sender.classList.remove('active');
+          this.currentFilter = null;
+        } else {
+          var prevActive = this.$.moreFilters.querySelector('.active');
+          if (prevActive) prevActive.classList.remove('active');
+          sender.classList.add('active');
+          this.currentFilter = sender.getAttribute('data-filter');
+        }
+
+        this.$.loader.classList.add('loading');
+        if (chart_) chart_.detach();
+        this.fire('request-stats', {
+          query: this.currentQuery,
+          sensorId: this.sensorId,
+          filter: this.currentFilter
         });
       },
       initWithData: function(data) {
 
-        var key;
-        var labels = [];
-        switch (this.currentQuery) {
-          case 'last24':
-            key = 'hourAgo';
-            for (var a = 0; a < 24; a++) {
-              var h = moment().startOf('day').add(a, 'h');
-              labels.push(h.format('HH[h]'));
-            }
-            break;
-          case 'last12':
-            key = 'monthAgo';
-            for (var b = 11; b >= 0; b--) {
-              var m = moment().subtract(b, 'months');
-              labels.push(m.format('MMM'));
-            }
-            break;
-          case 'last30':
-            key = 'dayAgo';
-            for (var c = 30; c >= 0; c--) {
-              var d = moment().subtract(c, 'd');
-              labels.push(d.format('D/M'));
-            }
-            break;
-          default:
-            return;
-        }
-
         var series = [];
+        var labels = [];
 
-        _.each(data, function(values) {
-          var serie = normalizeData(values, labels.length, key);
-          if (self_.currentQuery === 'last24') {
-            var date = new Date();
-            var remainingHours = 24 - date.getHours() - 1;
-            serie = serie.concat(Array.apply(null, new Array(remainingHours)).map(function() {
-              return '';
-            })).slice(-24);
-          }
-          series.push({
-            data: serie,
-            className: values._id
+        if (self_.currentFilter && self_.currentQuery !== 'last12') {
+          _.each(data, function(values) {
+            values.values = values.values.slice(0, 12);
+            labels = values.values.map(function(value, index) {
+              return value[self_.currentFilter] || 'unknown';
+            });
+            series.push(values.values.map(function(value, index) {
+              return {
+                meta: value[self_.currentFilter] || 'unknown',
+                value: value.value
+              };
+            }));
           });
-        });
+        }
+        else {
+          var key;
+          switch (self_.currentQuery) {
+            case 'last24':
+              key = 'hourAgo';
+              for (var a = 0; a < 24; a++) {
+                var h = moment().startOf('day').add(a, 'h');
+                labels.push(h.format('HH[h]'));
+              }
+              break;
+            case 'last12':
+              key = 'monthAgo';
+              for (var b = 11; b >= 0; b--) {
+                var m = moment().subtract(b, 'months');
+                labels.push(m.format('MMM'));
+              }
+              break;
+            case 'last30':
+              key = 'dayAgo';
+              for (var c = 30; c >= 0; c--) {
+                var d = moment().subtract(c, 'd');
+                labels.push(d.format('D/M'));
+              }
+              break;
+            default:
+              return;
+          }
+
+          _.each(data, function(values) {
+            var serie = normalizeData(values, labels.length, key);
+            if (self_.currentQuery === 'last24') {
+              var date = new Date();
+              var remainingHours = 24 - date.getHours() - 1;
+              serie = serie.concat(Array.apply(null, new Array(remainingHours)).map(function() {
+                return '';
+              })).slice(-24);
+            }
+            series.push({
+              data: serie,
+              className: values._id
+            });
+          });
+        }
 
 
         var chartData = {
@@ -200,12 +273,17 @@
           }
 
           tooltip_.style.display = 'block';
-          tooltip_.innerHTML = numeral(target.getAttribute('ct:value')).format('0.[00]') + self_.unit;
+          var html = numeral(target.getAttribute('ct:value')).format('0.[00]') + self_.unit;
+          if (self_.currentFilter) {
+            html = target.getAttribute('ct:meta') + ': ' + html;
+          }
+          tooltip_.innerHTML = html;
         });
 
         this.$.chart.addEventListener('mousemove', function(e) {
           var x = e.offsetX || e.layerX,
-              y = e.offsetY || e.layerY;
+              y = (e.offsetY || e.layerY);
+
           tooltip_.style.left = (x < self_.offsetWidth - 100) ? (x + 16) + 'px' : (x - tooltip_.offsetWidth - 12) + 'px';
           tooltip_.style.top = (y - 8) + 'px';
         });
@@ -216,7 +294,9 @@
         this.classList.add('closed');
         clearTimeout(timeout_);
         if (callback) {
-          if (chart_) chart_.detach();
+          if (chart_) {
+            chart_.detach();
+          }
           setTimeout(callback, 400);
         }
       }

@@ -24,6 +24,9 @@
           value: self_.count
         });
       },
+      fit: function() {
+        if(self_) self_.setCountTo(self_.count);
+      },
       ready: function() {
         self_ = this;
         circles_ = this.$.circles;

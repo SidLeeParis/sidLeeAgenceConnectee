@@ -58,7 +58,7 @@
         },
         domReady: function() {
           setTimeout(function() {
-            self_.fitCanvas();
+            self_.fit();
 
             var smoothie = new SmoothieChart({
               interpolation: 'beziers',
@@ -97,7 +97,7 @@
           od_.update(self_.count);
           //line1_.append(new Date().getTime(), self_.count);
         },
-        fitCanvas: function() {
+        fit: function() {
           self_.$.canvas.width  = self_.clientWidth;
         },
       });

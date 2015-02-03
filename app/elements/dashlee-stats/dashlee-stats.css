@@ -20,12 +20,14 @@
   height: 0px;
 }
 
-:host-context(.compact):host(.closed) {
-  border: none;
-}
-
 .content {
   padding: 10px 30px;
+  height: 100%;
+  width: 100%;
+}
+
+:host-context(.compact) .content {
+  padding: 10px 10px;
 }
 
 .loader-wrapper {
@@ -45,16 +47,31 @@
   visibility: hidden;
 }
 
-.filters {
-  width: 100%;
-  height: 30px;
+.filters-wrapper {
+  height:30px;
 }
 
+:host-context(.compact) .filters-wrapper {
+  height: 50px;
+}
+
+.filters, .more-filters {
+  display: inline-block;
+}
+
+.more-filters {
+  margin-left: 20px;
+}
+
+:host-context(.compact) .filters, :host-context(.compact) .more-filters {
+  display: block;
+  margin: 0;
+}
 
 .filters .button {
   display: inline-block;
   width: 80px;
-  margin-right: 10px;
+  margin: 0 10px 6px 0;
   text-align: center;
   border: 2px solid white;
   border-radius: 6px;
@@ -66,7 +83,7 @@
   cursor: pointer;
 }
 
-.filters .button:last-child {
+.filters .button:last-child, .more-filters .checkbox:last-child {
   margin-right: 0;
 }
 
@@ -76,10 +93,51 @@
   cursor: default;
 }
 
-.ct-chart {
+.more-filters.hidden {
+  display: none;
+}
+
+.more-filters.inactive {
+  opacity: .4;
+}
+
+.more-filters.inactive .checkbox {
+  cursor: default;
+}
+
+.more-filters .checkbox {
+  display: inline-block;
+  margin: 0 10px 6px 0;
+  font-family: 'font-tsar';
+  text-transform: uppercase;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.more-filters .checkbox::before {
+  content: "";
+  display: inline-block;
   position: relative;
+  width: 5px;
+  height: 5px;
+  top: -1px;
+  border: 1px solid #FFF;
+  margin-right: 6px;
+}
+
+.more-filters .checkbox.active::before {
+  background-color: white;
+}
+
+.ct-chart {
   width: 100%;
-  height: 210px;
+  height: 208px;
+  position: relative;
+}
+
+
+:host-context(.compact) .ct-chart {
+  height: 188px;
 }
 
 .ct-chart .tooltip {
@@ -106,6 +164,13 @@
 
 .ct-chart .ct-label.ct-horizontal {
   text-align: center;
+}
+
+.ct-chart.filters-active .ct-label.ct-horizontal {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 2px;
+  overflow: hidden;
 }
 
 .ct-chart .ct-label.ct-vertical {
