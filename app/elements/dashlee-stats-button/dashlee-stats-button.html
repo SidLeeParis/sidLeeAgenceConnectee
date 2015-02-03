@@ -19,7 +19,6 @@
         multiplicator: 1,
         unit: '',
         toggleStats: function(event, detail, sender) {
-          console.log(this.isChecked);
           this.fire('toggle-stats', {sensorId: this.sensorId, multiplicator: this.multiplicator, unit: this.unit, hide: !this.isChecked});
         }
       });

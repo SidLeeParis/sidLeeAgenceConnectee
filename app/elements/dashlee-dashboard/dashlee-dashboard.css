@@ -112,6 +112,10 @@
   z-index: 10000;
 }
 
+.wrapper.compact .dashboard > dashlee-stats.closed {
+  border: none;
+}
+
 .dashboard > .item /deep/ dashlee-stats-button[ischecked] + .triangle {
   display: block;
 }

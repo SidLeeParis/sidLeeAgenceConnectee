@@ -1,4 +1,4 @@
-var DEBUG_MODE_ON = false;
+var DEBUG_MODE_ON = true;
 
 if (!DEBUG_MODE_ON) {
   console = console || {};
@@ -14,7 +14,7 @@ if (!DEBUG_MODE_ON) {
     console.log('Polymer is ready to rock!');
 
     dashboard_ = document.querySelector('#dashboard');
-    window.onresize = dashboard_.adjustCanvases;
+    window.onresize = dashboard_.fit;
 
   });
 
