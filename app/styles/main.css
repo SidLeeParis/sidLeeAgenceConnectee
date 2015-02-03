@@ -67,7 +67,7 @@ body {
   opacity: 0;
 }
 
-.loader-wrapper {
+.main-loader-wrapper {
   display: block;
   position: absolute;
   top: 0;
@@ -76,11 +76,10 @@ body {
   height: 100vh;
   background-color: black;
   opacity: 0;
-  /*transition: opacity .5s ease;*/
   z-index: 1000;
 }
 
-.loader-wrapper > .loader {
+.main-loader-wrapper > .loader {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -91,7 +90,7 @@ body {
   height: 40px;
   width: 40px;
 }
-.loader-wrapper > .loader:before, .loader-wrapper > .loader:after {
+.main-loader-wrapper > .loader:before, .loader-wrapper > .loader:after {
   content: "";
   position: absolute;
   left: 50%;
@@ -103,15 +102,15 @@ body {
   height: 42px;
   width: 42px;
 }
-.loader-wrapper > .loader:before {
+.main-loader-wrapper > .loader:before {
   background-color: white;
   animation: expand 1.6s linear infinite both;
 }
-.loader-wrapper > .loader:after {
+.main-loader-wrapper > .loader:after {
   background-color: black;
   animation: expand 1.6s linear 0.8s infinite both;
 }
-dashlee-dashboard.loading + .loader-wrapper {
+dashlee-dashboard.loading + .main-loader-wrapper {
   opacity: 1;
 }
 
