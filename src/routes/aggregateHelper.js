@@ -487,6 +487,7 @@ var undo = function(sensorConf, callback) {
 			_id: '$user',
 			value: { $sum: '$value' }
 		});
+		aggregate.sort('-value');
 		aggregate.group({
 			_id: 'undo',
 			values: {
@@ -502,6 +503,7 @@ var undo = function(sensorConf, callback) {
 			_id: '$app',
 			value: { $sum: '$value' }
 		});
+		aggregate.sort('-value');
 		aggregate.group({
 			_id: 'undo',
 			values: {
@@ -512,7 +514,7 @@ var undo = function(sensorConf, callback) {
 			}
 		});
 	}
-	aggregate.sort('-values.value');
+
 	aggregate.exec(callback);
 };
 
