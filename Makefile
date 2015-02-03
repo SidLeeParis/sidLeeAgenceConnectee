@@ -23,7 +23,7 @@ front-test:
 test: back-test front-test
 
 jshint:
-	$(JSHINT) src test app/scripts
+	$(JSHINT) src test app/scripts/api
 coverage:
 	@# check if reports folder exists, if not create it
 	@test -d reports || mkdir reports
