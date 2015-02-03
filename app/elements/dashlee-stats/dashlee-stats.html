@@ -9,9 +9,9 @@
     <div class="content">
       <div class="filters-wrapper">
         <div id="filters" class="filters">
-          <div class="button active" data-query="last24" on-click="{{requestStats}}">Hours</div>
-          <div class="button" data-query="last30" on-click="{{requestStats}}">Days</div>
-          <div class="button" data-query="last12" on-click="{{requestStats}}">Months</div>
+          <div class="button active" data-query="last24" on-click="{{requestStats}}">Day</div>
+          <div class="button" data-query="last30" on-click="{{requestStats}}">Month</div>
+          <div class="button" data-query="last12" on-click="{{requestStats}}">Year</div>
         </div>
         <div id="moreFilters" class="more-filters {{{hidden: !isUndo, inactive: isLast12}| tokenList }}">
           <div class="checkbox" data-filter="app" on-click="{{requestFilter}}">App</div>
