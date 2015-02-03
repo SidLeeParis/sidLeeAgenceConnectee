@@ -19,7 +19,6 @@ body {
   position: relative;
   background: #000;
   margin: 0;
-  height: 100%;
   font-family: Helvetica, Arial, sans-serif;
   color: #fff;
   -webkit-font-smoothing: antialiased;
@@ -29,7 +28,8 @@ body {
 .likebox {
   position: absolute;
   right: 14px;
-  top: 13px;
+  bottom: 136px;
+  z-index: 500;
 }
 
 .likebox .fb-like {
@@ -66,10 +66,69 @@ body {
   opacity: 0;
 }
 
+.loader-wrapper {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 0;
+  /*transition: opacity .5s ease;*/
+  z-index: 1000;
+}
+
+.loader-wrapper > .loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -20px 0 0 -20px;
+  background-color: black;
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px white;
+  height: 40px;
+  width: 40px;
+}
+.loader-wrapper > .loader:before, .loader-wrapper > .loader:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  margin: -21px 0 0 -21px;
+  border-radius: 50%;
+  z-index: 2;
+  height: 42px;
+  width: 42px;
+}
+.loader-wrapper > .loader:before {
+  background-color: white;
+  animation: expand 1.6s linear infinite both;
+}
+.loader-wrapper > .loader:after {
+  background-color: black;
+  animation: expand 1.6s linear 0.8s infinite both;
+}
+dashlee-dashboard.loading + .loader-wrapper {
+  opacity: 1;
+}
+
+@keyframes expand {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    z-index: 1;
+  }
+}
+
 @media screen and (max-width: 640px) {
   .likebox {
     right: auto;
-    top: auto;
     left: 10px;
     bottom: 10px;
   }

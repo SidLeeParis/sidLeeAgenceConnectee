@@ -11,7 +11,7 @@
   <meta property="og:title" content="Sid Lee Paris Dashboard">
   <meta property="og:site_name" content="Sid Lee">
   <meta property="og:description" content="Monitor Sid Lee Paris in real-time.">
-  <meta property="og:url" content="https://dashboard.sidlee.com/">
+  <meta property="og:url" content="http://dashboard.sidlee.com/">
   <meta property="fb:app_id" content="263843257087746">
 
 
@@ -34,6 +34,7 @@
   <!-- build:js scripts/vendors.min.js -->
   <script src="bower_components/socket.io-client/socket.io.js"></script>
   <script src="scripts/api/sidlee-client.js"></script>
+  <script src="scripts/modernizr/modernizr.custom.js"></script>
   <script src="bower_components/bowser/src/bowser.js"></script>
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
   <script src="bower_components/async/lib/async.js"></script>
@@ -54,7 +55,7 @@
   <!-- endbuild-->
 </head>
 
-<body unresolved>
+<body>
   <div id="fb-root"></div>
   <script>
   (function(d, s, id) {
@@ -67,12 +68,16 @@
   }(document, 'script', 'facebook-jssdk'));
   </script>
 
-  <div class="likebox">
-    <div class="fb-like" data-href="https://dashboard.sidlee.com/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" data-colorscheme="dark"></div>&nbsp;
-    <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://dashboard.sidlee.com/" data-hashtags="sidleeparis">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  <dashlee-dashboard id="dashboard" class="loading"></dashlee-dashboard>
+  <div id="loader" class="loader-wrapper">
+    <div class="loader"></div>
   </div>
 
-  <dashlee-dashboard id="dashboard"></dashlee-dashboard>
+  <div class="likebox">
+    <div class="fb-like" data-href="http://dashboard.sidlee.com/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" data-colorscheme="dark"></div>&nbsp;
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://dashboard.sidlee.com/" data-hashtags="sidleeparis">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
   <!-- endbuild-->

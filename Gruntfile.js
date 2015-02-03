@@ -236,7 +236,8 @@ module.exports = function(grunt) {
             '!elements/**/*.css',
             'images/{,*/}*.{webp,gif,svg}',
             'bower_components/**',
-            'styles/fonts/*' // <-- Where fonts are copied.
+            'styles/fonts/**', // <-- Where fonts are copied.
+            '!styles/fonts/licensed/**' // <-- fonts from Typography already there
           ]
         }]
       },

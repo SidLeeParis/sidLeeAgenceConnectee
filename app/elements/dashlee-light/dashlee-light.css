@@ -31,5 +31,19 @@
 .circles .circle {
   border: 1px dashed white;
   position: absolute;
+  animation: rotating 20s linear infinite;
 /*  transition: all .7s ease;*/
+}
+
+.circles .circle:nth-child(even) {
+  animation: rotating 20s linear infinite reverse;
+}
+
+@keyframes rotating {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
 }
