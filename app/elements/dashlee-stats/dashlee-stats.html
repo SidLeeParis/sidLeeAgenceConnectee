@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="dashlee-stats" class="closed" attributes="sensorId dividor">
+<polymer-element name="dashlee-stats" class="closed" attributes="sensorId multiplicator">
   <template>
     <link rel="stylesheet" href="dashlee-stats.css">
     <div id="loader" class="loader-wrapper loading">
@@ -71,7 +71,7 @@
       var computedData = Array.apply(null, new Array(max)).map(Number.prototype.valueOf, 0);
       // place each values at the right place
       data.values.forEach(function(current) {
-        computedData.splice(current[key], 1, current.value / self_.dividor);
+        computedData.splice(current[key], 1, current.value * self_.multiplicator);
       });
       return computedData.reverse();
     }
@@ -79,7 +79,7 @@
     Polymer({
       sensorId: '',
       currentQuery: 'last24',
-      dividor: 1,
+      multiplicator: 1,
       unit: '',
       domReady: function() {
         self_ = this;
