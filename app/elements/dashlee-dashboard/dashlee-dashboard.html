@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="dashlee-dashboard" class="not-android">
+<polymer-element name="dashlee-dashboard">
   <template>
     <template if="{{unsupportedBrowser}}" >
       <style>
@@ -209,8 +209,10 @@
 
         if (bowser.android) {
           this.classList.remove('not-android');
+          console.log('removing android');
         }
         if (!Modernizr.cssfilters) {
+          console.log('removing invert');
           var items = self_.$.wrapper.querySelectorAll('.item');
           for (var i = 0; i < items.length; ++i) {
             items[i].classList.remove('invert');
