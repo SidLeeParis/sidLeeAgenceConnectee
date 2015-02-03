@@ -19,7 +19,6 @@
     </template>
     <link rel="stylesheet" href="dashlee-dashboard.css">
     <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></core-media-query>
-    <dashlee-loader id="loader" class="loading"></dashlee-loader>
     <div id="wrapper" class="wrapper {{{invert: switchStatus, compact: phoneScreen}| tokenList }}">
       <dashlee-header compact="{{phoneScreen}}"></dashlee-header>
       <div id="container" class="dashboard" layout vertical?="{{phoneScreen}}" horizontal?="{{!phoneScreen}}" wrap>
@@ -51,7 +50,6 @@
   (function() {
     /*jslint nomen: true */
     /*global _, PolymerExpressions, SidLeeClient */
-
     PolymerExpressions.prototype.plus = function(value, i) {
       var result = value + i;
       return (result < 0) ? "" : result;
@@ -101,11 +99,11 @@
 
     function removeLoader() {
       setTimeout(function() {
-        self_.$.loader.classList.remove('loading');
+        self_.classList.remove('loading');
         self_.adjustCanvases();
       }, 300);
       setTimeout(function() {
-        self_.$.loader.remove();
+        document.querySelector('#loader').remove();
       }, 1000);
     }
 
@@ -123,6 +121,7 @@
       statsEl_ = document.createElement('dashlee-stats');
       statsEl_.sensorId = sensorId;
       statsEl_.dividor = dividor;
+      statsEl_.unit = event.detail.unit || '';
       container_.insertBefore(statsEl_, container_.children[i]);
     }
 
@@ -161,7 +160,9 @@
       var sensorId = event.detail.sensorId,
           query = event.detail.query;
 
-      if (sensorId === 'baby') {
+      if (sensorId === 'fax') {
+        statsEl_.initWithData([{values: []}]);
+      } else if (sensorId === 'baby') {
         async.parallel([
           function(callback){
             client_[query]('red').exec(function(redData) {
@@ -189,17 +190,31 @@
     }
 
     Polymer({
-      unsupportedBrowser: !bowser.webkit && !bowser.gecko,
+      get unsupportedBrowser() {
+        for (var feature in Modernizr) {
+          if (typeof Modernizr[feature] === "boolean" && !Modernizr[feature]) {
+            return true;
+          }
+        }
+        return false;
+      },
       adjustCanvases: _.debounce(function() {
         self_.$.degrees.fitCanvas();
         self_.$.sound.fitCanvas();
       }, 300),
       ready: function() {
+
         self_ = this;
         container_ = this.$.container;
 
         if (bowser.android) {
           this.classList.remove('not-android');
+        }
+        if (!Modernizr.cssfilters) {
+          var items = self_.$.wrapper.querySelectorAll('.item');
+          for (var i = 0; i < items.length; ++i) {
+            items[i].classList.remove('invert');
+          }
         }
 
         client_ = new SidLeeClient('https://sidlee.herokuapp.com/', computeData);

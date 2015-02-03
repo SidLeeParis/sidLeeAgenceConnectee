@@ -21,10 +21,6 @@
   padding-right: 10px;
 }
 
-.wrapper.compact dashlee-stats {
-  border-left: none;
-}
-
 :host(.not-android) .wrapper.invert {
   filter: invert(1);
 }
@@ -56,23 +52,12 @@
   filter: invert(1);
 }
 
-dashlee-loader.loading {
-  opacity: 1;
-}
-
-dashlee-loader.loading + .wrapper {
-  height: 100vh;
-  opacity: 0;
-  overflow: hidden;
-}
-
 .wrapper.compact .dashboard > .item:last-child {
   border-bottom: none;
 }
 
 .dashboard > .item.invert {
-  border-bottom: 2px solid black;
-  border-left: 2px solid black;
+  border-color: black;
 }
 .dashboard > .item.large {
   min-width: 360px;
