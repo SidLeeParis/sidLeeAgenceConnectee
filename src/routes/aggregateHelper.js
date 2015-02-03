@@ -512,6 +512,7 @@ var undo = function(sensorConf, callback) {
 			}
 		});
 	}
+	aggregate.sort('-values.value');
 	aggregate.exec(callback);
 };
 
