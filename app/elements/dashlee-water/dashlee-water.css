@@ -71,13 +71,6 @@ svg {
   mask: url(../../images/wave_mask.svg);
 }
 
-@-moz-document url-prefix() {
-  .level {
-    mask: url(#mask) !important;
-  }
-}
-
-
 .level[data-level='0'] .wave, .level[data-level='0'] .bubbles {
   transition: height 1.4s linear;
   height: 178px;

@@ -22,7 +22,7 @@
     </div>
     <div class="column">
       <div class="bottle">
-        <div id="level" class="level" data-level="4">
+        <div id="level" class="level" data-level="4" style="{{firefoxInlineStyle}}">
           <div class="wave"></div>
           <div id="bubbles" class="bubbles"></div>
         </div>
@@ -45,6 +45,7 @@
       ready: function() {
         self_ = this;
       },
+      firefoxInlineStyle: bowser.gecko ? 'mask: url(#mask)' : '',
       attached: function() {
         od_ = new Odometer({
           el: self_.$.number,
