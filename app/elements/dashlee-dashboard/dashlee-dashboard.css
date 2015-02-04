@@ -22,8 +22,8 @@
 }
 
 .wrapper.compact dashlee-header, .wrapper.compact dashlee-footer {
-  padding-left: 10px;
-  padding-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 :host(.not-android) .wrapper.invert {
