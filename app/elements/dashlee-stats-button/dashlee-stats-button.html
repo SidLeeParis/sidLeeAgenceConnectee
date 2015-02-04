@@ -1,9 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="dashlee-stats-button" attributes="sensorId dividor unit">
+<polymer-element name="dashlee-stats-button" attributes="sensorId multiplicator unit">
   <template>
     <link rel="stylesheet" href="dashlee-stats-button.css">
-    <input type="checkbox" on-change="{{toggleStats}}" checked="{{isChecked}}">
+    <input type="checkbox" on-click="{{toggleStats}}" checked="{{isChecked}}">
     <div class="clicker"></div>
   </template>
   <script>
@@ -16,12 +16,11 @@
           }
         },
         sensorId: '',
-        dividor: 1,
+        multiplicator: 1,
         unit: '',
         toggleStats: function(event, detail, sender) {
-          this.fire('toggle-stats', {sensorId: this.sensorId, dividor: this.dividor, unit: this.unit, hide: this.isChecked});
+          this.fire('toggle-stats', {sensorId: this.sensorId, multiplicator: this.multiplicator, unit: this.unit, hide: !this.isChecked});
         }
-        // define element prototype here
       });
     })();
   </script>
