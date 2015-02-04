@@ -28,9 +28,9 @@ body {
 .likebox {
   position: absolute;
   right: 14px;
-  bottom: 136px;
+  bottom: 146px;
   z-index: 500;
-  display: none; /* warning: remove */;
+  display: none; /* warning: remove */
 }
 
 .likebox .fb-like {
@@ -130,6 +130,6 @@ dashlee-dashboard.loading + .main-loader-wrapper {
   .likebox {
     right: auto;
     left: 10px;
-    bottom: 10px;
+    bottom: 20px;
   }
 }

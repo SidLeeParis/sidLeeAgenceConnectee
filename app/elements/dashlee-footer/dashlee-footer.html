@@ -4,9 +4,10 @@
   <template>
     <style>
       :host {
-        padding: 28px 0 47px 0;
+        margin: 28px 0 57px 0;
         display: block;
         text-transform: uppercase;
+        position: relative;
       }
       .footer-agency {
         font-family: 'font-tsar';
@@ -17,6 +18,31 @@
         font-family: 'font-gotham';
         font-size: 16px;
       }
+      .footer-credits {
+        font-family: 'font-tsar';
+        font-size: 10px;
+        letter-spacing: 1px;
+        color: #555;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        text-align: right;
+      }
+
+      .footer-credits a {
+        transition: color .35s ease;
+      }
+
+      .footer-credits a:hover {
+        color: #AAA;
+      }
+
+      :host-context(.compact) .footer-credits {
+        margin-top: 10px;
+        position: relative;
+        text-align: left;
+      }
+
     </style>
     <div class="footer-agency">
       SID LEE<br>
@@ -27,6 +53,11 @@
       75002 PARIS<br>
       FRANCE<br>
       +33 (0)1 44 88 83 90
+    </div>
+    <div class="footer-credits">
+      Art direction: <a href="http://www.playgroundparis.com/" target="_blank">Playground Paris</a><br>
+      Arduino and Server: <a href="http://drangies.fr" target="_blank">Xavier Seignard</a><br>
+      Front end: <a href="https://twitter.com/davidbismut" target="_blank">@davidbismut</a>
     </div>
   </template>
 </polymer-element>
