@@ -1,7 +1,12 @@
 :host {
   display: block;
   width: 100%;
-  height: 100%;
+}
+
+:host(.loading) {
+  visibility: hidden;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .wrapper {
@@ -52,6 +57,11 @@
   filter: invert(1);
 }
 
+.dashboard > dashlee-light.item {
+  background-color: black;
+  background-image: none;
+}
+
 .wrapper.compact .dashboard > .item:last-child {
   border-bottom: none;
 }
@@ -100,6 +110,10 @@
   border-width: 0 10px 10px 10px;
   border-color: transparent transparent #ffffff transparent;
   z-index: 10000;
+}
+
+.wrapper.compact .dashboard > dashlee-stats.closed {
+  border: none;
 }
 
 .dashboard > .item /deep/ dashlee-stats-button[ischecked] + .triangle {

@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="dashlee-dashboard" class="not-android">
+<polymer-element name="dashlee-dashboard">
   <template>
     <template if="{{unsupportedBrowser}}" >
       <style>
@@ -100,7 +100,7 @@
     function removeLoader() {
       setTimeout(function() {
         self_.classList.remove('loading');
-        self_.adjustCanvases();
+        self_.fit();
       }, 300);
       setTimeout(function() {
         document.querySelector('#loader').remove();
@@ -110,7 +110,7 @@
     function showStats(event) {
 
       var sensorId = event.detail.sensorId,
-          dividor = event.detail.dividor,
+          multiplicator = event.detail.multiplicator,
           target = self_.$[sensorId],
           index = Array.prototype.indexOf.call(container_.children, target);
 
@@ -120,7 +120,7 @@
 
       statsEl_ = document.createElement('dashlee-stats');
       statsEl_.sensorId = sensorId;
-      statsEl_.dividor = dividor;
+      statsEl_.multiplicator = multiplicator;
       statsEl_.unit = event.detail.unit || '';
       container_.insertBefore(statsEl_, container_.children[i]);
     }
@@ -157,20 +157,28 @@
     }
 
     function queryStats(event) {
+      console.log('querying', event.detail);
       var sensorId = event.detail.sensorId,
-          query = event.detail.query;
+          query = event.detail.query,
+          filter = event.detail.filter;
+
+      /* for now we don't authorize filter query for anything else than undo */
+      if (filter && sensorId !== 'undo') {
+        console.log('Filter error, nice try', sensorId);
+        return;
+      }
 
       if (sensorId === 'fax') {
         statsEl_.initWithData([{values: []}]);
       } else if (sensorId === 'baby') {
         async.parallel([
           function(callback){
-            client_[query]('red').exec(function(redData) {
+            client_[query]('red', filter).exec(function(redData) {
               callback(null, redData);
             });
           },
           function(callback){
-            client_[query]('blue').exec(function(blueData) {
+            client_[query]('blue', filter).exec(function(blueData) {
               callback(null, blueData);
             });
           }
@@ -182,7 +190,7 @@
         });
       }
       else {
-        client_[query](sensorId).exec(function(data) {
+        client_[query](sensorId, filter).exec(function(data) {
           if (! statsEl_ || statsEl_.sensorId !== sensorId) return;
           statsEl_.initWithData([data]);
         });
@@ -198,9 +206,10 @@
         }
         return false;
       },
-      adjustCanvases: _.debounce(function() {
-        self_.$.degrees.fitCanvas();
-        self_.$.sound.fitCanvas();
+      fit: _.debounce(function() {
+        self_.$.degrees.fit();
+        self_.$.sound.fit();
+        self_.$.light.fit();
       }, 300),
       ready: function() {
 
@@ -209,8 +218,10 @@
 
         if (bowser.android) {
           this.classList.remove('not-android');
+          console.log('removing android');
         }
         if (!Modernizr.cssfilters) {
+          console.log('removing invert');
           var items = self_.$.wrapper.querySelectorAll('.item');
           for (var i = 0; i < items.length; ++i) {
             items[i].classList.remove('invert');
