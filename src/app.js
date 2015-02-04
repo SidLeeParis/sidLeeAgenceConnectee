@@ -114,6 +114,10 @@ new CronJob('* * * * *', function(){
 	});
 }, null, true, 'Europe/Paris');
 
+// only use websockets, no polling because of multiple dynos on heroku
+// multiple dynos causes the session to be not shared
+io.set('transports', ['websocket']);
+
 // websocket configuration
 io.on('connection', function (socket) {
 	console.log('client connected');
