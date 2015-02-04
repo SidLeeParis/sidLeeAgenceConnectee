@@ -28,6 +28,7 @@
 
     var self_, tooltip_, timeout_ = null;
     var chart_ = null;
+    var oldBrowser_ = (bowser.safari && parseFloat(bowser.version) < 8) || bowser.msie;
 
     var options_ = {
       axisX: {
@@ -38,7 +39,7 @@
         },
         labelInterpolationFnc: function(value, index) {
           if(self_.currentFilter) {
-            return value;
+            return oldBrowser_ ? value.substr(0, 3) + '.' : value;
           } else {
             return self_.currentQuery !== 'last30' || index % 2 === 0 ? value : null;
           }
@@ -67,7 +68,7 @@
         axisX: {
           labelInterpolationFnc: function(value, index) {
             if(self_.currentFilter) {
-              return value;
+              return oldBrowser_ ? value.substr(0, 3) + '.' : value;
             }
             else {
               return self_.currentQuery === 'last12' || index % 2 === 0 ? value : null;
@@ -80,7 +81,7 @@
         axisX: {
           labelInterpolationFnc: function(value, index) {
             if(self_.currentFilter) {
-              return value;
+              return oldBrowser_ ? value.substr(0, 3) + '.' : value;
             }
             else {
               if (self_.currentQuery === 'last12')
