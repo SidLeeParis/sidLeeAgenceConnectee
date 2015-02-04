@@ -1,24 +1,13 @@
-/**
- * New Relic agent configuration.
- *
- * See lib/config.defaults.js in the agent distribution for a more complete
- * description of configuration variables and their potential values.
- */
 exports.config = {
-  /**
-   * Array of application names.
-   */
   app_name : ['sidlee'],
-  /**
-   * Your New Relic license key.
-   */
   license_key : '04cea5d92ca19be513ed5d480097151e6e8363e6',
+  // 900 ms of resp time, is considered ok for this particular app
+  apdex_t : 0.900,
+  // ignore socket.io errors
+  rules : {
+    ignore : ['^/socket.io']
+  },
   logging : {
-    /**
-     * Level at which to log. 'trace' is most useful to New Relic when diagnosing
-     * issues with the agent, 'info' and higher will impose the least overhead on
-     * production applications.
-     */
     level : 'info'
   }
 };
