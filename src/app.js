@@ -1,4 +1,5 @@
 'use strict';
+require('newrelic');
 var express = require('express'),
 	app = express(),
 	server = require('http').Server(app),
