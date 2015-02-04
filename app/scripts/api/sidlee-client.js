@@ -5,7 +5,7 @@
 	'use strict';
 
 	var Client = function(url, eventHandler) {
-		this.socket = io.connect(url, {secure: true});
+		this.socket = io.connect(url, { secure: true, transports: ['websocket'] });
 		this.socket.on('event', eventHandler);
 		this.url = url;
 		this.getUrl = this.url + 'api/1/event/';
