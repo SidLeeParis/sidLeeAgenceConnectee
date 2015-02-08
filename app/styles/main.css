@@ -30,7 +30,6 @@ body {
   right: 14px;
   bottom: 146px;
   z-index: 500;
-  display: none; /* warning: remove */
 }
 
 .likebox .fb-like {
