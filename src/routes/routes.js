@@ -122,7 +122,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 							delete data[0].user;
 							delete data[0].last;
 					}
-					res.status(200).send(data[0] || {});
+					res.status(200).send(data[0] || { _id: sensorConf.name, values: [] });
 				});
 			}
 		}
