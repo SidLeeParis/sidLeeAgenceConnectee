@@ -84,19 +84,19 @@ body {
   top: 50%;
   margin: -20px 0 0 -20px;
   background-color: black;
-  border-radius: 50%;
+  border-radius: 20px;
   box-shadow: 0 0 0 6px white;
   height: 40px;
   width: 40px;
 }
-.main-loader-wrapper > .loader:before, .loader-wrapper > .loader:after {
+.main-loader-wrapper > .loader:before, .main-loader-wrapper > .loader:after {
   content: "";
   position: absolute;
   left: 50%;
   top: 50%;
   display: block;
   margin: -21px 0 0 -21px;
-  border-radius: 50%;
+  border-radius: 21px;
   z-index: 2;
   height: 42px;
   width: 42px;

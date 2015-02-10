@@ -93,7 +93,7 @@
   transform-origin: 100% 1px;
   border-top: 2px solid white;
   background: white;
-  transition: transform .3s easeout;
+  transition: transform .3s ease-out;
 }
 .dot {
   position: absolute;
