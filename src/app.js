@@ -4,6 +4,9 @@ var express = require('express'),
 	app = express(),
 	server = require('http').Server(app),
 	io = require('socket.io')(server),
+	redis = require('redis'),
+	url = require('url'),
+	redisAdapter = require('socket.io-redis'),
 	bodyParser = require('body-parser'),
 	cors = require('cors'),
 	compression = require('compression'),
@@ -117,6 +120,15 @@ new CronJob('* * * * *', function(){
 // only use websockets, no polling because of multiple dynos on heroku
 // multiple dynos causes the session to be not shared
 io.set('transports', ['websocket']);
+
+// store io sessions in redis in order to broadcast over multiple dynos
+var redisURL = url.parse(process.env.REDISCLOUD_URL || 'redis://localhost:6379');
+var pub = redis.createClient(redisURL.port, redisURL.hostname, { no_ready_check: true, return_buffers: true });
+pub.auth(redisURL.auth.split(":")[1]);
+var sub = redis.createClient(redisURL.port, redisURL.hostname, { no_ready_check: true, return_buffers: true });
+sub.auth(redisURL.auth.split(":")[1]);
+
+io.adapter(redisAdapter({pubClient: pub, subClient: sub}));
 
 // websocket configuration
 io.on('connection', function (socket) {

@@ -22,7 +22,10 @@
     "moment": "^2.9.0",
     "mongoose": "^3.8.19",
     "newrelic": "^1.15.1",
-    "socket.io": "^1.2.1"
+    "redis": "^0.12.1",
+    "socket.io": "^1.2.1",
+    "socket.io-redis": "^0.1.4",
+    "url": "^0.10.2"
   },
   "devDependencies": {
     "chai": "^1.10.0",
