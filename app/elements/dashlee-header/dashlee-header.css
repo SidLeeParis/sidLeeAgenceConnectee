@@ -1,0 +1,38 @@
+:host {
+  margin: 5px 0;
+  display: block;
+  position: relative;
+}
+.twolines {
+  display: block;
+  margin-bottom: -2px;
+}
+.tagline {
+  font-family: 'font-tsar';
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #555;
+  position: absolute;
+  right: 0;
+  top: 11px;
+  text-align: right;
+}
+:host-context(.compact) .tagline {
+  position: relative;
+  text-align: left;
+  top: 0;
+  margin: 4px 0 8px 0;
+}
+
+.pulse {
+  animation: pulse 2s ease 0s infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: #333;
+  }
+  100% {
+    color: #AAA;
+  }
+}

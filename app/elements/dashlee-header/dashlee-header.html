@@ -2,37 +2,9 @@
 
 <polymer-element name="dashlee-header" attributes="compact">
   <template>
-    <style>
-      :host {
-        margin: 5px 0;
-        display: block;
-        position: relative;
-      }
-      .twolines {
-        display: block;
-        margin-bottom: -2px;
-      }
-      .tagline {
-        font-family: 'font-tsar';
-        font-size: 10px;
-        letter-spacing: 1px;
-        color: #555;
-        position: absolute;
-        right: 0;
-        top: 11px;
-        text-align: right;
-      }
-
-      :host-context(.compact) .tagline {
-        position: relative;
-        text-align: left;
-        top: 0;
-        margin: 4px 0 8px 0;
-      }
-
-    </style>
+    <link rel="stylesheet" href="dashlee-header.css">
     <a href="http://sidlee.com/fr" target="_blank"><span class="sidlee {{{twolines: compact}| tokenList }}">Sid Lee&nbsp;dashboard&nbsp;&nbsp;</span><span class="subtitle">Paris, {{time}}</span></a>
-    <div class="tagline">Real time data with Arduino electronics</div>
+    <div class="tagline">Real time data with Arduino.&nbsp;<a href="https://www.youtube.com/watch?v=TioYIJhdaKo&feature=youtu.be" target="_blank"><span class="pulse">Watch the video</span></a></div>
   </template>
   <script>
     (function () {
