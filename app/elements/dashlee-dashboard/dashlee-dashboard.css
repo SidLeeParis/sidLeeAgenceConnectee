@@ -75,13 +75,13 @@
 }
 
 .wrapper.compact .dashboard > .item {
-  min-width: initial;
+  min-width: 0;
   border-left: none;
   flex: none;
 }
 
 .wrapper.compact .dashboard > .item.large {
-  min-width: initial;
+  min-width: 0;
   flex: none;
 }
 
