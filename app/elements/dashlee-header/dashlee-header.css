@@ -9,7 +9,7 @@
 }
 .tagline {
   font-family: 'font-tsar';
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 1px;
   color: #555;
   position: absolute;
@@ -17,15 +17,19 @@
   top: 11px;
   text-align: right;
 }
-:host-context(.compact) .tagline {
-  position: relative;
-  text-align: left;
-  top: 0;
-  margin: 4px 0 8px 0;
+
+@media screen and (max-width: 820px) {
+  .tagline {
+    font-size: ;
+    position: relative;
+    text-align: left;
+    top: 0;
+    margin: 4px 0 8px 0;
+  }
 }
 
 .pulse {
-  animation: pulse 2s ease 0s infinite alternate;
+  animation: pulse 1s ease 0s infinite alternate;
 }
 
 @keyframes pulse {
@@ -33,6 +37,6 @@
     opacity: #333;
   }
   100% {
-    color: #AAA;
+    color: #EEE;
   }
 }
