@@ -2,19 +2,14 @@
 
 <polymer-element name="dashlee-dashboard">
   <template>
-    <template if="{{unsupportedBrowser}}" >
-      <style>
-        .unsupported-message {
-          width: 100%;
-          padding: 8px 10px 8px 10px;
-          background-color: #F66;
-          font-size: 14px;
-          text-align: center;
-          margin-bottom: 20px;
-        }
-      </style>
-      <div class="unsupported-message">
+    <template if="{{unsupportedBrowser}}">
+      <div class="message unsupported">
         Sorry, we were too lazy to optimize this site for your current browser. Please download <b><a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a></b> for the best viewing experience.
+      </div>
+    </template>
+    <template if="{{late}}">
+      <div class="message late">
+        &#127769;&nbsp;It's probably a bit late to be working in Paris so nothing might be happening right now. <a href="https://www.youtube.com/watch?v=TioYIJhdaKo&feature=youtu.be" target="_blank">Watch the video instead.</a>
       </div>
     </template>
     <link rel="stylesheet" href="dashlee-dashboard.css">
@@ -209,6 +204,10 @@
           }
         }
         return false;
+      },
+      get late() {
+        var d = new Date();
+        return d.getUTCDay() >= 5 || d.getUTCHours() > 20 || d.getUTCHours() < 8;
       },
       fit: _.debounce(function() {
         self_.$.degrees.fit();
