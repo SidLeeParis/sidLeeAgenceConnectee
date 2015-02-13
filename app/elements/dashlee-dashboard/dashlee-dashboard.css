@@ -9,6 +9,36 @@
   overflow: hidden;
 }
 
+.message {
+  width: 100%;
+  padding: 8px 10px 8px 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.message.unsupported {
+  background-color: #F66;
+}
+
+.message.late {
+  background-color: black;
+  color: #BBB;
+  font-size: 10px;
+  font-family: 'font-tsar';
+  letter-spacing: 1px;
+}
+
+.message.late a {
+  transition: color .35s ease;
+}
+.message.late a:hover {
+  color: #FFF;
+}
+
+.message:last-child {
+  margin-bottom: 20px;
+}
+
 .wrapper {
   width: 100%;
   padding: 0 46px 0px 46px;
