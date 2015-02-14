@@ -9,7 +9,7 @@
     </template>
     <template if="{{late}}">
       <div class="message late">
-        &#127769;&nbsp;It's probably a bit late to be working in Paris so very little might be happening right now. <a href="https://www.youtube.com/watch?v=TioYIJhdaKo&feature=youtu.be" target="_blank">Watch this video instead!</a>
+        &#127769;&nbsp;It's probably an unusual time to be working in Paris so very little might be happening right now. <a href="https://www.youtube.com/watch?v=TioYIJhdaKo&feature=youtu.be" target="_blank">Watch this video instead!</a>
       </div>
     </template>
     <link rel="stylesheet" href="dashlee-dashboard.css">
@@ -207,7 +207,7 @@
       },
       get late() {
         var d = new Date();
-        return d.getUTCDay() >= 5 || d.getUTCHours() > 20 || d.getUTCHours() < 8;
+        return d.getUTCDay() === 5 || d.getUTCDay() === 0 || d.getUTCHours() > 20 || d.getUTCHours() < 8;
       },
       fit: _.debounce(function() {
         self_.$.degrees.fit();
