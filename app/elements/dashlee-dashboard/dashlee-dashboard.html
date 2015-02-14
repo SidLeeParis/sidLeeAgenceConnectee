@@ -207,7 +207,7 @@
       },
       get late() {
         var d = new Date();
-        return d.getUTCDay() === 5 || d.getUTCDay() === 0 || d.getUTCHours() > 20 || d.getUTCHours() < 8;
+        return d.getUTCDay() === 6 || d.getUTCDay() === 0 || d.getUTCHours() >= 20 || d.getUTCHours() <= 7;
       },
       fit: _.debounce(function() {
         self_.$.degrees.fit();
