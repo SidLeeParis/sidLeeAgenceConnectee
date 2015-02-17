@@ -36,9 +36,11 @@
         });
       },
       tick: function(sensor) {
+        if (sensor.value < 0 || sensor.value > 50) return;
         self_.setCountTo(self_.count + sensor.value);
       },
       initSensor: function(sensor) {
+        if (sensor.value < 0) return;
         self_.setCountTo(sensor.value);
       },
       setCountTo: function(count) {
