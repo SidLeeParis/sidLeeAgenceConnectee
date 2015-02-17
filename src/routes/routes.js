@@ -19,11 +19,18 @@ var Routes = function(sockets, Event, SensorsConf) {
 	var _create = function(req, res) {
 		if (req.body.token === Conf.SENSOR_TOKEN ||
 			(req.body.token === Conf.FRONTEND_TOKEN && req.body.name === SensorsConf.lightswitch.name)) {
+
+			var value = req.body.value;
+			// limit lightswitch values because of attacks
+			if (req.body.name === SensorsConf.lightswitch.name) {
+				value = Math.max(0, Math.min(50, value));
+				console.log(JSON.stringify(req));
+			}
 			// get posted data
 			var postData = {
 				name: req.body.name,
 				date: new Date(),
-				value: req.body.value,
+				value: value,
 				unit: req.body.unit,
 				app: req.body.app,
 				user: req.body.user,
