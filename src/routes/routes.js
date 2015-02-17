@@ -24,7 +24,6 @@ var Routes = function(sockets, Event, SensorsConf) {
 			// limit lightswitch values because of attacks
 			if (req.body.name === SensorsConf.lightswitch.name) {
 				value = Math.max(0, Math.min(50, value));
-				console.log(JSON.stringify(req));
 			}
 			// get posted data
 			var postData = {
