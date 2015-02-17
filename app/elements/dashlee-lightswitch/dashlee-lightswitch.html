@@ -36,10 +36,12 @@
         });
       },
       tick: function(sensor) {
+        if (sensor.value < 0) return;
         self_.setCountTo(self_.count + sensor.value);
       },
       initSensor: function(sensor) {
-        self_.setCountTo(sensor.value);
+        if (sensor.value < 0) return;
+        self_.setCountTo(value);
       },
       setCountTo: function(count) {
         self_.count = isStub_ ? count - sendingClicks_ : count;
