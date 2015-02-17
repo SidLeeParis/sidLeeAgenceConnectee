@@ -41,7 +41,7 @@
       },
       initSensor: function(sensor) {
         if (sensor.value < 0) return;
-        self_.setCountTo(value);
+        self_.setCountTo(sensor.value);
       },
       setCountTo: function(count) {
         self_.count = isStub_ ? count - sendingClicks_ : count;
