@@ -1,23 +1,23 @@
 [![Build Status](https://travis-ci.org/SidLeeParis/sidLeeAgenceConnectee.svg)](https://travis-ci.org/SidLeeParis/sidLeeAgenceConnectee)
 [![Test Coverage](https://codeclimate.com/github/xseignard/sidLeeAgenceConnectee/badges/coverage.svg)](https://codeclimate.com/github/xseignard/sidLeeAgenceConnectee)
 
-# Utilisation de l'API cliente
+# Using the JS api
 
-## Connecter un client:
+## Connect a client:
 ```javascript
-var client = new SidLeeClient('https://sidlee.herokuapp.com/', function(data) {
+var client = new SidLeeClient('http://dashboard.sidlee.com/', function(data) {
 	console.log(data);
 });
 ```
-La fonction passée en callback est appelée à chaque fois qu'une nouvelle mesure est reçue.
+The function passed as a callback will be called each time a new event is recieved.
 
-## Requeter les mesures du jour
+## Request the events of the day
 ```javascript
 client.today().exec(function(data) {
 	console.log(data);
 });
 ```
-`data` retourne un objet contenant une vue aggrégée des évènements ayant eu lieu ce jour. Voici un exemple de la structure retournée:
+`data` returns an aggregated view of the events of the current day (6am to 6am):
 ```json
 [
 	{
@@ -37,18 +37,17 @@ client.today().exec(function(data) {
 	}
 ]
 ```
+For each sensors, and APIs, the client returns an object containing the name of the event and a value, which can be a sum or an average, according to the sensor configuration. The `undo` event is a particular one since it also returns the last `undo` event (`date`, `app` and `user`).
 
-Pour chacun des capteurs, et API interrogées, le client renvoie un doublet contenant le nom de l'event et une valeur represantant soit la moyenne, soit la somme des données mesurées pour l'event. `undo` est un cas particulier car il renvoie aussi le dernier `undo` (`date`, `app` et `user`).
+The list of the sensors and APIs is available [here](https://github.com/xseignard/sidLeeAgenceConnectee/blob/master/src/conf/sensorsConf.js).
 
-La liste des capteurs et API est disponible [ici](https://github.com/xseignard/sidLeeAgenceConnectee/blob/master/src/conf/sensorsConf.js).
-
-## Requeter les mesures des dernières 24h
+## Request the events of the last 24h
 ```javascript
 client.last24().exec(function(data) {
 	console.log(data);
 });
 ```
-`data` retourne un objet contenant une vue aggrégée des évènements ayant eu lieu lors des dernières 24 heures, triées par tranches horaire. Voici un exemple de la structure retournée:
+`data` returns an object containing an aggregated view of the events that happened during the last 24h. The events are sorted by hour ranges.
 ```json
 [
 	{
@@ -83,8 +82,7 @@ client.last24().exec(function(data) {
 	...
 ]
 ```
-Retourne soit une somme, soit une moyenne heure par heure des relevés des capteurs. Le format horaire est un format "hour ago", c'est à dire que dans l'exemple ci-dessus, il y a eu un event "red" dans l'heure en cours, 5 events "red" 12h plus tôt, etc.
-
+It returns a sum or an average, hour by hour. In the example, 1 "red" event happened in the running hour, 5 "red" event happened 12h ago, and so on.
 
 ## Requeter les mesures des derniers 30 jours
 ```javascript
@@ -92,9 +90,8 @@ client.last30().exec(function(data) {
 	console.log(data);
 });
 ```
-Idem à last 24, mais la somme ou la moyenne est journalière. En lieu et place de `hourAgo`, ce sera `dayAgo`.
+Similar to last 24, but the sum or average is a daily one: `hourAgo` becomes `dayAgo`.
 
+It' a [fluent interface](http://martinfowler.com/bliki/FluentInterface.html) API, so don't forget to call `exec` in order to execute the request!
 
-Il s'agit d'une api utilisant le pattern de [fluent interface](http://martinfowler.com/bliki/FluentInterface.html), cela veut dire qu'il est possible de chainer les fonctions, mais il ne faut pas oublier d'appeler `exec` pour effectivement éxecuter la requête.
-
-Un exemple sur jsfiddle: [http://jsfiddle.net/07acad0b/5/](http://jsfiddle.net/07acad0b/5/)
+A jsfiddle: [http://jsfiddle.net/07acad0b/6/](http://jsfiddle.net/07acad0b/6/)
