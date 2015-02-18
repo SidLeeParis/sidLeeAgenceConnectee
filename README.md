@@ -95,46 +95,6 @@ client.last30().exec(function(data) {
 Idem à last 24, mais la somme ou la moyenne est journalière. En lieu et place de `hourAgo`, ce sera `dayAgo`.
 
 
-## Requeter les anciennes mesures
-```javascript
-client.events().exec(function(data) {
-	console.log(data);
-});
-```
-`events` accepte un argument optionnel permettant de filtrer par nom d'évènement. Chaque capteur aura son nom d'évènement, ainsi on peut filter par nom:
-
-```javascript
-client.events('test').exec(function(data) {
-  console.log(data);
-});
-```
-
-On peut aussi filtrer par date avec `from` et `to`:
-```javascript
-client.events('random')
-		.from('2014-12-01')
-		.to('2014-12-02')
-		.exec(function(data) {
-			console.log(data);
-		});
-```
-
-Cela retournera les mesures du capteur 'random' entre les dates du 1er décembre et du 2 décembre.
-
-Enfin, il est possible de limiter le nombre de résultats avec `limit`:
-
-```javascript
-client.events('random')
-		.from('2014-12-01')
-		.to('2014-12-02')
-		.limit(10)
-		.exec(function(data) {
-			console.log(data);
-		});
-```
-
-Comme l'exemple précédent, mais ne retournant que 10 résultats.
-
 Il s'agit d'une api utilisant le pattern de [fluent interface](http://martinfowler.com/bliki/FluentInterface.html), cela veut dire qu'il est possible de chainer les fonctions, mais il ne faut pas oublier d'appeler `exec` pour effectivement éxecuter la requête.
 
-Un exemple sur jsfiddle: [http://jsfiddle.net/07acad0b/](http://jsfiddle.net/07acad0b/1/)
+Un exemple sur jsfiddle: [http://jsfiddle.net/07acad0b/5/](http://jsfiddle.net/07acad0b/5/)
