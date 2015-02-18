@@ -9,7 +9,7 @@ var client = new SidLeeClient('http://dashboard.sidlee.com/', function(data) {
 	console.log(data);
 });
 ```
-The function passed as a callback will be called each time a new event is recieved.
+The function passed as a callback will be called each time a new event is received.
 
 ## Request the events of the day
 ```javascript
@@ -84,7 +84,7 @@ client.last24().exec(function(data) {
 ```
 It returns a sum or an average, hour by hour. In the example, 1 "red" event happened in the running hour, 5 "red" event happened 12h ago, and so on.
 
-## Requeter les mesures des derniers 30 jours
+## Request the events of the last 30 days
 ```javascript
 client.last30().exec(function(data) {
 	console.log(data);
