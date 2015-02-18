@@ -63,7 +63,7 @@
       setCountTo: function(count) {
         self_.count = count;
         var odValue = self_.count / 1000;
-        if (Math.round((odValue % 1) * 100) % 10 === 0) {
+        if (odValue > 0 && Math.round((odValue % 1) * 100) % 10 === 0) {
           odValue += 0.01;
         }
         od_.update(odValue.toFixed(2));
