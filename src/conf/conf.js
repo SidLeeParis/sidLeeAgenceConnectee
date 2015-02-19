@@ -59,7 +59,7 @@ Conf.SENSOR_TOKEN = process.env.SENSOR_TOKEN;
  * @property FRONTEND_TOKEN
  * @type {String}
  */
-Conf.FRONTEND_TOKEN = 'b3f2ad85-a221-6fbf-19e2-9bcca6994c44';
+Conf.FRONTEND_TOKEN = process.env.FRONTEND_TOKEN;
 /**
  * Redis url
  * @property REDISCLOUD_URL
