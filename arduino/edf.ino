@@ -69,7 +69,7 @@ int getIINST() {
 
 void sendEvent(String name, String value, String unit) {
 	String data = "name=" + name + "&value=" + value + "&unit=" + unit;
-	data += "&token=***REMOVED***";
+	data += "&token=MY_TOKEN";
 	Serial.println(data);
 	if (client.connect("sidlee.herokuapp.com",80)) {
 		client.println("POST /api/1/event HTTP/1.1");

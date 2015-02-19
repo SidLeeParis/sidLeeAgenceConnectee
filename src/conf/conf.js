@@ -53,7 +53,7 @@ Conf.GOOGLE_SERVICE_ACCOUNT_KEY_FILE = __dirname + '/../conf/dashlee.pem';
  * @property SENSOR_TOKEN
  * @type {String}
  */
-Conf.SENSOR_TOKEN = '***REMOVED***';
+Conf.SENSOR_TOKEN = process.env.SENSOR_TOKEN;
 /**
  * Token used by front end to post data
  * @property FRONTEND_TOKEN

@@ -36,7 +36,7 @@ void loop() {
 
 void sendEvent(String name, String value, String unit) {
 	String data = "name=" + name + "&value=" + value + "&unit=" + unit;
-	data += "&token=***REMOVED***";
+	data += "&token=MY_TOKEN";
 	Serial.println(data);
 	request.body = data;
 	http.post(request, response, headers);

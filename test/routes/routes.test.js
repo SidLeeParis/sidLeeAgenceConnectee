@@ -45,7 +45,7 @@ describe('Routes', function() {
 			req.body.name = dummyName;
 			req.body.value = dummyValue;
 			req.body.unit = dummyUnit;
-			req.body.token = Conf.SENSOR_TOKEN;
+			req.body.token = undefined;
 
 			routes.create(req, response);
 		});
@@ -63,6 +63,7 @@ describe('Routes', function() {
 			req.body.name = dummyName;
 			req.body.value = dummyValue;
 			req.body.unit = dummyUnit;
+			req.body.token = null;
 
 			routes.create(req, response);
 		});
