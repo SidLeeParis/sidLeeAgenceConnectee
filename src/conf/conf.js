@@ -60,5 +60,17 @@ Conf.SENSOR_TOKEN = process.env.SENSOR_TOKEN;
  * @type {String}
  */
 Conf.FRONTEND_TOKEN = 'b3f2ad85-a221-6fbf-19e2-9bcca6994c44';
+/**
+ * Redis url
+ * @property REDISCLOUD_URL
+ * @type {String}
+ */
+Conf.REDISCLOUD_URL = process.env.REDISCLOUD_URL || 'redis://:@localhost:6379';
+/**
+ * How much cluster nodes
+ * @property WEB_CONCURRENCY
+ * @type {Number}
+ */
+Conf.WEB_CONCURRENCY = process.env.WEB_CONCURRENCY || 2;
 
 module.exports = Conf;
