@@ -27,7 +27,7 @@ body {
 
 .likebox {
   position: absolute;
-  right: 14px;
+  right: 28px;
   bottom: 146px;
   z-index: 500;
 }
