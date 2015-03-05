@@ -36,7 +36,7 @@
         numbers_ = this.$.numbers;
       },
       initSensor: function(sensor) {
-        var value = sensor.values[0].value;
+        var value = sensor.values.pop().value;
         var numbers = numbers_.querySelectorAll('.number');
         for (var i=0; i<numbers.length; i++) {
           numbers[i].innerHTML = numeral((value - 4 + 2 - i) / 100).format('0.00');
