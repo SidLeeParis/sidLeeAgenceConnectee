@@ -36,6 +36,16 @@ body {
   top: -4px;
 }
 
+.fwasotd-ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  z-index: 10;
+  background: transparent url(../../images/fwaribbon.png) no-repeat center center;
+}
+
 * /deep/ .number {
   font-family: 'font-tsar';
   font-size: 56px;
