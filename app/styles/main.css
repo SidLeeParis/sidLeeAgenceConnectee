@@ -38,6 +38,7 @@ body {
 
 .fwasotd-ribbon {
   position: absolute;
+  display: block;
   top: 0;
   right: 0;
   width: 100px;
