@@ -58,6 +58,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 			});
 		}
 		else {
+			console.log(JSON.stringify(req.body));
 			res.status(403).send({ error: 'Wrong token' });
 		}
 	};
