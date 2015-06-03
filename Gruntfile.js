@@ -187,9 +187,6 @@ module.exports = function(grunt) {
           src: '{,*/}*.{png,jpg,jpeg}',
           dest: '<%= yeoman.dist %>/images'
         }]
-      },
-      options: {
-        cache: false
       }
     },
     cssmin: {
