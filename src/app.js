@@ -52,7 +52,7 @@ function start() {
 	// production only : run with NODE_ENV=production node app.js
 	var env = process.env.NODE_ENV || 'development';
 	if (env === 'development') {
-		app.use(express.static(__dirname + '/../public'));
+		app.use(express.static(__dirname + '/../app'));
 		app.use('/bower_components', express.static(__dirname + '/../bower_components'));
 	} else if (env === 'production') {
 		app.use(express.static(__dirname + '/../dist'));

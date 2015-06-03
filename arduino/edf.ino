@@ -54,6 +54,7 @@ void loop() {
 
 int getIINST() {
 	int iinst = -1;
+	// check if line is at least 39 chars long
 	if(data.indexOf("IINST1") > 0 && data.indexOf("IINST2") > 0 && data.indexOf("IINST3") > 0) {
 		String line = data.substring(data.indexOf("IINST1"), data.indexOf("IINST3")+10);
 		//Serial.println(line);
