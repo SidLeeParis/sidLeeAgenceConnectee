@@ -27,13 +27,24 @@ body {
 
 .likebox {
   position: absolute;
-  right: 14px;
+  right: 28px;
   bottom: 146px;
   z-index: 500;
 }
 
 .likebox .fb-like {
   top: -4px;
+}
+
+.fwasotd-ribbon {
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  z-index: 10;
+  background: transparent url(../../images/fwaribbon.png) no-repeat center center;
 }
 
 * /deep/ .number {
