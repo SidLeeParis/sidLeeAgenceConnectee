@@ -4,7 +4,7 @@
   "description": "Server side of Sid Lee x Agence Conectée project",
   "author": "Xavier Seignard <xavier.seignard@gmail.com>",
   "scripts": {
-    "postinstall": "bower install && grunt build"
+    "postinstall": "bower install && grunt --force build"
   },
   "repository": {
     "type": "git",
