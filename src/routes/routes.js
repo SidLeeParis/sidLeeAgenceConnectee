@@ -18,6 +18,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 
 	var _create = function(req, res) {
 		if (req.body.name === SensorsConf.watt.name) {
+			console.log('WATTS');
 			console.log(JSON.stringify(req.body));
 		}
 		if (req.body.token === Conf.SENSOR_TOKEN ||
@@ -61,6 +62,7 @@ var Routes = function(sockets, Event, SensorsConf) {
 			});
 		}
 		else {
+			console.log('ERR 403');
 			console.log(JSON.stringify(req.body));
 			res.status(403).send({ error: 'Wrong token' });
 		}
