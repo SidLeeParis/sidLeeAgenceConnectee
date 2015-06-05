@@ -17,6 +17,9 @@ var async = require('async'),
 var Routes = function(sockets, Event, SensorsConf) {
 
 	var _create = function(req, res) {
+		if (req.body.name === SensorsConf.watt.name) {
+			console.log(JSON.stringify(req.body));
+		}
 		if (req.body.token === Conf.SENSOR_TOKEN ||
 			(req.body.token === Conf.FRONTEND_TOKEN && req.body.name === SensorsConf.lightswitch.name)) {
 
