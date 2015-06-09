@@ -7,11 +7,14 @@
 char inChar;
 String data = "";
 
-elapsedMillis timeElapsed;
-unsigned int interval = 5000;
+elapsedMillis edfElapsed;
+elapsedMillis doorElapsed;
+unsigned int edfInterval = 5000;
+unsigned int doorInterval = 100;
 
 SoftwareSerial teleInfo(2, 3);
 int watts;
+boolean canSend = true;
 
 Button door = Button(A0, INPUT_PULLUP);
 
@@ -34,6 +37,7 @@ void loop() {
 		if (inChar == '\n') {
 			int current = getIINST();
 			if (current > 0) {
+				canSend = true;
 				watts = current * 230;
 			}
 		}
@@ -41,14 +45,15 @@ void loop() {
 			data += inChar;
 		}
 	}
-	if (timeElapsed > interval) {
+	if (watts > 0 && edfElapsed > edfInterval && canSend) {
+		canSend = false;
 		sendEvent("watt", String(watts, DEC), "watts");
-		timeElapsed = 0;
+		edfElapsed = 0;
 	}
 
-	if (door.uniquePress()) {
+	if (door.uniquePress() && doorElapsed > doorInterval) {
 		sendEvent("door", "1", "door");
-		delay(50);
+		doorElapsed = 0;
 	}
 }
 
